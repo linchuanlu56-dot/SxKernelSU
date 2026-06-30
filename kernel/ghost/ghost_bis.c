@@ -12,6 +12,7 @@
 #include "klog.h"
 #include <linux/slab.h>
 #include <linux/sched.h>
+#include <linux/cred.h>
 #include <linux/uidgid.h>
 #include <linux/version.h>
 
