@@ -816,7 +816,7 @@ pub fn install_module(zip: &str) -> Result<()> {
                         warn!("regenerate preinit rc failed: {e}");
                     }
                     println!("- Module installed successfully!");
-                    Ok(())
+                    return Ok(());
                 }
                 Err(e) => {
                     // 3. Failure → restore backup
