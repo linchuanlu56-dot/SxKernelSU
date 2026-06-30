@@ -1,6 +1,7 @@
 package me.weishu.kernelsu.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
@@ -22,7 +23,7 @@ import kotlinx.coroutines.delay
 fun AnimatedCard(
     modifier: Modifier = Modifier,
     index: Int = 0,
-    content: @Composable () -> Unit
+    content: @Composable AnimatedVisibilityScope.() -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
 
