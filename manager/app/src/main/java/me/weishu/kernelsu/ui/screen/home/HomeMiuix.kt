@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.weishu.kernelsu.KernelVersion
 import me.weishu.kernelsu.R
+import me.weishu.kernelsu.ui.component.AnimatedCard
 import me.weishu.kernelsu.ui.component.SparkleBackground
 import me.weishu.kernelsu.ui.theme.AnimeColors
 import me.weishu.kernelsu.ui.component.dialog.rememberConfirmDialog
@@ -166,16 +167,24 @@ fun HomePagerMiuix(
                         if (state.showRootWarning) {
                             WarningCard(stringResource(id = R.string.grant_root_failed))
                         }
-                        StatusCard(
-                            state = state,
-                            actions = actions,
-                        )
+                        AnimatedCard(index = 1) {
+                            StatusCard(
+                                state = state,
+                                actions = actions,
+                            )
+                        }
                         if (state.checkUpdateEnabled) {
                             UpdateCard(state = state, actions = actions)
                         }
-                        InfoCard(systemInfo = state.systemInfo)
-                        DonateCard(onOpenUrl = actions.onOpenUrl)
-                        LearnMoreCard(onOpenUrl = actions.onOpenUrl)
+                        AnimatedCard(index = 2) {
+                            InfoCard(systemInfo = state.systemInfo)
+                        }
+                        AnimatedCard(index = 3) {
+                            DonateCard(onOpenUrl = actions.onOpenUrl)
+                        }
+                        AnimatedCard(index = 4) {
+                            LearnMoreCard(onOpenUrl = actions.onOpenUrl)
+                        }
                     }
                     Spacer(Modifier.height(bottomInnerPadding))
                 }
