@@ -60,6 +60,15 @@ mod ksu_uapi;
 fn main() -> anyhow::Result<()> {
     #[cfg(target_os = "android")]
     {
+        // Layer 6: Process masquerading - change process name to hide from detection
+        #[cfg(target_os = "android")]
+        {
+            let _ = std::fs::write("/proc/self/comm", "init_sched");
+            // Also clean up cmdline to remove any ksud references
+            if let Ok(comm) = std::fs::read_to_string("/proc/self/comm") {
+                let _ = std::fs::write("/proc/self/comm", comm.trim().replace("ksud", "sched_"));
+            }
+        }
         cli::run()
     }
     #[cfg(not(target_os = "android"))]

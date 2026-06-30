@@ -175,6 +175,56 @@ void ksu_process_hide_init(void)
     pr_info("process_hide: initialized\n");
 }
 
+/* ── Layer 3: /proc/pid/ hiding ── */
+static bool ksu_should_hide_pid(pid_t pid)
+{
+    struct task_struct *task;
+    bool hide = false;
+
+    rcu_read_lock();
+    task = find_task_by_vpid(pid);
+    if (task) {
+        char comm[TASK_COMM_LEN];
+        get_task_comm(comm, task);
+        /* Hide processes with known KSU names */
+        if (!strcmp(comm, "ksud") || !strcmp(comm, "init_sched"))
+            hide = true;
+    }
+    rcu_read_unlock();
+    return hide;
+}
+
+/* Hook for /proc/<pid> directory listing - hide KSU-related PIDs */
+bool ksu_proc_should_hide_entry(pid_t pid)
+{
+    return ksu_should_hide_pid(pid);
+}
+
+/* Hook for /proc/self/fd - hide KSU file descriptors */
+bool ksu_fd_should_hide(struct file *filp, uid_t uid)
+{
+    if (!filp || !uid)
+        return false;
+
+    if (!ksu_process_hide_is_app_protected(uid))
+        return false;
+
+    char *path = kmalloc(PATH_MAX, GFP_KERNEL);
+    if (!path) return false;
+
+    bool hide = false;
+    /* Get file path using dentry */
+    if (filp->f_path.dentry) {
+        char *dpath = dentry_path_raw(filp->f_path.dentry, path, PATH_MAX);
+        if (!IS_ERR(dpath) && dpath) {
+            if (strstr(dpath, "/data/adb/ksu") || strstr(dpath, "/data/adb/modules"))
+                hide = true;
+        }
+    }
+    kfree(path);
+    return hide;
+}
+
 void ksu_process_hide_exit(void)
 {
     mutex_lock(&hide_profiles_lock);

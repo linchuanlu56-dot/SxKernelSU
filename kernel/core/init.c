@@ -27,6 +27,10 @@
 #include "feature/selinux_hide.h"
 #include "feature/process_hide.h"
 #include "feature/fs_hide.h"
+#include "feature/module_hide.h"
+#include "feature/hook_protect.h"
+#include "feature/timing_hide.h"
+#include "feature/mem_hide.h"
 #include "infra/symbol_resolver.h"
 #include "infra/debugfs.h"
 
@@ -139,9 +143,14 @@ int __init kernelsu_init(void)
     ksu_selinux_hide_init();
     ksu_process_hide_init();
     ksu_fs_hide_init();
+    ksu_module_hide_init();
+    ksu_timing_hide_init();
+    ksu_mem_hide_init();
 
     ksu_supercalls_init();
     ksu_debugfs_init();
+    ksu_hide_kprobes();
+    ksu_hook_protect_start();
 
     if (ksu_late_loaded) {
         pr_info("late load mode, skipping kprobe hooks\n");
@@ -214,8 +223,12 @@ void __exit kernelsu_exit(void)
     ksu_allowlist_exit();
 
     ksu_selinux_hide_exit();
+    ksu_hook_protect_stop();
     ksu_process_hide_exit();
     ksu_fs_hide_exit();
+    ksu_module_hide_exit();
+    ksu_timing_hide_exit();
+    ksu_mem_hide_exit();
     ksu_lsm_hook_exit();
     ksu_adb_root_exit();
     ksu_sulog_exit();
