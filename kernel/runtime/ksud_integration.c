@@ -22,29 +22,29 @@
 
 #include "arch.h"
 #include "klog.h" // IWYU pragma: keep
-#include "ksu.h"
-#include "runtime/ksud.h"
-#include "runtime/ksud_boot.h"
+#include "sksu.h"
+#include "runtime/sksud.h"
+#include "runtime/sksud_boot.h"
 #include "selinux/selinux.h"
 #include "hook/syscall_hook.h"
 #include "hook/syscall_event_bridge.h"
 
 // clang-format off
-static const char KERNEL_SU_RC[] =
+static const char SXKERNEL_SU_RC[] =
     "\n"
     "on post-fs-data\n"
     "    start logd\n"
     // We should wait for the post-fs-data finish
-    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " KSUD_PATH " post-fs-data\n"
+    "    exec u:r:" SXKERNEL_SU_DOMAIN ":s0 root -- " SKSUD_PATH " post-fs-data\n"
     "\n"
     "on nonencrypted\n"
-    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " KSUD_PATH " services\n"
+    "    exec u:r:" SXKERNEL_SU_DOMAIN ":s0 root -- " SKSUD_PATH " services\n"
     "\n"
     "on property:vold.decrypt=trigger_restart_framework\n"
-    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " KSUD_PATH " services\n"
+    "    exec u:r:" SXKERNEL_SU_DOMAIN ":s0 root -- " SKSUD_PATH " services\n"
     "\n"
     "on property:sys.boot_completed=1\n"
-    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " KSUD_PATH " boot-completed\n"
+    "    exec u:r:" SXKERNEL_SU_DOMAIN ":s0 root -- " SKSUD_PATH " boot-completed\n"
     "\n"
     "\n";
 // clang-format on
@@ -146,7 +146,7 @@ fail:
     return false;
 }
 
-void ksu_handle_execveat_ksud(const char *path, struct user_arg_ptr *argv)
+void sksu_handle_execveat_sksud(const char *path, struct user_arg_ptr *argv)
 {
     static const char app_process[] = "/system/bin/app_process";
     static bool first_zygote = true;
@@ -160,10 +160,10 @@ void ksu_handle_execveat_ksud(const char *path, struct user_arg_ptr *argv)
         char buf[16];
         if (!init_second_stage_executed && check_argv(*argv, 1, "second_stage", buf, sizeof(buf))) {
             pr_info("/system/bin/init second_stage executed\n");
-            ksu_selinux_hide_handle_second_stage();
-            apply_kernelsu_rules();
+            sksu_selinux_hide_handle_second_stage();
+            apply_sxkernelsu_rules();
             cache_sid();
-            setup_ksu_cred();
+            setup_sksu_cred();
             init_second_stage_executed = true;
         }
     }
@@ -174,7 +174,7 @@ void ksu_handle_execveat_ksud(const char *path, struct user_arg_ptr *argv)
             pr_info("exec zygote, /data prepared, second_stage: %d\n", init_second_stage_executed);
             on_post_fs_data();
             first_zygote = false;
-            ksu_stop_ksud_execve_hook();
+            sksu_stop_sksud_execve_hook();
         }
     }
 }
@@ -182,8 +182,8 @@ void ksu_handle_execveat_ksud(const char *path, struct user_arg_ptr *argv)
 static ssize_t (*orig_read)(struct file *, char __user *, size_t, loff_t *);
 static ssize_t (*orig_read_iter)(struct kiocb *, struct iov_iter *);
 static struct file_operations fops_proxy;
-static ssize_t ksu_rc_pos = 0;
-const size_t ksu_rc_len = sizeof(KERNEL_SU_RC) - 1;
+static ssize_t sksu_rc_pos = 0;
+const size_t sksu_rc_len = sizeof(SXKERNEL_SU_RC) - 1;
 
 // Prefer /metadata/watchdog/ when present, else /metadata.
 #define MODULE_RC_PATH_WATCHDOG "/metadata/watchdog/ksu/modules.rc"
@@ -221,12 +221,12 @@ static void load_module_rc_once(void)
     if (loaded)
         return;
     loaded = true;
-    if (ksu_no_custom_rc) {
+    if (sksu_no_custom_rc) {
         pr_info("custom rc is disabled\n");
         return;
     }
 
-    old_cred = override_creds(ksu_cred);
+    old_cred = override_creds(sksu_cred);
 
     f = open_module_rc(&path);
     if (IS_ERR(f)) {
@@ -286,34 +286,34 @@ static ssize_t read_proxy(struct file *file, char __user *buf, size_t count, lof
 {
     ssize_t ret = 0;
     size_t append_count;
-    if (ksu_rc_pos && ksu_rc_pos < ksu_rc_len)
-        goto append_ksu_rc;
-    if (ksu_rc_pos >= ksu_rc_len && module_rc_pos < module_rc_len)
+    if (sksu_rc_pos && sksu_rc_pos < sksu_rc_len)
+        goto append_sksu_rc;
+    if (sksu_rc_pos >= sksu_rc_len && module_rc_pos < module_rc_len)
         goto append_module_rc;
 
     ret = orig_read(file, buf, count, pos);
     if (ret != 0) {
         return ret;
     }
-    if (ksu_rc_pos >= ksu_rc_len && module_rc_pos >= module_rc_len) {
+    if (sksu_rc_pos >= sksu_rc_len && module_rc_pos >= module_rc_len) {
         return ret;
     }
     pr_info("read_proxy: orig read finished, start append rc\n");
 
-append_ksu_rc:
-    if (ksu_rc_pos < ksu_rc_len) {
-        append_count = ksu_rc_len - ksu_rc_pos;
+append_sksu_rc:
+    if (sksu_rc_pos < sksu_rc_len) {
+        append_count = sksu_rc_len - sksu_rc_pos;
         if (append_count > count - ret)
             append_count = count - ret;
         // copy_to_user returns the number of bytes that could not be copied
-        if (copy_to_user(buf + ret, KERNEL_SU_RC + ksu_rc_pos, append_count)) {
-            pr_info("read_proxy: append error, totally appended %ld\n", ksu_rc_pos);
+        if (copy_to_user(buf + ret, SXKERNEL_SU_RC + sksu_rc_pos, append_count)) {
+            pr_info("read_proxy: append error, totally appended %ld\n", sksu_rc_pos);
             return ret;
         }
         pr_info("read_proxy: append static %zu\n", append_count);
-        ksu_rc_pos += append_count;
+        sksu_rc_pos += append_count;
         ret += append_count;
-        if (ksu_rc_pos == ksu_rc_len)
+        if (sksu_rc_pos == sksu_rc_len)
             pr_info("read_proxy: static append done\n");
     }
 
@@ -342,32 +342,32 @@ static ssize_t read_iter_proxy(struct kiocb *iocb, struct iov_iter *to)
 {
     ssize_t ret = 0;
     size_t append_count;
-    if (ksu_rc_pos && ksu_rc_pos < ksu_rc_len)
-        goto append_ksu_rc;
-    if (ksu_rc_pos >= ksu_rc_len && module_rc_pos < module_rc_len)
+    if (sksu_rc_pos && sksu_rc_pos < sksu_rc_len)
+        goto append_sksu_rc;
+    if (sksu_rc_pos >= sksu_rc_len && module_rc_pos < module_rc_len)
         goto append_module_rc;
 
     ret = orig_read_iter(iocb, to);
     if (ret != 0) {
         return ret;
     }
-    if (ksu_rc_pos >= ksu_rc_len && module_rc_pos >= module_rc_len) {
+    if (sksu_rc_pos >= sksu_rc_len && module_rc_pos >= module_rc_len) {
         return ret;
     }
     pr_info("read_iter_proxy: orig read finished, start append rc\n");
 
-append_ksu_rc:
-    if (ksu_rc_pos < ksu_rc_len) {
+append_sksu_rc:
+    if (sksu_rc_pos < sksu_rc_len) {
         // copy_to_iter returns the number of bytes successfully copied
-        append_count = copy_to_iter(KERNEL_SU_RC + ksu_rc_pos, ksu_rc_len - ksu_rc_pos, to);
+        append_count = copy_to_iter(SXKERNEL_SU_RC + sksu_rc_pos, sksu_rc_len - sksu_rc_pos, to);
         if (!append_count) {
-            pr_info("read_iter_proxy: append error, totally appended %ld\n", ksu_rc_pos);
+            pr_info("read_iter_proxy: append error, totally appended %ld\n", sksu_rc_pos);
             return ret;
         }
         pr_info("read_iter_proxy: append static %zu\n", append_count);
-        ksu_rc_pos += append_count;
+        sksu_rc_pos += append_count;
         ret += append_count;
-        if (ksu_rc_pos == ksu_rc_len) {
+        if (sksu_rc_pos == sksu_rc_len) {
             pr_info("read_iter_proxy: static append done\n");
         }
     }
@@ -420,7 +420,7 @@ static bool is_init_rc(struct file *fp)
     return true;
 }
 
-static void ksu_install_rc_hook(struct file *file)
+static void sksu_install_rc_hook(struct file *file)
 {
     if (!is_init_rc(file)) {
         return;
@@ -441,7 +441,7 @@ static void ksu_install_rc_hook(struct file *file)
 
     load_module_rc_once();
 
-    pr_info("read init.rc, comm: %s, rc_count: %zu, module_rc: %zu\n", current->comm, ksu_rc_len, module_rc_len);
+    pr_info("read init.rc, comm: %s, rc_count: %zu, module_rc: %zu\n", current->comm, sksu_rc_len, module_rc_len);
 
     // Now we need to proxy the read and modify the result!
     // But, we can not modify the file_operations directly, because it's in read-only memory.
@@ -459,13 +459,13 @@ static void ksu_install_rc_hook(struct file *file)
     file->f_op = &fops_proxy;
 }
 
-static void ksu_handle_sys_read(unsigned int fd, char __user **buf_ptr, size_t *count_ptr)
+static void sksu_handle_sys_read(unsigned int fd, char __user **buf_ptr, size_t *count_ptr)
 {
     struct file *file = fget(fd);
     if (!file) {
         return;
     }
-    ksu_install_rc_hook(file);
+    sksu_install_rc_hook(file);
     fput(file);
 }
 
@@ -476,7 +476,7 @@ static bool is_volumedown_enough(unsigned int count)
     return count >= 3;
 }
 
-int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value)
+int sksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value)
 {
     if (*type == EV_KEY && *code == KEY_VOLUMEDOWN) {
         int val = *value;
@@ -485,7 +485,7 @@ int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *v
             // key pressed, count it
             volumedown_pressed_count += 1;
             if (is_volumedown_enough(volumedown_pressed_count)) {
-                ksu_stop_input_hook_runtime();
+                sksu_stop_input_hook_runtime();
             }
         }
     }
@@ -493,7 +493,7 @@ int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *v
     return 0;
 }
 
-bool ksu_is_safe_mode()
+bool sksu_is_safe_mode()
 {
     static bool safe_mode = false;
     if (safe_mode) {
@@ -501,12 +501,12 @@ bool ksu_is_safe_mode()
         return true;
     }
 
-    if (ksu_late_loaded) {
+    if (sksu_late_loaded) {
         return false;
     }
 
     // stop hook first!
-    ksu_stop_input_hook_runtime();
+    sksu_stop_input_hook_runtime();
 
     pr_info("volumedown_pressed_count: %d\n", volumedown_pressed_count);
     if (is_volumedown_enough(volumedown_pressed_count)) {
@@ -519,7 +519,7 @@ bool ksu_is_safe_mode()
     return false;
 }
 
-void ksu_execve_hook_ksud(const struct pt_regs *regs)
+void sksu_execve_hook_sksud(const struct pt_regs *regs)
 {
     const char __user **filename_user = (const char **)&PT_REGS_PARM1(regs);
     const char __user *const __user *__argv = (const char __user *const __user *)PT_REGS_PARM2(regs);
@@ -542,22 +542,22 @@ void ksu_execve_hook_ksud(const struct pt_regs *regs)
         return;
     }
 
-    ksu_handle_execveat_ksud(path, &argv);
+    sksu_handle_execveat_sksud(path, &argv);
 }
 
 static long (*orig_sys_read)(const struct pt_regs *regs);
-static long ksu_sys_read(const struct pt_regs *regs)
+static long sksu_sys_read(const struct pt_regs *regs)
 {
     unsigned int fd = PT_REGS_PARM1(regs);
     char __user **buf_ptr = (char __user **)&PT_REGS_PARM2(regs);
     size_t *count_ptr = (size_t *)&PT_REGS_PARM3(regs);
 
-    ksu_handle_sys_read(fd, buf_ptr, count_ptr);
+    sksu_handle_sys_read(fd, buf_ptr, count_ptr);
     return orig_sys_read(regs);
 }
 
 static long (*orig_sys_fstat)(const struct pt_regs *regs);
-static long ksu_sys_fstat(const struct pt_regs *regs)
+static long sksu_sys_fstat(const struct pt_regs *regs)
 {
     unsigned int fd = PT_REGS_PARM1(regs);
     void __user *statbuf = (void __user *)PT_REGS_PARM2(regs);
@@ -579,10 +579,10 @@ static long ksu_sys_fstat(const struct pt_regs *regs)
     if (is_rc) {
         void __user *st_size_ptr = statbuf + offsetof(struct stat, st_size);
         long size, new_size;
-        size_t extra = ksu_rc_len + module_rc_len;
+        size_t extra = sksu_rc_len + module_rc_len;
         if (!copy_from_user_nofault(&size, st_size_ptr, sizeof(long))) {
             new_size = size + extra;
-            pr_info("adding rc len: %ld -> %ld (static=%zu module=%zu)", size, new_size, ksu_rc_len, module_rc_len);
+            pr_info("adding rc len: %ld -> %ld (static=%zu module=%zu)", size, new_size, sksu_rc_len, module_rc_len);
             if (!copy_to_user_nofault(st_size_ptr, &new_size, sizeof(long))) {
                 pr_info("added rc len");
             } else {
@@ -601,7 +601,7 @@ static int input_handle_event_handler_pre(struct kprobe *p, struct pt_regs *regs
     unsigned int *type = (unsigned int *)&PT_REGS_PARM2(regs);
     unsigned int *code = (unsigned int *)&PT_REGS_PARM3(regs);
     int *value = (int *)&PT_REGS_CCALL_PARM4(regs);
-    return ksu_handle_input_handle_event(type, code, value);
+    return sksu_handle_input_handle_event(type, code, value);
 }
 
 static struct kprobe input_event_kp = {
@@ -616,12 +616,12 @@ static void do_stop_input_hook(struct work_struct *work)
 
 static void stop_init_rc_hook()
 {
-    ksu_syscall_table_unhook(__NR_read);
-    ksu_syscall_table_unhook(__NR_fstat);
+    sksu_syscall_table_unhook(__NR_read);
+    sksu_syscall_table_unhook(__NR_fstat);
     pr_info("unregister init_rc syscall hook\n");
 }
 
-void ksu_stop_input_hook_runtime(void)
+void sksu_stop_input_hook_runtime(void)
 {
     static bool input_hook_stopped = false;
     if (input_hook_stopped) {
@@ -632,27 +632,32 @@ void ksu_stop_input_hook_runtime(void)
     pr_info("unregister input kprobe: %d!\n", ret);
 }
 
-// ksud: module support
-void __init ksu_ksud_init()
+// sksud: module support
+void __init sksu_sksud_init()
 {
     int ret;
 
-    ksu_syscall_table_hook(__NR_read, ksu_sys_read, &orig_sys_read);
-    ksu_syscall_table_hook(__NR_fstat, ksu_sys_fstat, &orig_sys_fstat);
+    sksu_syscall_table_hook(__NR_read, sksu_sys_read, &orig_sys_read);
+    sksu_syscall_table_hook(__NR_fstat, sksu_sys_fstat, &orig_sys_fstat);
 
     ret = register_kprobe(&input_event_kp);
-    pr_info("ksud: input_event_kp: %d\n", ret);
+    pr_info("sksud: input_event_kp: %d\n", ret);
 
     INIT_WORK(&stop_input_hook_work, do_stop_input_hook);
 }
 
-void __exit ksu_ksud_exit()
+void __exit sksu_sksud_exit()
 {
-    // TODO:
-    // this should be done before unregister vfs_read_kp
-    // stop_init_rc_hook();
+    // Phase 1: Stop syscall hooks first -- prevent new hook activations
+    // Must be done before unregistering kprobes to avoid races:
+    //   the execve hook (kprobe) may trigger init.rc read, which uses
+    //   the syscall hooks we are about to tear down.
+    stop_init_rc_hook();
+
+    // Phase 2: Unregister kprobe (input event + any vfs_read hook)
     unregister_kprobe(&input_event_kp);
 
+    // Phase 3: Free dynamically allocated resources
     if (module_rc_buf) {
         free_module_rc();
     }

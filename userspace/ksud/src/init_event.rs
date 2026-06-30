@@ -1,7 +1,7 @@
 use crate::module::{handle_updated_modules, prune_modules};
 use crate::utils::{is_safe_mode, switch_mnt_ns};
 use crate::{
-    assets, defs, ksucalls, metamodule, restorecon,
+    assets, defs, skcalls, metamodule, restorecon,
     utils::{self},
 };
 use anyhow::{Context, Result};
@@ -12,14 +12,15 @@ use prop_rs_android::sys_prop;
 use rustix::process::chdir;
 use std::path::Path;
 use std::process::Command;
+use std::time::Duration;
 
 pub fn on_post_data_fs() -> Result<()> {
-    if let Err(e) = ksucalls::ensure_uapi_version_matched() {
-        error!("{e:#}, skip on_post_fs_data");
+    if skcalls::is_uapi_version_mismatch() {
+        error!("Kernel and userspace uapi version mismatch! skip on_post_fs_data");
         return Ok(());
     }
 
-    ksucalls::report_post_fs_data();
+    skcalls::report_post_fs_data();
 
     utils::umask(0);
 
@@ -72,9 +73,9 @@ pub fn on_post_data_fs() -> Result<()> {
         warn!("prune modules failed: {e}");
     }
 
-    // Refresh /metadata/watchdog/ksu/modules.rc so the next boot's kernel hook sees the
+    // Refresh /metadata/watchdog/sks/modules.rc so the next boot's kernel hook sees the
     // current module set. Acts as a safety net when state was changed outside
-    // of ksud's normal mutation commands.
+    // of sksud's normal mutation commands.
     if let Err(e) = crate::module::regenerate_preinit_rc() {
         warn!("regenerate preinit rc failed: {e}");
     }
@@ -104,9 +105,12 @@ pub fn on_post_data_fs() -> Result<()> {
         warn!("exec metamodule post-fs-data script failed: {e}");
     }
 
-    // exec modules post-fs-data scripts
-    // TODO: Add timeout
-    if let Err(e) = crate::module::exec_stage_script("post-fs-data", true) {
+    // exec modules post-fs-data scripts with per-script timeout
+    // Each script gets max 60s to prevent a misbehaving module from
+    // hanging the entire boot sequence.
+    if let Err(e) =
+        crate::module::exec_stage_script_with_timeout("post-fs-data", Duration::from_mins(1))
+    {
         warn!("exec post-fs-data scripts failed: {e}");
     }
 
@@ -156,8 +160,8 @@ pub fn run_stage(stage: &str, block: bool) {
 }
 
 pub fn on_services() {
-    if let Err(e) = ksucalls::ensure_uapi_version_matched() {
-        error!("{e:#}, skip on_services");
+    if skcalls::is_uapi_version_mismatch() {
+        error!("Kernel and userspace uapi version mismatch! skip on_services");
         return;
     }
 
@@ -166,12 +170,12 @@ pub fn on_services() {
 }
 
 pub fn on_boot_completed() {
-    if let Err(e) = ksucalls::ensure_uapi_version_matched() {
-        error!("{e:#}, skip on_boot_completed");
+    if skcalls::is_uapi_version_mismatch() {
+        error!("Kernel and userspace uapi version mismatch! skip on_boot_completed");
         return;
     }
 
-    ksucalls::report_boot_complete();
+    skcalls::report_boot_complete();
     info!("on_boot_completed triggered!");
 
     run_stage("boot-completed", false);
@@ -247,8 +251,8 @@ fn catch_bootlog(logname: &str, command: &[&str]) -> Result<()> {
 
 pub fn soft_reboot() -> Result<()> {
     // check it avoid user click "soft_reboot" in manager when version mismatch
-    if let Err(e) = ksucalls::ensure_uapi_version_matched() {
-        error!("{e:#}, skip soft_reboot");
+    if skcalls::is_uapi_version_mismatch() {
+        error!("Kernel and userspace uapi version mismatch! skip soft_reboot");
         return Ok(());
     }
 

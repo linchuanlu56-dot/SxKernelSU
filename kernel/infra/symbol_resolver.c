@@ -2,8 +2,13 @@
 #include <linux/module.h>
 #include <linux/string.h>
 #include <linux/version.h>
+#include <linux/fs.h>
+#include <linux/uaccess.h>
+#include <linux/mm.h>
+#include <linux/vmalloc.h>
 
 #include "infra/symbol_resolver.h"
+#include "klog.h"
 
 // https://github.com/torvalds/linux/commit/89245600941e4e0f87d77f60ee269b5e61ef4e49
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
@@ -48,7 +53,7 @@ static int find_kernel_symbol_exact_cb(void *data, unsigned long addr)
 }
 #endif
 
-struct ksu_lookup_symbol_ctx {
+struct sksu_lookup_symbol_ctx {
     const char *symbol_name;
     size_t symbol_len;
     void *match;
@@ -76,7 +81,7 @@ unsigned long __nocfi find_kernel_symbol_exact(const char *symbol_name)
     return addr;
 }
 
-static inline bool ksu_symbol_has_suffix(const char *name, size_t name_len, const char *suffix, size_t suffix_len)
+static inline bool sksu_symbol_has_suffix(const char *name, size_t name_len, const char *suffix, size_t suffix_len)
 {
     return name_len >= suffix_len && strcmp(name + name_len - suffix_len, suffix) == 0;
 }
@@ -87,7 +92,7 @@ static int lookup_symbol_variant_cb(void *data, const char *name, unsigned long 
 static int lookup_symbol_variant_cb(void *data, const char *name, struct module *mod, unsigned long addr)
 #endif
 {
-    struct ksu_lookup_symbol_ctx *ctx = data;
+    struct sksu_lookup_symbol_ctx *ctx = data;
     size_t name_len;
 
     if (!name || !addr)
@@ -102,7 +107,7 @@ static int lookup_symbol_variant_cb(void *data, const char *name, struct module 
     }
 
 #if !USE_KCFI
-    if (ksu_symbol_has_suffix(name, name_len, cfi_suffix, cfi_suffix_len)) {
+    if (sksu_symbol_has_suffix(name, name_len, cfi_suffix, cfi_suffix_len)) {
         ctx->match = (void *)addr;
         pr_info("use .cfi_jt variant: %s\n", name);
         return 1;
@@ -120,9 +125,115 @@ static int lookup_symbol_variant_cb(void *data, const char *name, struct module 
     return 0;
 }
 
+/*
+ * Fallback symbol resolver: parse /proc/kallsyms line by line.
+ * Used when kallsyms_on_each_symbol() is not available (< 5.19 or not exported).
+ *
+ * Format per line:  <addr> <type> <name>[<module>]
+ * We match <name> against the target symbol name (including variant suffixes).
+ */
+#if !ALWAYS_HAVE_ON_EACH_SYMBOL
+static void resolve_symbol_by_proc_kallsyms(struct sksu_lookup_symbol_ctx *ctx)
+{
+    struct file *fp;
+    loff_t pos = 0;
+    char *buf;
+    int ret;
+
+    fp = filp_open("/proc/kallsyms", O_RDONLY, 0);
+    if (IS_ERR(fp)) {
+        pr_debug("resolve_sym: open /proc/kallsyms failed: %ld\n", PTR_ERR(fp));
+        return;
+    }
+
+    buf = vmalloc(PAGE_SIZE);
+    if (!buf) {
+        filp_close(fp, NULL);
+        return;
+    }
+
+    while ((ret = kernel_read(fp, buf, PAGE_SIZE - 1, &pos)) > 0) {
+        char *line = buf;
+        char *end = buf + ret;
+        char *p, *name_start, *addr_str;
+        int i;
+
+        buf[ret] = '\0';
+
+        while (line < end) {
+            /* Find end of line */
+            p = strchr(line, '\n');
+            if (!p)
+                p = end;
+            else
+                *p = '\0';
+
+            /* Skip empty lines */
+            if (p - line < 3) {
+                line = p + 1;
+                continue;
+            }
+
+            /* Parse: <addr> <type> <name> */
+            addr_str = line;
+            /* Skip hex address */
+            while (*addr_str && *addr_str != ' ')
+                addr_str++;
+            if (!*addr_str)
+                goto next_line;
+            *addr_str++ = '\0';
+            /* Skip type char */
+            if (*addr_str == ' ')
+                addr_str++;
+            if (!*addr_str || *addr_str == ' ')
+                goto next_line;
+            addr_str++; /* skip type */
+
+            /* Skip spaces before name */
+            while (*addr_str == ' ')
+                addr_str++;
+            if (!*addr_str)
+                goto next_line;
+
+            name_start = addr_str;
+            /* Strip module suffix [... ] */
+            for (i = 0; name_start[i]; i++) {
+                if (name_start[i] == '\t' || name_start[i] == ' ') {
+                    name_start[i] = '\0';
+                    break;
+                }
+            }
+
+            if (!name_start[0])
+                goto next_line;
+
+            /* Try to match the symbol name */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 6, 0)
+            if (lookup_symbol_variant_cb(ctx, name_start, 0)) {
+#else
+            if (lookup_symbol_variant_cb(ctx, name_start, NULL, 0)) {
+#endif
+                /* matched! ctx->match is set */
+                break;
+            }
+
+next_line:
+            line = p + 1;
+        }
+
+        if (ctx->match)
+            break;
+    }
+
+    vfree(buf);
+    buf = NULL;
+    filp_close(fp, NULL);
+}
+#endif
+
 static __nocfi void *resolve_symbol_variant(const char *symbol_name, size_t symbol_len)
 {
-    struct ksu_lookup_symbol_ctx ctx = {
+    struct sksu_lookup_symbol_ctx ctx = {
         .symbol_name = symbol_name,
         .symbol_len = symbol_len,
     };
@@ -131,14 +242,21 @@ static __nocfi void *resolve_symbol_variant(const char *symbol_name, size_t symb
     if (kallsyms_on_each_symbol_fn) {
         kallsyms_on_each_symbol_fn(lookup_symbol_variant_cb, &ctx);
     }
-    // TODO: iterate kallsyms by sprint_symbol
+    if (!ctx.match) {
+        /* Fallback: parse /proc/kallsyms when kallsyms_on_each_symbol is
+         * unavailable (pre-5.19 kernels that don't export it, or
+         * hardened builds with CONFIG_KALLSYMS_SYMBOL_ITERATE disabled).
+         */
+        pr_info("resolve_sym: falling back to /proc/kallsyms for %s\n", symbol_name);
+        resolve_symbol_by_proc_kallsyms(&ctx);
+    }
 #else
     kallsyms_on_each_symbol(lookup_symbol_variant_cb, &ctx);
 #endif
     return ctx.match;
 }
 
-void *ksu_resolve_symbol_for_functable_hook(const char *symbol_name)
+void *sksu_resolve_symbol_for_functable_hook(const char *symbol_name)
 {
     void *addr;
     size_t symbol_len;
@@ -172,7 +290,7 @@ void *ksu_resolve_symbol_for_functable_hook(const char *symbol_name)
 #endif
 }
 
-void __init ksu_init_symbol_resolver()
+void __init sksu_init_symbol_resolver()
 {
 #if !ALWAYS_HAVE_ON_EACH_SYMBOL
     kallsyms_on_each_symbol_fn = find_kernel_symbol_exact("kallsyms_on_each_symbol");
