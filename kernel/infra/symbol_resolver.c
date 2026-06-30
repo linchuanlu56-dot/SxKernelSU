@@ -53,7 +53,7 @@ static int find_kernel_symbol_exact_cb(void *data, unsigned long addr)
 }
 #endif
 
-struct sksu_lookup_symbol_ctx {
+struct ksu_lookup_symbol_ctx {
     const char *symbol_name;
     size_t symbol_len;
     void *match;
@@ -81,7 +81,7 @@ unsigned long __nocfi find_kernel_symbol_exact(const char *symbol_name)
     return addr;
 }
 
-static inline bool sksu_symbol_has_suffix(const char *name, size_t name_len, const char *suffix, size_t suffix_len)
+static inline bool ksu_symbol_has_suffix(const char *name, size_t name_len, const char *suffix, size_t suffix_len)
 {
     return name_len >= suffix_len && strcmp(name + name_len - suffix_len, suffix) == 0;
 }
@@ -92,7 +92,7 @@ static int lookup_symbol_variant_cb(void *data, const char *name, unsigned long 
 static int lookup_symbol_variant_cb(void *data, const char *name, struct module *mod, unsigned long addr)
 #endif
 {
-    struct sksu_lookup_symbol_ctx *ctx = data;
+    struct ksu_lookup_symbol_ctx *ctx = data;
     size_t name_len;
 
     if (!name || !addr)
@@ -107,7 +107,7 @@ static int lookup_symbol_variant_cb(void *data, const char *name, struct module 
     }
 
 #if !USE_KCFI
-    if (sksu_symbol_has_suffix(name, name_len, cfi_suffix, cfi_suffix_len)) {
+    if (ksu_symbol_has_suffix(name, name_len, cfi_suffix, cfi_suffix_len)) {
         ctx->match = (void *)addr;
         pr_info("use .cfi_jt variant: %s\n", name);
         return 1;
@@ -133,7 +133,7 @@ static int lookup_symbol_variant_cb(void *data, const char *name, struct module 
  * We match <name> against the target symbol name (including variant suffixes).
  */
 #if !ALWAYS_HAVE_ON_EACH_SYMBOL
-static void resolve_symbol_by_proc_kallsyms(struct sksu_lookup_symbol_ctx *ctx)
+static void resolve_symbol_by_proc_kallsyms(struct ksu_lookup_symbol_ctx *ctx)
 {
     struct file *fp;
     loff_t pos = 0;
@@ -233,7 +233,7 @@ next_line:
 
 static __nocfi void *resolve_symbol_variant(const char *symbol_name, size_t symbol_len)
 {
-    struct sksu_lookup_symbol_ctx ctx = {
+    struct ksu_lookup_symbol_ctx ctx = {
         .symbol_name = symbol_name,
         .symbol_len = symbol_len,
     };
@@ -256,7 +256,7 @@ static __nocfi void *resolve_symbol_variant(const char *symbol_name, size_t symb
     return ctx.match;
 }
 
-void *sksu_resolve_symbol_for_functable_hook(const char *symbol_name)
+void *ksu_resolve_symbol_for_functable_hook(const char *symbol_name)
 {
     void *addr;
     size_t symbol_len;
@@ -290,7 +290,7 @@ void *sksu_resolve_symbol_for_functable_hook(const char *symbol_name)
 #endif
 }
 
-void __init sksu_init_symbol_resolver()
+void __init ksu_init_symbol_resolver()
 {
 #if !ALWAYS_HAVE_ON_EACH_SYMBOL
     kallsyms_on_each_symbol_fn = find_kernel_symbol_exact("kallsyms_on_each_symbol");

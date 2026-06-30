@@ -15,12 +15,12 @@ use std::process::Command;
 use std::time::Duration;
 
 pub fn on_post_data_fs() -> Result<()> {
-    if skcalls::is_uapi_version_mismatch() {
+    if ksucalls::is_uapi_version_mismatch() {
         error!("Kernel and userspace uapi version mismatch! skip on_post_fs_data");
         return Ok(());
     }
 
-    skcalls::report_post_fs_data();
+    ksucalls::report_post_fs_data();
 
     utils::umask(0);
 
@@ -73,9 +73,9 @@ pub fn on_post_data_fs() -> Result<()> {
         warn!("prune modules failed: {e}");
     }
 
-    // Refresh /metadata/watchdog/sks/modules.rc so the next boot's kernel hook sees the
+    // Refresh /metadata/watchdog/ksu/modules.rc so the next boot's kernel hook sees the
     // current module set. Acts as a safety net when state was changed outside
-    // of sksud's normal mutation commands.
+    // of ksud's normal mutation commands.
     if let Err(e) = crate::module::regenerate_preinit_rc() {
         warn!("regenerate preinit rc failed: {e}");
     }
@@ -160,7 +160,7 @@ pub fn run_stage(stage: &str, block: bool) {
 }
 
 pub fn on_services() {
-    if skcalls::is_uapi_version_mismatch() {
+    if ksucalls::is_uapi_version_mismatch() {
         error!("Kernel and userspace uapi version mismatch! skip on_services");
         return;
     }
@@ -170,12 +170,12 @@ pub fn on_services() {
 }
 
 pub fn on_boot_completed() {
-    if skcalls::is_uapi_version_mismatch() {
+    if ksucalls::is_uapi_version_mismatch() {
         error!("Kernel and userspace uapi version mismatch! skip on_boot_completed");
         return;
     }
 
-    skcalls::report_boot_complete();
+    ksucalls::report_boot_complete();
     info!("on_boot_completed triggered!");
 
     run_stage("boot-completed", false);
@@ -251,7 +251,7 @@ fn catch_bootlog(logname: &str, command: &[&str]) -> Result<()> {
 
 pub fn soft_reboot() -> Result<()> {
     // check it avoid user click "soft_reboot" in manager when version mismatch
-    if skcalls::is_uapi_version_mismatch() {
+    if ksucalls::is_uapi_version_mismatch() {
         error!("Kernel and userspace uapi version mismatch! skip soft_reboot");
         return Ok(());
     }
