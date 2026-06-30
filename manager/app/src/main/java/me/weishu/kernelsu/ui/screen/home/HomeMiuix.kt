@@ -472,7 +472,17 @@ private fun LearnMoreCard(
     onOpenUrl: (String) -> Unit,
 ) {
     val url = stringResource(R.string.home_learn_kernelsu_url)
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.defaultColors(
+            color = when {
+                isDynamicColor -> colorScheme.secondaryContainer
+                isInDarkTheme() -> Color(0xFF2A1A38)
+                else -> AnimeColors.pastelLavender.copy(alpha = 0.3f)
+            }
+        ),
+        shape = CardDefaults.shape
+    ) {
         BasicComponent(
             title = stringResource(R.string.home_learn_kernelsu),
             summary = stringResource(R.string.home_click_to_learn_kernelsu),
@@ -490,7 +500,17 @@ private fun LearnMoreCard(
 
 @Composable
 private fun DonateCard(onOpenUrl: (String) -> Unit) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.defaultColors(
+            color = when {
+                isDynamicColor -> colorScheme.secondaryContainer
+                isInDarkTheme() -> Color(0xFF2A1A38)
+                else -> AnimeColors.candyPink.copy(alpha = 0.25f)
+            }
+        ),
+        shape = CardDefaults.shape
+    ) {
         BasicComponent(
             title = stringResource(R.string.home_support_title),
             summary = stringResource(R.string.home_support_content),
@@ -529,7 +549,16 @@ private fun InfoCard(systemInfo: SystemInfo) {
         )
     }
 
-    Card {
+    Card(
+        colors = CardDefaults.defaultColors(
+            color = when {
+                isDynamicColor -> colorScheme.secondaryContainer
+                isInDarkTheme() -> Color(0xFF2A1A38)
+                else -> AnimeColors.pastelLavender.copy(alpha = 0.2f)
+            }
+        ),
+        shape = CardDefaults.shape
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
