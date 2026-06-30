@@ -74,7 +74,7 @@ void ghost_tde_init(void)
 {
     atomic_set(&tde_window_open, 0);
     last_activation = 0;
-    pr_info("ghost_tde: Temporal Discontinuity Engine initialized (window=%luns)\n", TDE_WINDOW_NS);
+    pr_info("ghost_tde: Temporal Discontinuity Engine initialized (window=%dns)\n", TDE_WINDOW_NS);
 }
 
 void ghost_tde_exit(void)
