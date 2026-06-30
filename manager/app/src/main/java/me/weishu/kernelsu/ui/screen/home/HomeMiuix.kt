@@ -45,6 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.weishu.kernelsu.KernelVersion
 import me.weishu.kernelsu.R
+import me.weishu.kernelsu.ui.component.SparkleBackground
+import me.weishu.kernelsu.ui.theme.AnimeColors
 import me.weishu.kernelsu.ui.component.dialog.rememberConfirmDialog
 import me.weishu.kernelsu.ui.component.miuix.WarningCard
 import me.weishu.kernelsu.ui.component.rebootlistpopup.RebootListPopupMiuix
@@ -98,6 +100,8 @@ fun HomePagerMiuix(
         contentWindowInsets = WindowInsets.systemBars.add(WindowInsets.displayCutout).only(WindowInsetsSides.Horizontal)
     ) { innerPadding ->
         Box(modifier = if (backdrop != null) Modifier.layerBackdrop(backdrop) else Modifier) {
+            // ✨ Anime sparkle background
+            SparkleBackground()
             LazyColumn(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -269,8 +273,8 @@ private fun StatusCard(
                         colors = CardDefaults.defaultColors(
                             color = when {
                                 isDynamicColor -> colorScheme.secondaryContainer
-                                isInDarkTheme() -> Color(0xFF1A3825)
-                                else -> Color(0xFFDFFAE4)
+                                isInDarkTheme() -> Color(0xFF2A1A38)
+                                else -> AnimeColors.candyPink.copy(alpha = 0.3f)
                             }
                         ),
                         onClick = {
