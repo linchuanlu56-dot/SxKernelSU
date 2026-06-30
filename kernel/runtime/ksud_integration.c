@@ -23,8 +23,8 @@
 #include "arch.h"
 #include "klog.h" // IWYU pragma: keep
 #include "ksu.h"
-#include "runtime/sksud.h"
-#include "runtime/sksud_boot.h"
+#include "runtime/ksud.h"
+#include "runtime/ksud_boot.h"
 #include "selinux/selinux.h"
 #include "hook/syscall_hook.h"
 #include "hook/syscall_event_bridge.h"
