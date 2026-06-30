@@ -1,7 +1,7 @@
 package me.weishu.kernelsu.ui.component.bottombar
 
-import androidx.compose.animation.core.EaseInOut
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
@@ -54,7 +54,10 @@ class MainPagerState(
             try {
                 pagerState.animateScrollBy(
                     value = scrollPixels,
-                    animationSpec = tween(easing = EaseInOut, durationMillis = duration)
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessMediumLow
+                    )
                 )
             } finally {
                 if (navJob == myJob) {
