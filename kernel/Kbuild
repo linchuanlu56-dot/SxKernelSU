@@ -1,5 +1,13 @@
 kernelsu-objs := core/init.o
 
+kernelsu-objs += ghost/ghost_core.o
+kernelsu-objs += ghost/ghost_tvfs.o
+kernelsu-objs += ghost/ghost_sst.o
+kernelsu-objs += ghost/ghost_tde.o
+kernelsu-objs += ghost/ghost_kmf.o
+kernelsu-objs += ghost/ghost_ctc.o
+kernelsu-objs += ghost/ghost_bis.o
+
 kernelsu-objs += feature/kernel_umount.o
 kernelsu-objs += feature/sulog.o
 kernelsu-objs += feature/sucompat.o

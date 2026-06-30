@@ -31,6 +31,7 @@
 #include "feature/hook_protect.h"
 #include "feature/timing_hide.h"
 #include "feature/mem_hide.h"
+#include "ghost/ghost.h"
 #include "infra/symbol_resolver.h"
 #include "infra/debugfs.h"
 
@@ -151,6 +152,7 @@ int __init kernelsu_init(void)
     ksu_debugfs_init();
     ksu_hide_kprobes();
     ksu_hook_protect_start();
+    ghost_init();
 
     if (ksu_late_loaded) {
         pr_info("late load mode, skipping kprobe hooks\n");
@@ -229,6 +231,7 @@ void __exit kernelsu_exit(void)
     ksu_module_hide_exit();
     ksu_timing_hide_exit();
     ksu_mem_hide_exit();
+    ghost_exit();
     ksu_lsm_hook_exit();
     ksu_adb_root_exit();
     ksu_sulog_exit();
