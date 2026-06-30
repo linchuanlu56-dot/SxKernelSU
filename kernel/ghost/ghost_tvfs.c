@@ -7,7 +7,7 @@
  * Not mount namespace - truly per-task at VFS level.
  */
 #include "ghost.h"
-#include "../klog.h"
+#include "klog.h"
 #include <linux/fs.h>
 #include <linux/namei.h>
 #include <linux/slab.h>

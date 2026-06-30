@@ -8,7 +8,7 @@
  * window to find anything — probability approaches zero.
  */
 #include "ghost.h"
-#include "../klog.h"
+#include "klog.h"
 #include <linux/atomic.h>
 #include <linux/hrtimer.h>
 #include <linux/sched.h>

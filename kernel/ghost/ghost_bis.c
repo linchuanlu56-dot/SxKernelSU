@@ -9,7 +9,7 @@
  * - Always active: Monitors for danger signals constantly
  */
 #include "ghost.h"
-#include "../klog.h"
+#include "klog.h"
 #include <linux/slab.h>
 #include <linux/version.h>
 

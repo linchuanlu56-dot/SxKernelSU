@@ -8,7 +8,7 @@
  * Looks like normal system monitoring to any observer.
  */
 #include "ghost.h"
-#include "../klog.h"
+#include "klog.h"
 #include <linux/ktime.h>
 #include <linux/sched.h>
 #include <linux/version.h>

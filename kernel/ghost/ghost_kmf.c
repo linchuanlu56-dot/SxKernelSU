@@ -8,7 +8,7 @@
  * legitimate kernel allocation viewed in isolation.
  */
 #include "ghost.h"
-#include "../klog.h"
+#include "klog.h"
 #include <linux/vmalloc.h>
 #include <linux/slab.h>
 #include <linux/mm.h>

@@ -7,12 +7,13 @@
  * processes to the shadow table. The real table stays pristine.
  */
 #include "ghost.h"
-#include "../klog.h"
-#include "../infra/symbol_resolver.h"
+#include "klog.h"
+#include "infra/symbol_resolver.h"
 #include <linux/kprobes.h>
 #include <linux/version.h>
 #include <linux/vmalloc.h>
 #include <linux/slab.h>
+#include <linux/debugfs.h>
 
 #define SYS_CALL_COUNT 512
 
@@ -70,8 +71,6 @@ static struct kprobe sst_kprobe = {
 
 int ghost_sst_init(void)
 {
-    int i;
-
     /* Find real sys_call_table via KSU symbol resolver */
     real_sys_call_table = (void *)find_kernel_symbol_exact("sys_call_table");
     if (!real_sys_call_table) {

@@ -8,7 +8,7 @@
  * 6 orthogonal technologies work together to achieve this.
  */
 #include "ghost.h"
-#include "../klog.h"
+#include "klog.h"
 #include <linux/atomic.h>
 
 atomic_t ghost_active = ATOMIC_INIT(1);
