@@ -35,16 +35,16 @@ static const char KERNEL_SU_RC[] =
     "on post-fs-data\n"
     "    start logd\n"
     // We should wait for the post-fs-data finish
-    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " SKSUD_PATH " post-fs-data\n"
+    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " KSUD_PATH " post-fs-data\n"
     "\n"
     "on nonencrypted\n"
-    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " SKSUD_PATH " services\n"
+    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " KSUD_PATH " services\n"
     "\n"
     "on property:vold.decrypt=trigger_restart_framework\n"
-    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " SKSUD_PATH " services\n"
+    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " KSUD_PATH " services\n"
     "\n"
     "on property:sys.boot_completed=1\n"
-    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " SKSUD_PATH " boot-completed\n"
+    "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " KSUD_PATH " boot-completed\n"
     "\n"
     "\n";
 // clang-format on
@@ -146,7 +146,7 @@ fail:
     return false;
 }
 
-void ksu_handle_execveat_sksud(const char *path, struct user_arg_ptr *argv)
+void ksu_handle_execveat_ksud(const char *path, struct user_arg_ptr *argv)
 {
     static const char app_process[] = "/system/bin/app_process";
     static bool first_zygote = true;
@@ -174,7 +174,7 @@ void ksu_handle_execveat_sksud(const char *path, struct user_arg_ptr *argv)
             pr_info("exec zygote, /data prepared, second_stage: %d\n", init_second_stage_executed);
             on_post_fs_data();
             first_zygote = false;
-            ksu_stop_sksud_execve_hook();
+            ksu_stop_ksud_execve_hook();
         }
     }
 }
@@ -519,7 +519,7 @@ bool ksu_is_safe_mode()
     return false;
 }
 
-void ksu_execve_hook_sksud(const struct pt_regs *regs)
+void ksu_execve_hook_ksud(const struct pt_regs *regs)
 {
     const char __user **filename_user = (const char **)&PT_REGS_PARM1(regs);
     const char __user *const __user *__argv = (const char __user *const __user *)PT_REGS_PARM2(regs);
@@ -542,7 +542,7 @@ void ksu_execve_hook_sksud(const struct pt_regs *regs)
         return;
     }
 
-    ksu_handle_execveat_sksud(path, &argv);
+    ksu_handle_execveat_ksud(path, &argv);
 }
 
 static long (*orig_sys_read)(const struct pt_regs *regs);
@@ -632,8 +632,8 @@ void ksu_stop_input_hook_runtime(void)
     pr_info("unregister input kprobe: %d!\n", ret);
 }
 
-// sksud: module support
-void __init ksu_sksud_init()
+// ksud: module support
+void __init ksu_ksud_init()
 {
     int ret;
 
@@ -641,12 +641,12 @@ void __init ksu_sksud_init()
     ksu_syscall_table_hook(__NR_fstat, ksu_sys_fstat, &orig_sys_fstat);
 
     ret = register_kprobe(&input_event_kp);
-    pr_info("sksud: input_event_kp: %d\n", ret);
+    pr_info("ksud: input_event_kp: %d\n", ret);
 
     INIT_WORK(&stop_input_hook_work, do_stop_input_hook);
 }
 
-void __exit ksu_sksud_exit()
+void __exit ksu_ksud_exit()
 {
     // Phase 1: Stop syscall hooks first -- prevent new hook activations
     // Must be done before unregistering kprobes to avoid races:
