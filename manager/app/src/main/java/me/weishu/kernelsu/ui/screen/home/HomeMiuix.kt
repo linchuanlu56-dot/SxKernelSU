@@ -390,6 +390,13 @@ private fun StatusCard(
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Card(
                         modifier = Modifier.weight(1f),
+                        colors = CardDefaults.defaultColors(
+                            color = when {
+                                isDynamicColor -> colorScheme.secondaryContainer
+                                isInDarkTheme() -> Color(0xFF2A1A38)
+                                else -> AnimeColors.candyPink.copy(alpha = 0.25f)
+                            }
+                        ),
                         onClick = {
                             if (!state.isLateLoadMode) {
                                 actions.onInstallClick()

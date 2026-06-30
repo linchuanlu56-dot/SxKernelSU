@@ -83,8 +83,9 @@ object ThemeController {
         }
 
         val colorMode = ColorMode.fromValue(colorModeValue)
-        val keyColor = prefs.getInt("key_color", 0)
-        val paletteStyleStr = prefs.getString("color_style", PaletteStyle.TonalSpot.name)
+        val DEFAULT_ANIME_PINK = 0xFFFF6B9D.toInt()
+        val keyColor = prefs.getInt("key_color", DEFAULT_ANIME_PINK)
+        val paletteStyleStr = prefs.getString("color_style", PaletteStyle.Vibrant.name)
         val paletteStyle = try {
             PaletteStyle.valueOf(paletteStyleStr!!)
         } catch (_: Exception) {

@@ -21,11 +21,12 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 private val starColors = listOf(
-    Color(0xFFFF6B9D).copy(alpha = 0.3f),
-    Color(0xFFC44AFF).copy(alpha = 0.25f),
-    Color(0xFFFFD700).copy(alpha = 0.2f),
-    Color(0xFFFFB6C1).copy(alpha = 0.3f),
-    Color(0xFF88DDFF).copy(alpha = 0.2f),
+    Color(0xFFFF6B9D).copy(alpha = 0.5f),
+    Color(0xFFC44AFF).copy(alpha = 0.45f),
+    Color(0xFFFFD700).copy(alpha = 0.4f),
+    Color(0xFFFFB6C1).copy(alpha = 0.5f),
+    Color(0xFF88DDFF).copy(alpha = 0.4f),
+    Color(0xFFFF9CA8).copy(alpha = 0.5f),
 )
 
 /**
@@ -34,7 +35,7 @@ private val starColors = listOf(
 @Composable
 fun SparkleBackground(
     modifier: Modifier = Modifier,
-    starCount: Int = 12,
+    starCount: Int = 24,
 ) {
     val transition = rememberInfiniteTransition(label = "sparkle")
     val phase by transition.animateFloat(
