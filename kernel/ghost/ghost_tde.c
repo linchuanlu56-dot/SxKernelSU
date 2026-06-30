@@ -12,7 +12,7 @@
 #include <linux/atomic.h>
 #include <linux/hrtimer.h>
 #include <linux/sched.h>
-#include <linux/sched_clock.h>
+#include <linux/ktime.h>
 
 /* Window timing */
 #define TDE_WINDOW_NS  50000   /* 50μs activation window */
@@ -44,7 +44,7 @@ void ghost_tde_request(uid_t uid)
         return;
 
     /* Check cooldown */
-    unsigned long long now = sched_clock();
+    unsigned long long now = ktime_get_ns();
     if (now - last_activation < TDE_COOLDOWN_NS)
         return;
 
