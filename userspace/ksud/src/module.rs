@@ -772,7 +772,81 @@ fn install_module_to_system(zip: &str) -> Result<()> {
     Ok(())
 }
 
+/// Atomic module installation with automatic backup & rollback.
+/// If installation fails, the module is restored to its previous state.
 pub fn install_module(zip: &str) -> Result<()> {
+    // 1. Extract module_id from zip to check for existing module
+    let mut buffer: Vec<u8> = Vec::new();
+    let entry_path = PathBuf::from("module.prop");
+    let zip_path = PathBuf::from(zip).canonicalize()?;
+
+    if let Ok(()) = zip_extract_file_to_memory(&zip_path, &entry_path, &mut buffer) {
+        let mut module_prop = HashMap::new();
+        let _ = PropertiesIter::new_with_encoding(
+            Cursor::new(buffer), encoding_rs::UTF_8
+        ).read_into(|k, v| { module_prop.insert(k, v); });
+
+        if let Some(id) = module_prop.get("id").map(|s| s.trim().to_string()) {
+            let module_path = Path::new(defs::MODULE_DIR).join(&id);
+            let backup_path = Path::new(defs::MODULE_DIR).join(format!("{}.bak", id));
+            let updated_path = Path::new(defs::MODULE_UPDATE_DIR).join(&id);
+            let updated_bak = Path::new(defs::MODULE_UPDATE_DIR).join(format!("{}.bak", id));
+
+            // Backup existing module if present
+            let has_backup = if module_path.exists() {
+                let _ = remove_dir_all(&backup_path);
+                let _ = rename(&module_path, &backup_path);
+                if updated_path.exists() { let _ = remove_dir_all(&updated_bak); let _ = rename(&updated_path, &updated_bak); }
+                info!("Atomic install: backed up existing module '{id}'");
+                true
+            } else { false };
+
+            // 2. Attempt installation
+            let result = install_module_to_system(zip);
+
+            match result {
+                Ok(()) => {
+                    // Success → remove backups
+                    if has_backup {
+                        let _ = remove_dir_all(&backup_path);
+                        let _ = remove_dir_all(&updated_bak);
+                        info!("Atomic install: module '{id}' installed, backups removed");
+                    }
+                    if let Err(e) = regenerate_preinit_rc() {
+                        warn!("regenerate preinit rc failed: {e}");
+                    }
+                    println!("- Module installed successfully!");
+                    Ok(())
+                }
+                Err(e) => {
+                    // 3. Failure → restore backup
+                    error!("Module installation failed: {e}");
+                    println!("- Installation failed! Rolling back...");
+
+                    // Clean up failed install
+                    let _ = remove_dir_all(&module_path);
+                    let _ = remove_dir_all(&updated_path);
+
+                    if has_backup {
+                        if backup_path.exists() {
+                            let _ = rename(&backup_path, &module_path);
+                            info!("Atomic install: restored module '{id}' from backup");
+                            println!("- Rollback: restored previous version of '{id}'");
+                        }
+                        if updated_bak.exists() {
+                            let _ = rename(&updated_bak, &updated_path);
+                        }
+                    }
+                    println!("- Error: {e}");
+                    bail!("Module installation failed and was rolled back: {e}");
+                }
+            }
+            // Don't fall through to the non-atomic path
+            return Ok(());
+        }
+    }
+
+    // Fallback: if we couldn't parse the zip, try non-atomic install
     let result = install_module_to_system(zip);
     if let Err(ref e) = result {
         println!("- Error: {e}");
