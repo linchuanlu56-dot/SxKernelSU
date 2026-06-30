@@ -19,6 +19,7 @@
 #include <linux/proc_fs.h>
 #include <linux/sched.h>
 #include <linux/pid.h>
+#include <linux/namei.h>
 
 #define MAX_HIDE_APPS 128
 #define MAX_PATH_LEN 256
