@@ -481,7 +481,6 @@ private fun LearnMoreCard(
                 else -> AnimeColors.pastelLavender.copy(alpha = 0.3f)
             }
         ),
-        shape = CardDefaults.shape
     ) {
         BasicComponent(
             title = stringResource(R.string.home_learn_kernelsu),
@@ -509,7 +508,6 @@ private fun DonateCard(onOpenUrl: (String) -> Unit) {
                 else -> AnimeColors.candyPink.copy(alpha = 0.25f)
             }
         ),
-        shape = CardDefaults.shape
     ) {
         BasicComponent(
             title = stringResource(R.string.home_support_title),
@@ -557,7 +555,6 @@ private fun InfoCard(systemInfo: SystemInfo) {
                 else -> AnimeColors.pastelLavender.copy(alpha = 0.2f)
             }
         ),
-        shape = CardDefaults.shape
     ) {
         Column(
             modifier = Modifier
