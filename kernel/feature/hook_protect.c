@@ -9,9 +9,11 @@
 #include "ksu.h"
 #include "klog.h"
 #include "infra/symbol_resolver.h"
+#include "hook/patch_memory.h"
 #include <linux/timer.h>
 #include <linux/version.h>
 #include <linux/slab.h>
+#include <linux/debugfs.h>
 
 struct hook_slot {
     void **target_addr;
@@ -53,10 +55,10 @@ static void integrity_check(struct timer_list *t)
         struct hook_slot *s = slots[i];
         if (!s || !s->target_addr || !s->expected_fn)
             continue;
-        void *current = (void *)*s->target_addr;
-        if (current != s->expected_fn) {
+        void *cur = (void *)*s->target_addr;
+        if (cur != s->expected_fn) {
             pr_warn("hook_protect: slot %d overwritten! expected %pS, found %pS, restoring\n",
-                     i, s->expected_fn, current);
+                     i, s->expected_fn, cur);
             ksu_patch_text(s->target_addr, &s->expected_fn,
                           sizeof(s->expected_fn), KSU_PATCH_TEXT_FLUSH_DCACHE);
         }
