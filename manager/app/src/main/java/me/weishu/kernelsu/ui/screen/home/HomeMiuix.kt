@@ -133,20 +133,16 @@ fun HomePagerMiuix(
                             )
                         }
                         if (state.showGkiWarning) {
-                            me.weishu.kernelsu.ui.component.AnimatedCard(index = 0) {
-                                WarningCard(stringResource(id = R.string.home_gki_warning))
-                            }
+                            WarningCard(stringResource(id = R.string.home_gki_warning))
                         }
                         if (state.showUAPIMisMatchWarning) {
-                            me.weishu.kernelsu.ui.component.AnimatedCard(index = 0) {
-                                WarningCard(
-                                    stringResource(
-                                        id = R.string.uapi_mismatch,
-                                        state.managerUAPIVersion,
-                                        state.kernelUAPIVersion ?: 0,
-                                    )
+                            WarningCard(
+                                stringResource(
+                                    id = R.string.uapi_mismatch,
+                                    state.managerUAPIVersion,
+                                    state.kernelUAPIVersion ?: 0,
                                 )
-                            }
+                            )
                         }
                         if (state.showRequireKernelWarning) {
                             if (state.currentManagerVersionCode < (state.ksuVersion ?: 0)) {
