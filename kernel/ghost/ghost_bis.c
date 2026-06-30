@@ -11,6 +11,8 @@
 #include "ghost.h"
 #include "klog.h"
 #include <linux/slab.h>
+#include <linux/sched.h>
+#include <linux/uidgid.h>
 #include <linux/version.h>
 
 #define MAX_WHITELIST 64
