@@ -23,9 +23,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -41,7 +44,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.sxkernelsu.R
 import com.sxkernelsu.ui.component.dialog.rememberConfirmDialog
+import com.sxkernelsu.ui.component.SparkleBackground
 import com.sxkernelsu.ui.theme.LocalEnableBlur
+import com.sxkernelsu.ui.theme.isInDarkTheme
 import com.sxkernelsu.ui.util.BlurredBar
 import com.sxkernelsu.ui.util.LkmSelection
 import com.sxkernelsu.ui.util.rememberBlurBackdrop
@@ -99,6 +104,14 @@ internal fun InstallScreenMiuix(
         contentWindowInsets = WindowInsets.systemBars.add(WindowInsets.displayCutout).only(WindowInsetsSides.Horizontal)
     ) { innerPadding ->
         Box(modifier = if (backdrop != null) Modifier.layerBackdrop(backdrop) else Modifier) {
+            Image(
+                painter = painterResource(id = if (isInDarkTheme()) R.drawable.bg_anime_dark else R.drawable.bg_anime_light),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alpha = 0.2f
+            )
+            SparkleBackground(starCount = 16)
             LazyColumn(
                 modifier = Modifier
                     .fillMaxHeight()
