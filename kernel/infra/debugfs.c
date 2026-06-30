@@ -40,8 +40,6 @@ static int ksu_hooks_show(struct seq_file *m, void *v)
     seq_puts(m, "syscall_hooks: active\n");
     seq_puts(m, "lsm_hooks: active\n");
     seq_puts(m, "kprobes: registered\n");
-    seq_printf(m, "late_load: %s\n", ksu_is_late_loaded() ? "yes" : "no");
-    seq_printf(m, "safe_mode: %s\n", ksu_is_safe_mode() ? "yes" : "no");
     return 0;
 }
 

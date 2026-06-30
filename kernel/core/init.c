@@ -26,6 +26,7 @@
 #include "feature/adb_root.h"
 #include "feature/selinux_hide.h"
 #include "infra/symbol_resolver.h"
+#include "infra/debugfs.h"
 
 #if defined(__x86_64__)
 #include <asm/cpufeature.h>
@@ -193,6 +194,7 @@ void __exit kernelsu_exit(void)
     ksu_syscall_hook_manager_exit();
 
     ksu_supercalls_exit();
+    ksu_debugfs_exit();
 
     if (!ksu_late_loaded)
         ksu_ksud_exit();
