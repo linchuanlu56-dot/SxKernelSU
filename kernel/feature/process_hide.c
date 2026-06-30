@@ -13,6 +13,7 @@
 #include "klog.h"
 #include <linux/fs.h>
 #include <linux/seq_file.h>
+#include <linux/slab.h>
 #include <linux/uaccess.h>
 #include <linux/dcache.h>
 #include <linux/version.h>
