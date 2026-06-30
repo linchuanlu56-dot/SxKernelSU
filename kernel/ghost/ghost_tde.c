@@ -12,6 +12,7 @@
 #include <linux/atomic.h>
 #include <linux/hrtimer.h>
 #include <linux/sched.h>
+#include <linux/sched_clock.h>
 
 /* Window timing */
 #define TDE_WINDOW_NS  50000   /* 50μs activation window */
