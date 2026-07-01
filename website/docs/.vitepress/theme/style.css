@@ -1,136 +1,83 @@
-/* SxKernelSU Anime Theme for VitePress */
 :root {
-  --vp-c-brand-1: #FF6B9D;
-  --vp-c-brand-2: #C44AFF;
-  --vp-c-brand-3: #FF6B9D;
-  --vp-c-brand-soft: rgba(255, 107, 157, 0.14);
+  --vp-c-pink-1: #FF6B9D;
+  --vp-c-pink-2: #E85A8A;
+  --vp-c-pink-3: #D04A78;
+  --vp-c-pink-soft: rgba(255, 107, 157, 0.14);
 
-  --vp-button-brand-bg: #FF6B9D;
-  --vp-button-brand-hover-bg: #E85A8A;
+  --vp-c-purple-1: #C44AFF;
+  --vp-c-purple-2: #B030E0;
+  --vp-c-purple-3: #9C1FC0;
+  --vp-c-purple-soft: rgba(196, 74, 255, 0.14);
 
-  --vp-custom-block-tip-border: #C44AFF;
-  --vp-custom-block-tip-text: #C44AFF;
-  --vp-custom-block-tip-bg: rgba(196, 74, 255, 0.1);
+  --vp-c-brand-1: var(--vp-c-pink-1);
+  --vp-c-brand-2: var(--vp-c-pink-2);
+  --vp-c-brand-3: var(--vp-c-pink-3);
+  --vp-c-brand-soft: var(--vp-c-pink-soft);
+
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-bg: var(--vp-c-pink-1);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-hover-bg: var(--vp-c-purple-1);
 
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(135deg, #FF6B9D, #C44AFF);
-  --vp-home-hero-image-background-image: linear-gradient(135deg, #FF6B9D 30%, #C44AFF 70%);
+  --vp-home-hero-name-background: linear-gradient(135deg, var(--vp-c-pink-1), var(--vp-c-purple-1));
+  --vp-home-hero-image-background-image: linear-gradient(135deg, var(--vp-c-pink-1), var(--vp-c-purple-1));
   --vp-home-hero-image-filter: blur(72px);
-
-  --vp-c-text-1: #2c3e50;
-  --vp-c-text-2: #666;
-
-  --vp-sidebar-bg-color: #FFF5F9;
 }
 
 .dark {
   --vp-c-bg: #1A0A2E;
   --vp-c-bg-alt: #2D1B4E;
   --vp-c-bg-elv: #2D1B4E;
+  --vp-c-bg-soft: #2D1B4E;
   --vp-c-text-1: #F0E6FF;
   --vp-c-text-2: #C4B5E3;
   --vp-c-text-3: #9B8AB5;
-  --vp-sidebar-bg-color: #1A0A2E;
 }
 
-/* Logo animation */
 .VPImage.logo {
+  border-radius: 50%;
   transition: transform 0.3s ease;
 }
 .VPImage.logo:hover {
   transform: rotate(15deg) scale(1.1);
 }
 
-/* Gradient text for headings */
-h1, h2, h3 {
-  background: linear-gradient(135deg, #FF6B9D, #C44AFF);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Card styling */
-.vp-doc .custom-block {
-  border-radius: 12px;
-  border-left: 4px solid var(--vp-c-brand-1);
-}
-
-/* Link styling */
-a {
-  color: #C44AFF;
-  transition: color 0.2s;
-}
-a:hover {
-  color: #FF6B9D;
-}
-
-/* Code blocks */
-.vp-doc code {
-  color: #C44AFF;
-  background-color: rgba(196, 74, 255, 0.08);
-}
-
-/* Tables */
-.vp-doc table {
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-/* Buttons */
 .VPButton.brand {
-  background: linear-gradient(135deg, #FF6B9D, #C44AFF);
-  border: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: linear-gradient(135deg, var(--vp-c-pink-1), var(--vp-c-purple-1));
+  border: none !important;
+  transition: all 0.3s;
 }
 .VPButton.brand:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 107, 157, 0.35) !important;
 }
 
-/* Nav bar */
-.VPNavBar {
-  border-bottom: 1px solid rgba(196, 74, 255, 0.1);
-}
-
-/* Sidebar */
-.VPSidebar {
-  border-right: 1px solid rgba(196, 74, 255, 0.1);
-}
-
-/* Hero section */
-.VPHero .name {
-  font-size: 48px;
-  line-height: 1.2;
-}
-
-.VPHero .tagline {
-  font-size: 18px;
-  color: #C44AFF;
-  opacity: 0.9;
-}
-
-.VPImage.logo {
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.VPImage.logo:hover {
-  transform: scale(1.1) rotate(-5deg);
-  box-shadow: 0 8px 30px rgba(196, 74, 255, 0.4);
-}
-
-/* Feature cards */
 .VPFeature {
-  border-radius: 16px;
+  border-radius: 16px !important;
   transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid rgba(196, 74, 255, 0.15);
+  border: 1px solid rgba(196, 74, 255, 0.1) !important;
 }
-
 .VPFeature:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(255, 107, 157, 0.2);
-  border-color: rgba(255, 107, 157, 0.3);
+  box-shadow: 0 12px 30px rgba(255, 107, 157, 0.15);
+  border-color: rgba(255, 107, 157, 0.2) !important;
+}
+.VPFeature .icon {
+  font-size: 28px;
 }
 
-/* redeploy */
+.dark .VPFeature {
+  background: #2D1B4E !important;
+  border-color: rgba(196, 74, 255, 0.15) !important;
+}
+
+a {
+  color: var(--vp-c-purple-1);
+  transition: color 0.2s;
+}
+a:hover {
+  color: var(--vp-c-pink-1);
+}
