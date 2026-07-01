@@ -1,16 +1,16 @@
 [English](README.md) | [Español](README_ES.md) | [简体中文](README_CN.md) | [繁體中文](README_TW.md) | [日本語](README_JP.md) | [한국어](README_KR.md) | [Polski](README_PL.md) | [Português (Brasil)](README_PT-BR.md) | [Türkçe](README_TR.md) | [Русский](README_RU.md) | [Tiếng Việt](README_VI.md) | **Indonesia** | [עברית](README_IW.md) | [हिंदी](README_IN.md) | [Italiano](README_IT.md)
 
-# KernelSU
+# SxSxKernelSU
 
 <img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="logo">
 
 Solusi root berbasis Kernel untuk perangkat Android.
 
-[![Latest release](https://img.shields.io/github/v/release/tiann/KernelSU?label=Release&logo=github)](https://github.com/tiann/KernelSU/releases/latest)
+[![Latest release](https://img.shields.io/github/v/release/tiann/SxKernelSU?label=Release&logo=github)](https://github.com/tiann/SxKernelSU/releases/latest)
 [![Weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/kernelsu)
-[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/KernelSU)
+[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/SxKernelSU)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-orange.svg?logo=gnu)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub License](https://img.shields.io/github/license/tiann/KernelSU?logo=gnu)](/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/tiann/SxKernelSU?logo=gnu)](/LICENSE)
 
 ## Fitur
 
@@ -20,14 +20,14 @@ Solusi root berbasis Kernel untuk perangkat Android.
 
 ## Status Kompatibilitas
 
-KernelSU secara resmi mendukung perangkat Android GKI 2.0 (dengan kernel 5.10+), kernel lama (4.14+) juga kompatibel, tetapi Anda perlu membuat kernel sendiri.
+SxKernelSU secara resmi mendukung perangkat Android GKI 2.0 (dengan kernel 5.10+), kernel lama (4.14+) juga kompatibel, tetapi Anda perlu membuat kernel sendiri.
 
-WSA, ChromeOS, dan Android berbasis wadah juga dapat bekerja dengan KernelSU terintegrasi.
+WSA, ChromeOS, dan Android berbasis wadah juga dapat bekerja dengan SxKernelSU terintegrasi.
 
 Saat ini, arsitektur `arm64-v8a` dan `x86_64` didukung.
 
 > [!CAUTION]
-> Versi kernel terbaru telah menerapkan perubahan yang merusak yang menyebabkan KernelSU gagal dan berpotensi memicu kernel panic pada `x86_64`! Cek situs web untuk info lebih lanjut!
+> Versi kernel terbaru telah menerapkan perubahan yang merusak yang menyebabkan SxKernelSU gagal dan berpotensi memicu kernel panic pada `x86_64`! Cek situs web untuk info lebih lanjut!
 
 ## Penggunaan
 
@@ -37,11 +37,11 @@ Saat ini, arsitektur `arm64-v8a` dan `x86_64` didukung.
 
 ## Terjemahan
 
-Untuk menerjemahkan KernelSU ke dalam bahasa Anda atau menyempurnakan terjemahan yang sudah ada, harap gunakan [Weblat](https://hosted.weblate.org/engage/kernelsu/).
+Untuk menerjemahkan SxKernelSU ke dalam bahasa Anda atau menyempurnakan terjemahan yang sudah ada, harap gunakan [Weblat](https://hosted.weblate.org/engage/kernelsu/).
 
 ## Diskusi
 
-- Telegram: [@KernelSU](https://t.me/KernelSU)
+- Telegram: [@SxKernelSU](https://t.me/SxKernelSU)
 
 ## Lisensi
 
@@ -50,7 +50,7 @@ Untuk menerjemahkan KernelSU ke dalam bahasa Anda atau menyempurnakan terjemahan
 
 ## Kredit
 
-- [kernel-assisted-superuser](https://git.zx2c4.com/kernel-assisted-superuser/about/): ide KernelSU.
+- [kernel-assisted-superuser](https://git.zx2c4.com/kernel-assisted-superuser/about/): ide SxKernelSU.
 - [Magisk](https://github.com/topjohnwu/Magisk): alat root yang ampuh.
 - [genuine](https://github.com/brevent/genuine/): validasi tanda tangan apk v2.
 - [Diamorphine](https://github.com/m0nad/Diamorphine): beberapa keterampilan rootkit.

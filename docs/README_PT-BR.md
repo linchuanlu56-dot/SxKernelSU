@@ -1,16 +1,16 @@
 [English](README.md) | [Español](README_ES.md) | [简体中文](README_CN.md) | [繁體中文](README_TW.md) | [日本語](README_JP.md) | [한국어](README_KR.md) | [Polski](README_PL.md) | **Português (Brasil)** | [Türkçe](README_TR.md) | [Русский](README_RU.md) | [Tiếng Việt](README_VI.md) | [Indonesia](README_ID.md) | [עברית](README_IW.md) | [हिंदी](README_IN.md) | [Italiano](README_IT.md)
 
-# KernelSU
+# SxSxKernelSU
 
 <img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="logo">
 
 Uma solução root baseada em kernel para dispositivos Android.
 
-[![Latest release](https://img.shields.io/github/v/release/tiann/KernelSU?label=Release&logo=github)](https://github.com/tiann/KernelSU/releases/latest)
+[![Latest release](https://img.shields.io/github/v/release/tiann/SxKernelSU?label=Release&logo=github)](https://github.com/tiann/SxKernelSU/releases/latest)
 [![Weblate](https://img.shields.io/badge/Localização-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/kernelsu)
-[![Channel](https://img.shields.io/badge/Seguir-Telegram-blue.svg?logo=telegram)](https://t.me/KernelSU)
+[![Channel](https://img.shields.io/badge/Seguir-Telegram-blue.svg?logo=telegram)](https://t.me/SxKernelSU)
 [![License: GPL v2](https://img.shields.io/badge/Licença-GPL%20v2-orange.svg?logo=gnu)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub License](https://img.shields.io/github/license/tiann/KernelSU?logo=gnu)](/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/tiann/SxKernelSU?logo=gnu)](/LICENSE)
 
 ## Características
 
@@ -20,14 +20,14 @@ Uma solução root baseada em kernel para dispositivos Android.
 
 ## Estado de compatibilidade
 
-O KernelSU oferece suporte oficial a dispositivos Android GKI 2.0 (kernel 5.10+). Kernels mais antigos (4.14+) também são compatíveis, mas será necessário construir o kernel manualmente.
+O SxKernelSU oferece suporte oficial a dispositivos Android GKI 2.0 (kernel 5.10+). Kernels mais antigos (4.14+) também são compatíveis, mas será necessário construir o kernel manualmente.
 
 Com isso, WSA, ChromeOS e Android baseado em contêiner são todos suportados.
 
 Atualmente, as arquiteturas `arm64-v8a` e `x86_64` são suportadas.
 
 > [!CAUTION]
-> Versões recentes do kernel implementaram uma mudança que quebra a compatibilidade, fazendo com que o KernelSU falhe e potencialmente cause um kernel panic no `x86_64`! Verifique o site para mais informações!
+> Versões recentes do kernel implementaram uma mudança que quebra a compatibilidade, fazendo com que o SxKernelSU falhe e potencialmente cause um kernel panic no `x86_64`! Verifique o site para mais informações!
 
 ## Uso
 
@@ -37,15 +37,15 @@ Atualmente, as arquiteturas `arm64-v8a` e `x86_64` são suportadas.
 
 ## Tradução
 
-Para contribuir com a tradução do KernelSU ou aprimorar traduções existentes, por favor, use o [Weblate](https://hosted.weblate.org/engage/kernelsu/). PR para a tradução do Manager não são mais aceitas, pois podem entrar em conflito com o Weblate.
+Para contribuir com a tradução do SxKernelSU ou aprimorar traduções existentes, por favor, use o [Weblate](https://hosted.weblate.org/engage/kernelsu/). PR para a tradução do Manager não são mais aceitas, pois podem entrar em conflito com o Weblate.
 
 ## Discussão
 
-- Telegram: [@KernelSU](https://t.me/KernelSU)
+- Telegram: [@SxKernelSU](https://t.me/SxKernelSU)
 
 ## Segurança
 
-Para obter informações sobre como relatar vulnerabilidades de segurança do KernelSU, consulte [SECURITY.md](/SECURITY.md).
+Para obter informações sobre como relatar vulnerabilidades de segurança do SxKernelSU, consulte [SECURITY.md](/SECURITY.md).
 
 ## Licença
 
@@ -54,7 +54,7 @@ Para obter informações sobre como relatar vulnerabilidades de segurança do Ke
 
 ## Créditos
 
-- [Kernel-Assisted Superuser](https://git.zx2c4.com/kernel-assisted-superuser/about/): A ideia do KernelSU.
+- [Kernel-Assisted Superuser](https://git.zx2c4.com/kernel-assisted-superuser/about/): A ideia do SxKernelSU.
 - [Magisk](https://github.com/topjohnwu/Magisk): A poderosa ferramenta root.
 - [genuine](https://github.com/brevent/genuine/): Validação de assinatura APK v2.
 - [Diamorphine](https://github.com/m0nad/Diamorphine): Algumas habilidades de rootkit.

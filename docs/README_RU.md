@@ -1,16 +1,16 @@
 [English](README.md) | [Español](README_ES.md) | [简体中文](README_CN.md) | [繁體中文](README_TW.md) | [日本語](README_JP.md) | [한국어](README_KR.md) | [Polski](README_PL.md) | [Português (Brasil)](README_PT-BR.md) | [Türkçe](README_TR.md) | **Русский** | [Tiếng Việt](README_VI.md) | [Indonesia](README_ID.md) | [עברית](README_IW.md) | [हिंदी](README_IN.md) | [Italiano](README_IT.md)
 
-# KernelSU
+# SxSxKernelSU
 
 <img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="logo">
 
 Решение на основе ядра root для Android-устройств.
 
-[![Latest release](https://img.shields.io/github/v/release/tiann/KernelSU?label=Release&logo=github)](https://github.com/tiann/KernelSU/releases/latest)
+[![Latest release](https://img.shields.io/github/v/release/tiann/SxKernelSU?label=Release&logo=github)](https://github.com/tiann/SxKernelSU/releases/latest)
 [![Weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/kernelsu)
-[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/KernelSU)
+[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/SxKernelSU)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-orange.svg?logo=gnu)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub License](https://img.shields.io/github/license/tiann/KernelSU?logo=gnu)](/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/tiann/SxKernelSU?logo=gnu)](/LICENSE)
 
 ## Особенности
 
@@ -20,14 +20,14 @@
 
 ## Совместимость
 
-KernelSU официально поддерживает устройства на базе Android GKI 2.0 (с ядром 5.10+), старые ядра (4.14+) также совместимы, но для этого необходимо собрать ядро самостоятельно.
+SxKernelSU официально поддерживает устройства на базе Android GKI 2.0 (с ядром 5.10+), старые ядра (4.14+) также совместимы, но для этого необходимо собрать ядро самостоятельно.
 
-WSA и Android на основе контейнеров также должны работать с интегрированным KernelSU.
+WSA и Android на основе контейнеров также должны работать с интегрированным SxKernelSU.
 
 В настоящее время поддерживаются архитектуры `arm64-v8a` и `x86_64`.
 
 > [!CAUTION]
-> В последних версиях ядра реализовано критическое изменение, из-за которого KernelSU перестает работать и может вызвать панику ядра (kernel panic) на `x86_64`! Дополнительную информацию смотрите на сайте!
+> В последних версиях ядра реализовано критическое изменение, из-за которого SxKernelSU перестает работать и может вызвать панику ядра (kernel panic) на `x86_64`! Дополнительную информацию смотрите на сайте!
 
 ## Использование
 
@@ -37,7 +37,7 @@ WSA и Android на основе контейнеров также должны 
 
 ## Обсуждение
 
-- Telegram: [@KernelSU](https://t.me/KernelSU)
+- Telegram: [@SxKernelSU](https://t.me/SxKernelSU)
 
 ## Лицензия
 
@@ -46,7 +46,7 @@ WSA и Android на основе контейнеров также должны 
 
 ## Благодарности
 
-- [kernel-assisted-superuser](https://git.zx2c4.com/kernel-assisted-superuser/about/): идея KernelSU.
+- [kernel-assisted-superuser](https://git.zx2c4.com/kernel-assisted-superuser/about/): идея SxKernelSU.
 - [Magisk](https://github.com/topjohnwu/Magisk): реализация sepolicy.
 - [genuine](https://github.com/brevent/genuine/): проверка подписи apk v2.
 - [Diamorphine](https://github.com/m0nad/Diamorphine): некоторые навыки руткита.
