@@ -9,7 +9,7 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamiccolor.ColorSpec
-import com.sxkernelsu.KernelSUApplication
+import com.sxkernelsu.SxKernelSUApplication
 import com.sxkernelsu.ui.LocalUiMode
 import com.sxkernelsu.ui.UiMode
 import com.sxkernelsu.ui.navigation3.LocalNavigator
@@ -52,7 +52,7 @@ fun ColorPaletteScreen() {
         onSetEnableFloatingBottomBarBlur = viewModel::setEnableFloatingBottomBarBlur,
         onSetEnablePredictiveBack = {
             viewModel.setEnablePredictiveBack(it)
-            KernelSUApplication.setEnableOnBackInvokedCallback(context.applicationInfo, it)
+            SxKernelSUApplication.setEnableOnBackInvokedCallback(context.applicationInfo, it)
             activity?.recreate()
         },
         onSetPageScale = viewModel::setPageScale,

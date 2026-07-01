@@ -15,9 +15,9 @@ import org.lsposed.hiddenapibypass.HiddenApiBypass
 import java.io.File
 import java.util.Locale
 
-lateinit var ksuApp: KernelSUApplication
+lateinit var ksuApp: SxKernelSUApplication
 
-class KernelSUApplication : Application(), ViewModelStoreOwner {
+class SxKernelSUApplication : Application(), ViewModelStoreOwner {
 
     companion object {
         fun setEnableOnBackInvokedCallback(appInfo: ApplicationInfo, enable: Boolean) {
