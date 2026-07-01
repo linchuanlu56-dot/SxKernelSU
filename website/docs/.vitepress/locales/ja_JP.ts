@@ -1,4 +1,4 @@
-import { createRequire } from 'module'
+﻿import { createRequire } from 'module'
 import { defineConfig } from 'vitepress'
 
 const require = createRequire(import.meta.url)
@@ -18,16 +18,16 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/tiann/KernelSU' }
+      { icon: 'github', link: 'https://github.com/linchuanlu56-dot/SxKernelSU' }
     ],
 
     footer: {
       message: 'GPL3 ライセンスでリリースされています。',
-      copyright: 'Copyright © 2022-現在 KernelSU 開発者。'
+      copyright: 'Copyright © 2022-現在 SxKernelSU 開発者。'
     },
 
     editLink: {
-      pattern: 'https://github.com/tiann/KernelSU/edit/main/website/docs/:path',
+      pattern: 'https://github.com/linchuanlu56-dot/SxKernelSU/edit/main/website/docs/:path',
       text: 'GitHub でこのページを編集'
     }
   }
@@ -35,7 +35,7 @@ export default defineConfig({
 
 function nav() {
   return [
-    { text: 'ガイド', link: '/ja_JP/guide/what-is-kernelsu' },
+    { text: 'ガイド', link: '/ja_JP/guide/what-is-sxkernelsu' },
   ]
 }
 
@@ -44,7 +44,7 @@ function sidebarGuide() {
     {
       text: 'ガイド',
       items: [
-        { text: 'KernelSU とは?', link: '/ja_JP/guide/what-is-kernelsu' },
+        { text: 'SxKernelSU とは?', link: '/ja_JP/guide/what-is-sxkernelsu' },
         { text: 'インストール', link: '/ja_JP/guide/installation' },
         { text: 'ビルドするには?', link: '/ja_JP/guide/how-to-build' },
         { text: '非 GKI デバイスでの実装', link: '/ja_JP/guide/how-to-integrate-for-non-gki' },

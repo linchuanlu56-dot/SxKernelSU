@@ -1,29 +1,29 @@
-# Как интегрировать KernelSU для не GKI ядер? {#introduction}
+# Как интегрировать SxKernelSU для не GKI ядер? {#introduction}
 
 ::: warning
 Этот документ предназначен только для архивных ссылок и больше не обновляется.
-Начиная с KernelSU v1.0, мы отказались от официальной поддержки устройств не-GKI.
+Начиная с SxKernelSU v1.0, мы отказались от официальной поддержки устройств не-GKI.
 :::
 
-KernelSU может быть интегрирован в ядра, отличные от GKI, и был перенесен на версии 4.14 и ниже.
+SxKernelSU может быть интегрирован в ядра, отличные от GKI, и был перенесен на версии 4.14 и ниже.
 
-В связи с фрагментацией ядер, отличных от GKI, у нас нет единого способа их сборки, поэтому мы не можем предоставить загрузочные образы, отличные от GKI. Однако вы можете собрать ядро самостоятельно с помощью интегрированной программы KernelSU.
+В связи с фрагментацией ядер, отличных от GKI, у нас нет единого способа их сборки, поэтому мы не можем предоставить загрузочные образы, отличные от GKI. Однако вы можете собрать ядро самостоятельно с помощью интегрированной программы SxKernelSU.
 
-Во-первых, вы должны уметь собирать загрузочное ядро из исходных текстов ядра. Если ядро не является открытым, то запустить KernelSU для вашего устройства будет затруднительно.
+Во-первых, вы должны уметь собирать загрузочное ядро из исходных текстов ядра. Если ядро не является открытым, то запустить SxKernelSU для вашего устройства будет затруднительно.
 
-Если вы можете собрать загрузочное ядро, то существует два способа интеграции KernelSU в исходный код ядра:
+Если вы можете собрать загрузочное ядро, то существует два способа интеграции SxKernelSU в исходный код ядра:
 
 1. Автоматически с помощью `kprobe`
 2. Вручную
 
 ## Интеграция с kprobe {#using-kprobes}
 
-KernelSU использует kprobe для выполнения хуков ядра, если *kprobe* хорошо работает в вашем ядре, то рекомендуется использовать именно этот способ.
+SxKernelSU использует kprobe для выполнения хуков ядра, если *kprobe* хорошо работает в вашем ядре, то рекомендуется использовать именно этот способ.
 
-Сначала добавьте KernelSU в дерево исходных текстов ядра:
+Сначала добавьте SxKernelSU в дерево исходных текстов ядра:
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -
 ```
 
 Затем необходимо проверить, включена ли функция *kprobe* в конфигурации ядра, если нет, то добавьте в нее эти настройки:
@@ -34,15 +34,15 @@ CONFIG_HAVE_KPROBES=y
 CONFIG_KPROBE_EVENTS=y
 ```
 
-И снова соберите ядро, KernelSU должен работать нормально.
+И снова соберите ядро, SxKernelSU должен работать нормально.
 
 Если вы обнаружите, что KPROBES по-прежнему не активирован, попробуйте включить `CONFIG_MODULES`. (Если это все равно не даст результата, используйте `make menuconfig` для поиска других зависимостей KPROBES).
 
-Если же при интеграции KernelSU возникает зацикливание загрузки, то, возможно, в вашем ядре *kprobe неисправен*, следует исправить ошибку kprobe или воспользоваться вторым способом.
+Если же при интеграции SxKernelSU возникает зацикливание загрузки, то, возможно, в вашем ядре *kprobe неисправен*, следует исправить ошибку kprobe или воспользоваться вторым способом.
 
 :::tip Как проверить, не сломан ли kprobe？
 
-закомментируйте `ksu_sucompat_init()` и `ksu_ksud_init()` в файле `KernelSU/kernel/ksu.c`, если устройство загружается нормально, то может быть нарушена работа kprobe.
+закомментируйте `sksu_sucompat_init()` и `sksu_sksud_init()` в файле `SxKernelSU/kernel/ksu.c`, если устройство загружается нормально, то может быть нарушена работа kprobe.
 :::
 
 ## Ручная модификация исходного кода ядра {#modify-kernel-source-code}
@@ -54,22 +54,22 @@ CONFIG_KPROBE_EVENTS=y
 - Последний тэг(стабильный)
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -
 ```
 
 - Основная ветвь(разработка)
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -s main
 ```
 
 - Выбранный тэг(Например, версия v0.5.2)
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.5.2
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -s v0.5.2
 ```
 
-Затем добавьте вызовы KernelSU в исходный код ядра, вот патч, на который можно сослаться:
+Затем добавьте вызовы SxKernelSU в исходный код ядра, вот патч, на который можно сослаться:
 
 ```diff
 diff --git a/fs/exec.c b/fs/exec.c
@@ -80,20 +80,20 @@ index ac59664eaecf..bdd585e1d2cc 100644
  	return retval;
  }
  
-+extern bool ksu_execveat_hook __read_mostly;
-+extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
++extern bool sksu_execveat_hook __read_mostly;
++extern int sksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
 +			void *envp, int *flags);
-+extern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
++extern int sksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
 +				 void *argv, void *envp, int *flags);
  static int do_execveat_common(int fd, struct filename *filename,
  			      struct user_arg_ptr argv,
  			      struct user_arg_ptr envp,
  			      int flags)
  {
-+	if (unlikely(ksu_execveat_hook))
-+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
++	if (unlikely(sksu_execveat_hook))
++		sksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
 +	else
-+		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
++		sksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
  	return __do_execve_file(fd, filename, argv, envp, flags, NULL);
  }
 ```
@@ -106,7 +106,7 @@ index 05036d819197..965b84d486b8 100644
  	return ksys_fallocate(fd, mode, offset, len);
  }
  
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			 int *flags);
  /*
   * access() needs to use the real uid/gid, not the effective uid/gid.
@@ -123,7 +123,7 @@ index 05036d819197..965b84d486b8 100644
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
  
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
  
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
  		return -EINVAL;
@@ -137,15 +137,15 @@ index 650fc7e0f3a6..55be193913b6 100644
  }
  EXPORT_SYMBOL(kernel_read);
  
-+extern bool ksu_vfs_read_hook __read_mostly;
-+extern int ksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
++extern bool sksu_vfs_read_hook __read_mostly;
++extern int sksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
 +			size_t *count_ptr, loff_t **pos);
  ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
  {
  	ssize_t ret;
  
-+	if (unlikely(ksu_vfs_read_hook))
-+		ksu_handle_vfs_read(&file, &buf, &count, &pos);
++	if (unlikely(sksu_vfs_read_hook))
++		sksu_handle_vfs_read(&file, &buf, &count, &pos);
 +
  	if (!(file->f_mode & FMODE_READ))
  		return -EBADF;
@@ -160,7 +160,7 @@ index 376543199b5a..82adcef03ecc 100644
  }
  EXPORT_SYMBOL(vfs_statx_fd);
  
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +
  /**
   * vfs_statx - Get basic and extra attributes by filename
@@ -169,7 +169,7 @@ index 376543199b5a..82adcef03ecc 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_AUTOMOUNT;
  
-+	ksu_handle_stat(&dfd, &filename, &flags);
++	sksu_handle_stat(&dfd, &filename, &flags);
  	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		       AT_EMPTY_PATH | KSTAT_QUERY_FLAGS)) != 0)
  		return -EINVAL;
@@ -193,7 +193,7 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  }
  EXPORT_SYMBOL(vfs_fstat);
  
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +
  int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
  		int flag)
@@ -202,7 +202,7 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = 0;
  
-+	ksu_handle_stat(&dfd, &filename, &flag);
++	sksu_handle_stat(&dfd, &filename, &flag);
 +
  	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		      AT_EMPTY_PATH)) != 0)
@@ -220,7 +220,7 @@ index 2ff887661237..e758d7db7663 100644
  	return error;
  }
  
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			        int *flags);
 +
  /*
@@ -230,13 +230,13 @@ index 2ff887661237..e758d7db7663 100644
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
  
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 +
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
  		return -EINVAL;
 ```
 
-Чтобы включить встроенный в KernelSU безопасный режим, необходимо также изменить `input_handle_event` в файле `drivers/input/input.c`:
+Чтобы включить встроенный в SxKernelSU безопасный режим, необходимо также изменить `input_handle_event` в файле `drivers/input/input.c`:
 
 :::tip
 Настоятельно рекомендуется включить эту функцию, она очень помогает предотвратить циклическую загрузку!
@@ -251,22 +251,22 @@ index 45306f9ef247..815091ebfca4 100755
  	return disposition;
  }
  
-+extern bool ksu_input_hook __read_mostly;
-+extern int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
++extern bool sksu_input_hook __read_mostly;
++extern int sksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
 +
  static void input_handle_event(struct input_dev *dev,
  			       unsigned int type, unsigned int code, int value)
  {
 	int disposition = input_get_disposition(dev, type, code, &value);
 +
-+	if (unlikely(ksu_input_hook))
-+		ksu_handle_input_handle_event(&type, &code, &value);
++	if (unlikely(sksu_input_hook))
++		sksu_handle_input_handle_event(&type, &code, &value);
  
  	if (disposition != INPUT_IGNORE_EVENT && type != EV_SYN)
  		add_input_randomness(type, code, value);
 ```
 
-Наконец, снова соберите ядро, KernelSU должен работать хорошо.
+Наконец, снова соберите ядро, SxKernelSU должен работать хорошо.
 
 ### How to backport path_umount
 
@@ -317,4 +317,4 @@ You can make the "Umount modules" feature work on pre-GKI kernels by manually ba
   * This is important for filesystems which use unnamed block devices.
 ```
 
-Finally, build your kernel again, and KernelSU should work correctly.
+Finally, build your kernel again, and SxKernelSU should work correctly.

@@ -1,6 +1,6 @@
 # Konfigurasi Modul
 
-KernelSU menyediakan sistem konfigurasi bawaan yang memungkinkan modul menyimpan pengaturan key-value persisten atau sementara. Konfigurasi disimpan dalam format biner di `/data/adb/ksu/module_configs/<module_id>/` dengan karakteristik berikut:
+SxKernelSU menyediakan sistem konfigurasi bawaan yang memungkinkan modul menyimpan pengaturan key-value persisten atau sementara. Konfigurasi disimpan dalam format biner di `/data/adb/sks/module_configs/<module_id>/` dengan karakteristik berikut:
 
 ## Tipe Konfigurasi
 
@@ -11,44 +11,44 @@ Saat membaca konfigurasi, nilai sementara lebih diprioritaskan daripada nilai pe
 
 ## Menggunakan Konfigurasi dalam Skrip Modul
 
-Semua skrip modul (`post-fs-data.sh`, `service.sh`, `boot-completed.sh`, dll.) berjalan dengan variabel lingkungan `KSU_MODULE` diatur ke ID modul. Anda dapat menggunakan perintah `ksud module config` untuk mengelola konfigurasi modul Anda:
+Semua skrip modul (`post-fs-data.sh`, `service.sh`, `boot-completed.sh`, dll.) berjalan dengan variabel lingkungan `SKS_MODULE` diatur ke ID modul. Anda dapat menggunakan perintah `sksud module config` untuk mengelola konfigurasi modul Anda:
 
 ```bash
 # Mendapatkan nilai konfigurasi
-value=$(ksud module config get my_setting)
+value=$(sksud module config get my_setting)
 
 # Mengatur nilai konfigurasi persisten
-ksud module config set my_setting "some value"
+sksud module config set my_setting "some value"
 
 # Mengatur nilai konfigurasi sementara (dihapus setelah reboot)
-ksud module config set --temp runtime_state "active"
+sksud module config set --temp runtime_state "active"
 
 # Mengatur nilai dari stdin (berguna untuk teks multiline atau data kompleks)
-ksud module config set my_key <<EOF
+sksud module config set my_key <<EOF
 teks multiline
 nilai
 EOF
 
 # Atau alirkan dari perintah
-echo "value" | ksud module config set my_key
+echo "value" | sksud module config set my_key
 
 # Bendera stdin eksplisit
-cat file.json | ksud module config set json_data --stdin
+cat file.json | sksud module config set json_data --stdin
 
 # Daftar semua entri konfigurasi (gabungan persisten dan sementara)
-ksud module config list
+sksud module config list
 
 # Menghapus entri konfigurasi
-ksud module config delete my_setting
+sksud module config delete my_setting
 
 # Menghapus entri konfigurasi sementara
-ksud module config delete --temp runtime_state
+sksud module config delete --temp runtime_state
 
 # Menghapus semua konfigurasi persisten
-ksud module config clear
+sksud module config clear
 
 # Menghapus semua konfigurasi sementara
-ksud module config clear --temp
+sksud module config clear --temp
 ```
 
 ## Batasan Validasi
@@ -85,7 +85,7 @@ Sistem konfigurasi ideal untuk:
 - Gunakan konfigurasi persisten untuk preferensi pengguna yang harus bertahan setelah reboot
 - Gunakan konfigurasi sementara untuk status runtime atau flag fitur yang harus direset saat boot
 - Validasi nilai konfigurasi dalam skrip Anda sebelum menggunakannya
-- Gunakan perintah `ksud module config list` untuk men-debug masalah konfigurasi
+- Gunakan perintah `sksud module config list` untuk men-debug masalah konfigurasi
 :::
 
 ## Fitur Lanjutan
@@ -98,7 +98,7 @@ Anda dapat mengganti field `description` dari `module.prop` secara dinamis denga
 
 ```bash
 # Mengganti deskripsi modul
-ksud module config set override.description "Deskripsi kustom yang ditampilkan di pengelola"
+sksud module config set override.description "Deskripsi kustom yang ditampilkan di pengelola"
 ```
 
 Saat mengambil daftar modul, jika konfigurasi `override.description` ada, itu akan menggantikan deskripsi asli dari `module.prop`. Ini berguna untuk:
@@ -108,7 +108,7 @@ Saat mengambil daftar modul, jika konfigurasi `override.description` ada, itu ak
 
 ### Mendeklarasikan Fitur yang Dikelola
 
-Modul dapat mendeklarasikan fitur KernelSU mana yang mereka kelola menggunakan pola konfigurasi `manage.<feature>`. Fitur yang didukung sesuai dengan enum internal `FeatureId` KernelSU:
+Modul dapat mendeklarasikan fitur SxKernelSU mana yang mereka kelola menggunakan pola konfigurasi `manage.<feature>`. Fitur yang didukung sesuai dengan enum internal `FeatureId` SxKernelSU:
 
 **Fitur yang Didukung:**
 - `su_compat` - Mode kompatibilitas SU
@@ -116,13 +116,13 @@ Modul dapat mendeklarasikan fitur KernelSU mana yang mereka kelola menggunakan p
 
 ```bash
 # Mendeklarasikan bahwa modul ini mengelola kompatibilitas SU dan mengaktifkannya
-ksud module config set manage.su_compat true
+sksud module config set manage.su_compat true
 
 # Mendeklarasikan bahwa modul ini mengelola unmount kernel dan menonaktifkannya
-ksud module config set manage.kernel_umount false
+sksud module config set manage.kernel_umount false
 
 # Menghapus pengelolaan fitur (modul tidak lagi mengontrol fitur ini)
-ksud module config delete manage.su_compat
+sksud module config delete manage.su_compat
 ```
 
 **Cara kerjanya:**
@@ -131,10 +131,10 @@ ksud module config delete manage.su_compat
 - Untuk berhenti mengelola fitur, hapus kunci konfigurasi sepenuhnya
 
 Fitur yang dikelola diekspos melalui API daftar modul sebagai field `managedFeatures` (string yang dipisahkan koma). Ini memungkinkan:
-- Pengelola KernelSU mendeteksi modul mana yang mengelola fitur KernelSU mana
+- Pengelola SxKernelSU mendeteksi modul mana yang mengelola fitur SxKernelSU mana
 - Pencegahan konflik ketika beberapa modul mencoba mengelola fitur yang sama
-- Koordinasi yang lebih baik antara modul dan fungsionalitas inti KernelSU
+- Koordinasi yang lebih baik antara modul dan fungsionalitas inti SxKernelSU
 
 ::: warning HANYA FITUR YANG DIDUKUNG
-Gunakan hanya nama fitur yang telah ditentukan sebelumnya yang tercantum di atas (`su_compat`, `kernel_umount`). Ini sesuai dengan fitur internal KernelSU yang sebenarnya. Menggunakan nama fitur lain tidak akan menyebabkan error, tetapi tidak memiliki tujuan fungsional.
+Gunakan hanya nama fitur yang telah ditentukan sebelumnya yang tercantum di atas (`su_compat`, `kernel_umount`). Ini sesuai dengan fitur internal SxKernelSU yang sebenarnya. Menggunakan nama fitur lain tidak akan menyebabkan error, tetapi tidak memiliki tujuan fungsional.
 :::

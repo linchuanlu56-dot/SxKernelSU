@@ -1,6 +1,6 @@
 # Configuração de Módulo
 
-O KernelSU fornece um sistema de configuração integrado que permite que os módulos armazenem configurações de chave-valor persistentes ou temporárias. As configurações são armazenadas em formato binário em `/data/adb/ksu/module_configs/<module_id>/` com as seguintes características:
+O SxKernelSU fornece um sistema de configuração integrado que permite que os módulos armazenem configurações de chave-valor persistentes ou temporárias. As configurações são armazenadas em formato binário em `/data/adb/sks/module_configs/<module_id>/` com as seguintes características:
 
 ## Tipos de Configuração
 
@@ -11,44 +11,44 @@ Ao ler configurações, os valores temporários têm prioridade sobre os valores
 
 ## Usando Configuração em Scripts de Módulo
 
-Todos os scripts de módulo (`post-fs-data.sh`, `service.sh`, `boot-completed.sh`, etc.) são executados com a variável de ambiente `KSU_MODULE` definida como o ID do módulo. Você pode usar os comandos `ksud module config` para gerenciar a configuração do seu módulo:
+Todos os scripts de módulo (`post-fs-data.sh`, `service.sh`, `boot-completed.sh`, etc.) são executados com a variável de ambiente `SKS_MODULE` definida como o ID do módulo. Você pode usar os comandos `sksud module config` para gerenciar a configuração do seu módulo:
 
 ```bash
 # Obter um valor de configuração
-value=$(ksud module config get my_setting)
+value=$(sksud module config get my_setting)
 
 # Definir um valor de configuração persistente
-ksud module config set my_setting "some value"
+sksud module config set my_setting "some value"
 
 # Definir um valor de configuração temporário (limpo após a reinicialização)
-ksud module config set --temp runtime_state "active"
+sksud module config set --temp runtime_state "active"
 
 # Definir valor a partir de stdin (útil para texto multilinhas ou dados complexos)
-ksud module config set my_key <<EOF
+sksud module config set my_key <<EOF
 texto multilinhas
 valor
 EOF
 
 # Ou transmitir de um comando
-echo "value" | ksud module config set my_key
+echo "value" | sksud module config set my_key
 
 # Sinalizador stdin explícito
-cat file.json | ksud module config set json_data --stdin
+cat file.json | sksud module config set json_data --stdin
 
 # Listar todas as entradas de configuração (mesclando persistentes e temporárias)
-ksud module config list
+sksud module config list
 
 # Excluir uma entrada de configuração
-ksud module config delete my_setting
+sksud module config delete my_setting
 
 # Excluir uma entrada de configuração temporária
-ksud module config delete --temp runtime_state
+sksud module config delete --temp runtime_state
 
 # Limpar todas as configurações persistentes
-ksud module config clear
+sksud module config clear
 
 # Limpar todas as configurações temporárias
-ksud module config clear --temp
+sksud module config clear --temp
 ```
 
 ## Limites de Validação
@@ -85,7 +85,7 @@ O sistema de configuração é ideal para:
 - Use configurações persistentes para preferências do usuário que devem sobreviver às reinicializações
 - Use configurações temporárias para estado de execução ou sinalizadores de recursos que devem ser redefinidos na inicialização
 - Valide os valores de configuração em seus scripts antes de usá-los
-- Use o comando `ksud module config list` para depurar problemas de configuração
+- Use o comando `sksud module config list` para depurar problemas de configuração
 :::
 
 ## Recursos Avançados
@@ -98,7 +98,7 @@ Você pode substituir dinamicamente o campo `description` do `module.prop` defin
 
 ```bash
 # Substituir a descrição do módulo
-ksud module config set override.description "Descrição personalizada exibida no gerenciador"
+sksud module config set override.description "Descrição personalizada exibida no gerenciador"
 ```
 
 Ao recuperar a lista de módulos, se a configuração `override.description` existir, ela substituirá a descrição original do `module.prop`. Isso é útil para:
@@ -108,7 +108,7 @@ Ao recuperar a lista de módulos, se a configuração `override.description` exi
 
 ### Declarando Recursos Gerenciados
 
-Os módulos podem declarar quais recursos do KernelSU eles gerenciam usando o padrão de configuração `manage.<feature>`. Os recursos suportados correspondem ao enum interno `FeatureId` do KernelSU:
+Os módulos podem declarar quais recursos do SxKernelSU eles gerenciam usando o padrão de configuração `manage.<feature>`. Os recursos suportados correspondem ao enum interno `FeatureId` do SxKernelSU:
 
 **Recursos Suportados:**
 - `su_compat` - Modo de compatibilidade SU
@@ -116,13 +116,13 @@ Os módulos podem declarar quais recursos do KernelSU eles gerenciam usando o pa
 
 ```bash
 # Declarar que este módulo gerencia a compatibilidade SU e a habilita
-ksud module config set manage.su_compat true
+sksud module config set manage.su_compat true
 
 # Declarar que este módulo gerencia a desmontagem do kernel e a desabilita
-ksud module config set manage.kernel_umount false
+sksud module config set manage.kernel_umount false
 
 # Remover gerenciamento de recurso (o módulo não controla mais este recurso)
-ksud module config delete manage.su_compat
+sksud module config delete manage.su_compat
 ```
 
 **Como funciona:**
@@ -131,10 +131,10 @@ ksud module config delete manage.su_compat
 - Para parar de gerenciar um recurso, exclua completamente a chave de configuração
 
 Os recursos gerenciados são expostos através da API de lista de módulos como um campo `managedFeatures` (string separada por vírgulas). Isso permite:
-- O gerenciador do KernelSU detectar quais módulos gerenciam quais recursos do KernelSU
+- O gerenciador do SxKernelSU detectar quais módulos gerenciam quais recursos do SxKernelSU
 - Prevenção de conflitos quando vários módulos tentam gerenciar o mesmo recurso
-- Melhor coordenação entre módulos e funcionalidade central do KernelSU
+- Melhor coordenação entre módulos e funcionalidade central do SxKernelSU
 
 ::: warning APENAS RECURSOS SUPORTADOS
-Use apenas os nomes de recursos predefinidos listados acima (`su_compat`, `kernel_umount`). Eles correspondem aos recursos internos reais do KernelSU. Usar outros nomes de recursos não causará erros, mas não terá nenhum propósito funcional.
+Use apenas os nomes de recursos predefinidos listados acima (`su_compat`, `kernel_umount`). Eles correspondem aos recursos internos reais do SxKernelSU. Usar outros nomes de recursos não causará erros, mas não terá nenhum propósito funcional.
 :::

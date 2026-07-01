@@ -1,21 +1,52 @@
-# What is KernelSU?
+# What is SxKernelSU?
 
-KernelSU is a root solution for Android GKI devices. It works in kernel mode and grants root permission to userspace apps directly in kernel space.
+SxKernelSU is an enhanced root solution for Android GKI devices, forked from [KernelSU](https://github.com/tiann/KernelSU). It works in kernel mode and grants root permission to userspace apps directly in kernel space, with a range of advanced security features.
 
 ## Features
 
-The main feature of KernelSU is that it's **kernel-based**. KernelSU works in kernel mode, enabling it to provide a kernel interface that we never had before. For example, it's possible to add hardware breakpoints to any process in kernel mode, access the physical memory of any process invisibly, intercept any system call (syscall) within the kernel space, among other functionalities.
+The core feature of SxKernelSU is that it's **kernel-based**. SxKernelSU works in kernel space, enabling capabilities we never had before:
 
-Additionally, KernelSU provides a [metamodule system](metamodule.md), which is a pluggable architecture for module management. Unlike traditional root solutions that bake mounting logic into their core, KernelSU delegates this to metamodules. This allows you to install metamodules like [meta-overlayfs](https://github.com/tiann/KernelSU/tree/main/userspace/meta-overlayfs) to provide systemless modifications to the `/system` partition and other partitions.
+- Add hardware breakpoints to any process in kernel mode
+- Access the physical memory of any process invisibly
+- Intercept any system call within kernel space
+- Hide SELinux enforcing status from detection-aware apps
+- HOOK syscalls to inject custom init scripts
 
-## How to use KernelSU?
+### 🔒 SELinux Hiding
+
+SxKernelSU can hide the SELinux enforcing state from userspace apps. It implements this through:
+- A fake SELinux status page that returns forged "enforcing" information
+- Intercepting SELinux context write operations, responding with a backup policy
+- Full support for 6.6+ kernels
+
+### 📦 Metamodule System
+
+SxKernelSU provides a [metamodule system](metamodule.md) — a pluggable architecture for module management. Unlike traditional root solutions that bake mounting logic into their core, SxKernelSU delegates this to metamodules. Install metamodules like [meta-overlayfs](https://github.com/linchuanlu56-dot/SxKernelSU/tree/main/userspace/meta-overlayfs) for systemless modifications to `/system` and other partitions.
+
+### 🛡️ App Profile
+
+Fine-grained control over each app's root permissions via [App Profile](app-profile.md) — including `uid`, `gid`, `groups`, `capabilities`, and SELinux rules.
+
+### 🔐 Safe Mode
+
+Press the **Volume Down key 3 times** during boot to enter safe mode, disabling all SxKernelSU functions.
+
+### ⚙️ ADB Root Support
+
+Built-in adbd root support for direct root access in adb shell.
+
+## How to use SxKernelSU?
 
 See [Installation](installation.md).
 
-## How to build KernelSU?
+## How to build SxKernelSU?
 
 See [How to build](how-to-build.md).
 
+## Relationship with KernelSU
+
+SxKernelSU is an enhanced fork of KernelSU that adds advanced features while maintaining upstream compatibility. See [Differences with KernelSU](difference-with-kernelsu) for details.
+
 ## Discussion
 
-- Telegram: [@KernelSU](https://t.me/KernelSU)
+- Telegram: [@SxKernelSU](https://t.me/SxKernelSU)

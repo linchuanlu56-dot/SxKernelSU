@@ -1,6 +1,6 @@
 # Magisk との違い
 
-KernelSU モジュールと Magisk モジュールには多くの共通点がありますが、実装の仕組みが全く異なるため、必然的にいくつかの相違点が存在します。Magisk と KernelSU の両方でモジュールを動作させたい場合、これらの違いを理解する必要があります。
+SxKernelSU モジュールと Magisk モジュールには多くの共通点がありますが、実装の仕組みが全く異なるため、必然的にいくつかの相違点が存在します。Magisk と SxKernelSU の両方でモジュールを動作させたい場合、これらの違いを理解する必要があります。
 
 ## 似ているところ
 
@@ -15,15 +15,15 @@ KernelSU モジュールと Magisk モジュールには多くの共通点があ
 
 ## 違うところ
 
-違いを理解する前に、モジュールが KernelSU で動作しているか Magisk で動作しているかを区別する方法を知っておく必要があります。環境変数 `KSU` を使うとモジュールスクリプトを実行できるすべての場所 (`customize.sh`, `post-fs-data.sh`, `service.sh`) で区別できます。KernelSU では、この環境変数に `true` が設定されます。
+違いを理解する前に、モジュールが SxKernelSU で動作しているか Magisk で動作しているかを区別する方法を知っておく必要があります。環境変数 `KSU` を使うとモジュールスクリプトを実行できるすべての場所 (`customize.sh`, `post-fs-data.sh`, `service.sh`) で区別できます。SxKernelSU では、この環境変数に `true` が設定されます。
 
 以下は違いです：
 
-- KernelSU モジュールは、リカバリーモードではインストールできません。
-- KernelSU モジュールには Zygisk のサポートが組み込まれていません（ただし[ZygiskNext](https://github.com/Dr-TSNG/ZygiskNext)を使うと Zygisk モジュールを使用できます）。
-- **モジュールマウントアーキテクチャ**：KernelSU は [metamodule システム](metamodule.md) を使用し、マウントをプラグ可能な metamodule (`meta-overlayfs`など) に委任します。一方、Magisk はマウントをコアに組み込んでいます。KernelSU はモジュールマウントを有効にするために metamodule のインストールが必要です。
-- KernelSU モジュールにおけるファイルの置換や削除の方法は、Magisk とは全く異なります。KernelSU は `.replace` メソッドをサポートしていません。その代わり、`mknod filename c 0 0` で同名のファイルを作成し、対応するファイルを削除する必要があります。
-- BusyBox 用のディレクトリが違います。KernelSU の組み込み BusyBox は `/data/adb/ksu/bin/busybox` に、Magisk では `/data/adb/magisk/busybox` に配置されます。**これは KernelSU の内部動作であり、将来的に変更される可能性があることに注意してください!**
-- KernelSU は `.replace` ファイルをサポートしていません。しかし、KernelSU はファイルやフォルダを削除したり置き換えたりするための `REMOVE` と `REPLACE` 変数をサポートしています。
-- KernelSU は `boot-completed.sh` スクリプトを追加し、Android システムの起動完了後にタスクを実行できます。
-- KernelSU は `post-mount.sh` スクリプトを追加し、モジュールマウント完了後にタスクを実行できます。
+- SxKernelSU モジュールは、リカバリーモードではインストールできません。
+- SxKernelSU モジュールには Zygisk のサポートが組み込まれていません（ただし[ZygiskNext](https://github.com/Dr-TSNG/ZygiskNext)を使うと Zygisk モジュールを使用できます）。
+- **モジュールマウントアーキテクチャ**：SxKernelSU は [metamodule システム](metamodule.md) を使用し、マウントをプラグ可能な metamodule (`meta-overlayfs`など) に委任します。一方、Magisk はマウントをコアに組み込んでいます。SxKernelSU はモジュールマウントを有効にするために metamodule のインストールが必要です。
+- SxKernelSU モジュールにおけるファイルの置換や削除の方法は、Magisk とは全く異なります。SxKernelSU は `.replace` メソッドをサポートしていません。その代わり、`mknod filename c 0 0` で同名のファイルを作成し、対応するファイルを削除する必要があります。
+- BusyBox 用のディレクトリが違います。SxKernelSU の組み込み BusyBox は `/data/adb/sks/bin/busybox` に、Magisk では `/data/adb/magisk/busybox` に配置されます。**これは SxKernelSU の内部動作であり、将来的に変更される可能性があることに注意してください!**
+- SxKernelSU は `.replace` ファイルをサポートしていません。しかし、SxKernelSU はファイルやフォルダを削除したり置き換えたりするための `REMOVE` と `REPLACE` 変数をサポートしています。
+- SxKernelSU は `boot-completed.sh` スクリプトを追加し、Android システムの起動完了後にタスクを実行できます。
+- SxKernelSU は `post-mount.sh` スクリプトを追加し、モジュールマウント完了後にタスクを実行できます。

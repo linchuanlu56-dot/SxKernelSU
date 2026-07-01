@@ -1,33 +1,33 @@
-# Integração para dispositivos não-GKI
+﻿# Integração para dispositivos não-GKI
 
 ::: warning
 Este documento é apenas para referência de arquivo e não é mais mantido.
-Desde o KernelSU v1.0, abandonamos o suporte oficial para dispositivos não-GKI.
+Desde o SxKernelSU v1.0, abandonamos o suporte oficial para dispositivos não-GKI.
 :::
 
-O KernelSU pode ser integrado a kernels não-GKI e foi portado para 4.14 e versões anteriores.
+O SxKernelSU pode ser integrado a kernels não-GKI e foi portado para 4.14 e versões anteriores.
 
-Devido à fragmentação dos kernels não-GKI, não temos um método universal para construí-lo, portanto, não podemos fornecer o boot.img não-GKI. No entanto, você pode compilar o kernel com o KernelSU integrado por conta própria.
+Devido à fragmentação dos kernels não-GKI, não temos um método universal para construí-lo, portanto, não podemos fornecer o boot.img não-GKI. No entanto, você pode compilar o kernel com o SxKernelSU integrado por conta própria.
 
-Primeiro, você deve ser capaz de compilar um kernel inicializável a partir do código-fonte do kernel. Se o kernel não for de código aberto, será difícil executar o KernelSU para o seu dispositivo.
+Primeiro, você deve ser capaz de compilar um kernel inicializável a partir do código-fonte do kernel. Se o kernel não for de código aberto, será difícil executar o SxKernelSU para o seu dispositivo.
 
-Se você puder compilar um kernel inicializável, existem duas maneiras de integrar o KernelSU ao código-fonte do kernel:
+Se você puder compilar um kernel inicializável, existem duas maneiras de integrar o SxKernelSU ao código-fonte do kernel:
 
 1. Automaticamente com `kprobe`
 2. Manualmente
 
 ## Integrar com kprobe
 
-O KernelSU usa kprobe para fazer ganchos do kernel, se o kprobe funcionar bem em seu kernel, é recomendado usar desta forma.
+O SxKernelSU usa kprobe para fazer ganchos do kernel, se o kprobe funcionar bem em seu kernel, é recomendado usar desta forma.
 
-Primeiro, adicione o KernelSU à árvore de origem do kernel:
+Primeiro, adicione o SxKernelSU à árvore de origem do kernel:
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -s v0.9.5
 ```
 
 ::: info INFORMAÇÕES
-[KernelSU 1.0 e versões posteriores não suportam mais kernels não-GKI](https://github.com/tiann/KernelSU/issues/1705). A última versão suportada é a `v0.9.5`, portanto, certifique-se de usar a versão correta.
+[SxKernelSU 1.0 e versões posteriores não suportam mais kernels não-GKI](https://github.com/linchuanlu56-dot/SxKernelSU/issues/1705). A última versão suportada é a `v0.9.5`, portanto, certifique-se de usar a versão correta.
 :::
 
 Então, você deve verificar se o kprobe está ativado na configuração do seu kernel. Caso não esteja, adicione estas configurações a ele:
@@ -38,14 +38,14 @@ CONFIG_HAVE_KPROBES=y
 CONFIG_KPROBE_EVENTS=y
 ```
 
-Agora, ao recompilar seu kernel, o KernelSU deve funcionar corretamente.
+Agora, ao recompilar seu kernel, o SxKernelSU deve funcionar corretamente.
 
 Se você descobrir que o KPROBES ainda não está ativado, pode tentar ativar `CONFIG_MODULES`. Se isso não resolver, use `make menuconfig` para procurar outras dependências do KPROBES.
 
-Porém, se você entrar em um bootloop após integrar o KernelSU, isso pode indicar que o **kprobe está quebrado no seu kernel**, o que significa que você precisará corrigir o bug do kprobe ou usar outra maneira.
+Porém, se você entrar em um bootloop após integrar o SxKernelSU, isso pode indicar que o **kprobe está quebrado no seu kernel**, o que significa que você precisará corrigir o bug do kprobe ou usar outra maneira.
 
 ::: tip COMO VERIFICAR SE O KPROBE ESTÁ QUEBRADO?
-Comente `ksu_sucompat_init()` e `ksu_ksud_init()` em `KernelSU/kernel/ksu.c`, se o dispositivo inicializar normalmente, então o kprobe pode estar quebrado.
+Comente `sksu_sucompat_init()` e `sksu_sksud_init()` em `SxKernelSU/kernel/ksu.c`, se o dispositivo inicializar normalmente, então o kprobe pode estar quebrado.
 :::
 
 ::: info COMO FAZER COM QUE O RECURSO DE DESMONTAR MÓDULOS FUNCIONE NO PRÉ-GKI?
@@ -56,20 +56,20 @@ Se o seu kernel for inferior a 5.9, você deve portar `path_umount` para `fs/nam
 
 Se o kprobe não funcionar no seu kernel (isso pode ser causado por um bug no upstream ou do kernel abaixo de 4.8), então você pode tentar o seguinte:
 
-Primeiro, adicione o KernelSU à árvore de origem do kernel:
+Primeiro, adicione o SxKernelSU à árvore de origem do kernel:
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -s v0.9.5
 ```
 
-Tenha em mente que, em alguns dispositivos, seu defconfig pode estar localizado em `arch/arm64/configs` ou em outros casos pode estar em `arch/arm64/configs/vendor/your_defconfig`. Independentemente do defconfig que você estiver usando, certifique-se de ativar `CONFIG_KSU` com `y` para ativa-lo ou `n` para desativa-lo. Por exemplo, se optar por ativá-lo, seu defconfig deverá conter a seguinte linha:
+Tenha em mente que, em alguns dispositivos, seu defconfig pode estar localizado em `arch/arm64/configs` ou em outros casos pode estar em `arch/arm64/configs/vendor/your_defconfig`. Independentemente do defconfig que você estiver usando, certifique-se de ativar `CONFIG_SKS` com `y` para ativa-lo ou `n` para desativa-lo. Por exemplo, se optar por ativá-lo, seu defconfig deverá conter a seguinte linha:
 
 ```txt
-# KernelSU
-CONFIG_KSU=y
+# SxKernelSU
+CONFIG_SKS=y
 ```
 
-Em seguida, adicione chamadas do KernelSU à fonte do kernel. Abaixo estão alguns patches para referência:
+Em seguida, adicione chamadas do SxKernelSU à fonte do kernel. Abaixo estão alguns patches para referência:
 
 ::: code-group
 
@@ -82,11 +82,11 @@ index ac59664eaecf..bdd585e1d2cc 100644
  	return retval;
  }
 
-+#ifdef CONFIG_KSU
-+extern bool ksu_execveat_hook __read_mostly;
-+extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
++#ifdef CONFIG_SKS
++extern bool sksu_execveat_hook __read_mostly;
++extern int sksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
 +			void *envp, int *flags);
-+extern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
++extern int sksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
 +				 void *argv, void *envp, int *flags);
 +#endif
  static int do_execveat_common(int fd, struct filename *filename,
@@ -94,11 +94,11 @@ index ac59664eaecf..bdd585e1d2cc 100644
  			      struct user_arg_ptr envp,
  			      int flags)
  {
-+   #ifdef CONFIG_KSU
-+	if (unlikely(ksu_execveat_hook))
-+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
++   #ifdef CONFIG_SKS
++	if (unlikely(sksu_execveat_hook))
++		sksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
 +	else
-+		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
++		sksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
 +   #endif
  	return __do_execve_file(fd, filename, argv, envp, flags, NULL);
  }
@@ -112,8 +112,8 @@ index 05036d819197..965b84d486b8 100644
  	return ksys_fallocate(fd, mode, offset, len);
  }
 
-+#ifdef CONFIG_KSU
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++#ifdef CONFIG_SKS
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			 int *flags);
 +#endif
  /*
@@ -130,8 +130,8 @@ index 05036d819197..965b84d486b8 100644
  	struct vfsmount *mnt;
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
-+   #ifdef CONFIG_KSU
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++   #ifdef CONFIG_SKS
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 +   #endif
  
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
@@ -146,17 +146,17 @@ index 650fc7e0f3a6..55be193913b6 100644
  }
  EXPORT_SYMBOL(kernel_read);
 
-+#ifdef CONFIG_KSU
-+extern bool ksu_vfs_read_hook __read_mostly;
-+extern int ksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
++#ifdef CONFIG_SKS
++extern bool sksu_vfs_read_hook __read_mostly;
++extern int sksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
 +			size_t *count_ptr, loff_t **pos);
 +#endif
  ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
  {
  	ssize_t ret;
-+   #ifdef CONFIG_KSU 
-+	if (unlikely(ksu_vfs_read_hook))
-+		ksu_handle_vfs_read(&file, &buf, &count, &pos);
++   #ifdef CONFIG_SKS 
++	if (unlikely(sksu_vfs_read_hook))
++		sksu_handle_vfs_read(&file, &buf, &count, &pos);
 +   #endif
 +
  	if (!(file->f_mode & FMODE_READ))
@@ -172,8 +172,8 @@ index 376543199b5a..82adcef03ecc 100644
  }
  EXPORT_SYMBOL(vfs_statx_fd);
 
-+#ifdef CONFIG_KSU
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++#ifdef CONFIG_SKS
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +#endif
 +
  /**
@@ -183,8 +183,8 @@ index 376543199b5a..82adcef03ecc 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_AUTOMOUNT;
 
-+   #ifdef CONFIG_KSU
-+	ksu_handle_stat(&dfd, &filename, &flags);
++   #ifdef CONFIG_SKS
++	sksu_handle_stat(&dfd, &filename, &flags);
 +   #endif
  	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		       AT_EMPTY_PATH | KSTAT_QUERY_FLAGS)) != 0)
@@ -211,8 +211,8 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  }
  EXPORT_SYMBOL(vfs_fstat);
 
-+#ifdef CONFIG_KSU
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++#ifdef CONFIG_SKS
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +#endif
  int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
  		int flag)
@@ -220,8 +220,8 @@ index 068fdbcc9e26..5348b7bb9db2 100644
 @@ -94,6 +96,8 @@ int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
  	int error = -EINVAL;
  	unsigned int lookup_flags = 0;
-+   #ifdef CONFIG_KSU 
-+	ksu_handle_stat(&dfd, &filename, &flag);
++   #ifdef CONFIG_SKS 
++	sksu_handle_stat(&dfd, &filename, &flag);
 +   #endif
 +
  	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
@@ -240,8 +240,8 @@ index 2ff887661237..e758d7db7663 100644
  	return error;
  }
 
-+#ifdef CONFIG_KSU
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++#ifdef CONFIG_SKS
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			        int *flags);
 +#endif
 +
@@ -251,8 +251,8 @@ index 2ff887661237..e758d7db7663 100644
 @@ -370,6 +373,8 @@ SYSCALL_DEFINE3(faccessat, int, dfd, const char __user *, filename, int, mode)
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
-+   #ifdef CONFIG_KSU
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++   #ifdef CONFIG_SKS
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 +   #endif
 +
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
@@ -261,7 +261,7 @@ index 2ff887661237..e758d7db7663 100644
 
 ### Modo de Segurança
 
-Para ativar o Modo de Segurança integrado do KernelSU, você deve modificar a função `input_handle_event` em `drivers/input/input.c`:
+Para ativar o Modo de Segurança integrado do SxKernelSU, você deve modificar a função `input_handle_event` em `drivers/input/input.c`:
 
 ::: tip DICA
 É altamente recomendável ativar este recurso, é muito útil para evitar bootloops!
@@ -276,18 +276,18 @@ index 45306f9ef247..815091ebfca4 100755
  	return disposition;
  }
 
-+#ifdef CONFIG_KSU
-+extern bool ksu_input_hook __read_mostly;
-+extern int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
++#ifdef CONFIG_SKS
++extern bool sksu_input_hook __read_mostly;
++extern int sksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
 +#endif
 +
  static void input_handle_event(struct input_dev *dev,
  			       unsigned int type, unsigned int code, int value)
  {
 	int disposition = input_get_disposition(dev, type, code, &value);
-+   #ifdef CONFIG_KSU
-+	if (unlikely(ksu_input_hook))
-+		ksu_handle_input_handle_event(&type, &code, &value);
++   #ifdef CONFIG_SKS
++	if (unlikely(sksu_input_hook))
++		sksu_handle_input_handle_event(&type, &code, &value);
 +   #endif
  
  	if (disposition != INPUT_IGNORE_EVENT && type != EV_SYN)
@@ -311,8 +311,8 @@ index 32f6f1c68..d69d8eca2 100644
         return dentry;
  }
 
-+#ifdef CONFIG_KSU
-+extern int ksu_handle_devpts(struct inode*);
++#ifdef CONFIG_SKS
++extern int sksu_handle_devpts(struct inode*);
 +#endif
 +
  /**
@@ -322,9 +322,9 @@ index 32f6f1c68..d69d8eca2 100644
   */
  void *devpts_get_priv(struct dentry *dentry)
  {
-+       #ifdef CONFIG_KSU
-+       ksu_handle_devpts(dentry->d_inode);
-+       #ifdef CONFIG_KSU
++       #ifdef CONFIG_SKS
++       sksu_handle_devpts(dentry->d_inode);
++       #ifdef CONFIG_SKS
         if (dentry->d_sb->s_magic != DEVPTS_SUPER_MAGIC)
                 return NULL;
         return dentry->d_fsdata;
@@ -379,4 +379,4 @@ Você pode fazer com que o recurso "Desmontar módulos" funcione em kernels pré
   * Isto é importante para filesystems que usam dispositivos bloqueados sem nome.
 ```
 
-Finalmente, compile seu kernel novamente e o KernelSU deverá funcionar corretamente.
+Finalmente, compile seu kernel novamente e o SxKernelSU deverá funcionar corretamente.

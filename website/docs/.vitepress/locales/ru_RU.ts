@@ -1,4 +1,4 @@
-import { createRequire } from 'module'
+﻿import { createRequire } from 'module'
 import { defineConfig } from 'vitepress'
 
 const require = createRequire(import.meta.url)
@@ -18,16 +18,16 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/tiann/KernelSU' }
+      { icon: 'github', link: 'https://github.com/linchuanlu56-dot/SxKernelSU' }
     ],
 
     footer: {
         message: 'Выпускается под лицензией GPL3.',
-        copyright: 'Авторские права © 2022-текущее Разработчики KernelSU.'
+        copyright: 'Авторские права © 2022-текущее Разработчики SxKernelSU.'
     },
 
     editLink: {
-        pattern: 'https://github.com/tiann/KernelSU/edit/main/website/docs/:path',
+        pattern: 'https://github.com/linchuanlu56-dot/SxKernelSU/edit/main/website/docs/:path',
         text: 'Редактировать эту страницу на GitHub'
     }
   }
@@ -35,7 +35,7 @@ export default defineConfig({
 
 function nav() {
   return [
-    { text: 'Руководство', link: '/ru_RU/guide/what-is-kernelsu' },
+    { text: 'Руководство', link: '/ru_RU/guide/what-is-sxkernelsu' },
   ]
 }
 
@@ -44,7 +44,7 @@ function sidebarGuide() {
     {
         text: 'Руководство',
         items: [
-          { text: 'Что такое KernelSU?', link: '/ru_RU/guide/what-is-kernelsu' },
+          { text: 'Что такое SxKernelSU?', link: '/ru_RU/guide/what-is-sxkernelsu' },
           { text: 'Установка', link: '/ru_RU/guide/installation' },
           { text: 'Как собрать?', link: '/ru_RU/guide/how-to-build' },
           { text: 'Реализация в устройствах, не относящихся к GKI', link: '/ru_RU/guide/how-to-integrate-for-non-gki'},

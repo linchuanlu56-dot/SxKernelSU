@@ -1,33 +1,33 @@
-# 如何為非 GKI 核心整合 KernelSU {#how-to-integrate-kernelsu-for-non-gki-kernels}
+﻿# 如何為非 GKI 核心整合 SxKernelSU {#how-to-integrate-sxkernelsu-for-non-gki-kernels}
 
 ::: warning
 該文件僅供存檔參考，不再維護更新。
-自 KernelSU v1.0 版本之後，我們放棄了對非 GKI 裝置的官方支援。
+自 SxKernelSU v1.0 版本之後，我們放棄了對非 GKI 裝置的官方支援。
 :::
 
-KernelSU 可以被整合到非 GKI 核心中，現在它最低支援到核心 4.14 版本；理論上也可以支援更低的版本。
+SxKernelSU 可以被整合到非 GKI 核心中，現在它最低支援到核心 4.14 版本；理論上也可以支援更低的版本。
 
-由於非 GKI 核心的片段化極其嚴重，因此通常沒有統一的方法來建置它，所以我們也無法為非 GKI 裝置提供 Boot 映像。但您完全可以自行整合 KernelSU 並建置核心以繼續使用。
+由於非 GKI 核心的片段化極其嚴重，因此通常沒有統一的方法來建置它，所以我們也無法為非 GKI 裝置提供 Boot 映像。但您完全可以自行整合 SxKernelSU 並建置核心以繼續使用。
 
 首先，您必須有能力從您裝置的核心原始碼建置出一個可以開機並且能夠正常使用的核心，如果核心並非開放原始碼，這通常難以做到。
 
-如果您已經做好了上述準備，那有兩個方法來將 KernelSU 整合至您的核心之中。
+如果您已經做好了上述準備，那有兩個方法來將 SxKernelSU 整合至您的核心之中。
 
 1. 藉助 `kprobe` 自動整合
 2. 手動修改核心原始碼
 
 ## 使用 kprobe 整合 {#integrate-with-kprobe}
 
-KernelSU 使用 kprobe 機制來處理核心的相關 hook，如果 *kprobe* 可以在您建置的核心中正常運作，那麼建議使用這個方法進行整合。
+SxKernelSU 使用 kprobe 機制來處理核心的相關 hook，如果 *kprobe* 可以在您建置的核心中正常運作，那麼建議使用這個方法進行整合。
 
-首先，把 KernelSU 新增至您的核心來源樹狀結構，再核心的根目錄執行以下命令：
+首先，把 SxKernelSU 新增至您的核心來源樹狀結構，再核心的根目錄執行以下命令：
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -s v0.9.5
 ```
 
 :::info 公告
-[KernelSU 1.0 及更新版本不再支援非 GKI 核心](https://github.com/tiann/KernelSU/issues/1705)。最後一個支援的版本為 `v0.9.5`，請確保使用的版本正確。
+[SxKernelSU 1.0 及更新版本不再支援非 GKI 核心](https://github.com/linchuanlu56-dot/SxKernelSU/issues/1705)。最後一個支援的版本為 `v0.9.5`，請確保使用的版本正確。
 :::
 
 然後，您需要檢查您的核心是否啟用 *kprobe*，如果未啟用，則需要新增以下設定：
@@ -42,11 +42,11 @@ CONFIG_KPROBE_EVENTS=y
 
 如果您發現 KPROBES 仍未生效，很有可能是因為它依賴的 `CONFIG_MODULES` 並未被啟用，如果還是未生效請輸入 `make menuconfig` 搜尋 KPROBES 的其他相依性並啟用。
 
-如果您在整合 KernelSU 之後手機無法啟動，那麼很可能您的核心中 **kprobe 無法正常運作**，您需要修正這個錯誤，或者使用第二種方法。
+如果您在整合 SxKernelSU 之後手機無法啟動，那麼很可能您的核心中 **kprobe 無法正常運作**，您需要修正這個錯誤，或者使用第二種方法。
 
 :::tip 如何檢查 kprobe 是否損毀？
 
-將 `KernelSU/kernel/ksu.c` 中的 `ksu_sucompat_init()` 和 `ksu_ksud_init()` 註解掉，如果正常開機，即 kprobe 已損毀；或者您可以手動嘗試使用 kprobe 功能，如果不正常，手機會直接重新啟動。
+將 `SxKernelSU/kernel/ksu.c` 中的 `sksu_sucompat_init()` 和 `sksu_sksud_init()` 註解掉，如果正常開機，即 kprobe 已損毀；或者您可以手動嘗試使用 kprobe 功能，如果不正常，手機會直接重新啟動。
 :::
 
 :::info 如何為非 GKI 核心啟用卸載模組功能
@@ -58,15 +58,15 @@ CONFIG_KPROBE_EVENTS=y
 
 如果 kprobe 無法正常運作 (在4.8之前可能是上游或核心的錯誤)，那您可以嘗試這種方法：
 
-首先，將 KernelSU 新增至您的原始碼樹狀結構，在核心的根目錄執行以下命令：
+首先，將 SxKernelSU 新增至您的原始碼樹狀結構，在核心的根目錄執行以下命令：
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -s v0.9.5
 ```
-請記住，在某些裝置上，您的 `defconfig` 可能位於 `arch/arm64/configs` 中，或在其他情況下位於 `arch/arm64/configs/vendor/你的defconfig` 中。無論您使用哪個 `defconfig`，請確保使用 `CONFIG_KSU=y` 啟用KernelSU，或使用 `n` 停用它。例如，如果您選擇啟用它，則 `defconfig` 應包含以下字串：
+請記住，在某些裝置上，您的 `defconfig` 可能位於 `arch/arm64/configs` 中，或在其他情況下位於 `arch/arm64/configs/vendor/你的defconfig` 中。無論您使用哪個 `defconfig`，請確保使用 `CONFIG_SKS=y` 啟用SxKernelSU，或使用 `n` 停用它。例如，如果您選擇啟用它，則 `defconfig` 應包含以下字串：
 ```conf
-# KernelSU
-CONFIG_KSU=y
+# SxKernelSU
+CONFIG_SKS=y
 ```
 
 然後，手動修改核心原始碼，您可以參閱下方的 patch：
@@ -82,20 +82,20 @@ index ac59664eaecf..bdd585e1d2cc 100644
  	return retval;
  }
  
-+extern bool ksu_execveat_hook __read_mostly;
-+extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
++extern bool sksu_execveat_hook __read_mostly;
++extern int sksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
 +			void *envp, int *flags);
-+extern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
++extern int sksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
 +				 void *argv, void *envp, int *flags);
  static int do_execveat_common(int fd, struct filename *filename,
  			      struct user_arg_ptr argv,
  			      struct user_arg_ptr envp,
  			      int flags)
  {
-+	if (unlikely(ksu_execveat_hook))
-+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
++	if (unlikely(sksu_execveat_hook))
++		sksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
 +	else
-+		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
++		sksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
  	return __do_execve_file(fd, filename, argv, envp, flags, NULL);
  }
 ```
@@ -108,7 +108,7 @@ index 05036d819197..965b84d486b8 100644
  	return ksys_fallocate(fd, mode, offset, len);
  }
  
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			 int *flags);
  /*
   * access() needs to use the real uid/gid, not the effective uid/gid.
@@ -125,7 +125,7 @@ index 05036d819197..965b84d486b8 100644
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
  
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
  
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
  		return -EINVAL;
@@ -139,15 +139,15 @@ index 650fc7e0f3a6..55be193913b6 100644
  }
  EXPORT_SYMBOL(kernel_read);
  
-+extern bool ksu_vfs_read_hook __read_mostly;
-+extern int ksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
++extern bool sksu_vfs_read_hook __read_mostly;
++extern int sksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
 +			size_t *count_ptr, loff_t **pos);
  ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
  {
  	ssize_t ret;
  
-+	if (unlikely(ksu_vfs_read_hook))
-+		ksu_handle_vfs_read(&file, &buf, &count, &pos);
++	if (unlikely(sksu_vfs_read_hook))
++		sksu_handle_vfs_read(&file, &buf, &count, &pos);
 +
  	if (!(file->f_mode & FMODE_READ))
  		return -EBADF;
@@ -162,7 +162,7 @@ index 376543199b5a..82adcef03ecc 100644
  }
  EXPORT_SYMBOL(vfs_statx_fd);
  
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +
  /**
   * vfs_statx - Get basic and extra attributes by filename
@@ -171,7 +171,7 @@ index 376543199b5a..82adcef03ecc 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_AUTOMOUNT;
  
-+	ksu_handle_stat(&dfd, &filename, &flags);
++	sksu_handle_stat(&dfd, &filename, &flags);
  	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		       AT_EMPTY_PATH | KSTAT_QUERY_FLAGS)) != 0)
  		return -EINVAL;
@@ -197,7 +197,7 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  }
  EXPORT_SYMBOL(vfs_fstat);
  
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +
  int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
  		int flag)
@@ -206,7 +206,7 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = 0;
  
-+	ksu_handle_stat(&dfd, &filename, &flag);
++	sksu_handle_stat(&dfd, &filename, &flag);
 +
  	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		      AT_EMPTY_PATH)) != 0)
@@ -224,7 +224,7 @@ index 2ff887661237..e758d7db7663 100644
  	return error;
  }
  
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			        int *flags);
 +
  /*
@@ -234,7 +234,7 @@ index 2ff887661237..e758d7db7663 100644
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
  
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 +
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
  		return -EINVAL;
@@ -242,7 +242,7 @@ index 2ff887661237..e758d7db7663 100644
 
 ### 安全模式 {#safe-mode}
 
-若要啟用 KernelSU 內建的安全模式，您還需要修改 `drivers/input/input.c` 中的 `input_handle_event` 方法：
+若要啟用 SxKernelSU 內建的安全模式，您還需要修改 `drivers/input/input.c` 中的 `input_handle_event` 方法：
 
 :::tip 小建議
 強烈建議啟用此功能，如果遇到開機迴圈，這將會非常有用！
@@ -257,16 +257,16 @@ index 45306f9ef247..815091ebfca4 100755
  	return disposition;
  }
  
-+extern bool ksu_input_hook __read_mostly;
-+extern int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
++extern bool sksu_input_hook __read_mostly;
++extern int sksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
 +
  static void input_handle_event(struct input_dev *dev,
  			       unsigned int type, unsigned int code, int value)
  {
 	int disposition = input_get_disposition(dev, type, code, &value);
 +
-+	if (unlikely(ksu_input_hook))
-+		ksu_handle_input_handle_event(&type, &code, &value);
++	if (unlikely(sksu_input_hook))
++		sksu_handle_input_handle_event(&type, &code, &value);
  
  	if (disposition != INPUT_IGNORE_EVENT && type != EV_SYN)
  		add_input_randomness(type, code, value);
@@ -289,8 +289,8 @@ index 32f6f1c68..d69d8eca2 100644
         return dentry;
  }
 
-+#ifdef CONFIG_KSU
-+extern int ksu_handle_devpts(struct inode*);
++#ifdef CONFIG_SKS
++extern int sksu_handle_devpts(struct inode*);
 +#endif
 +
  /**
@@ -300,8 +300,8 @@ index 32f6f1c68..d69d8eca2 100644
   */
  void *devpts_get_priv(struct dentry *dentry)
  {
-+       #ifdef CONFIG_KSU
-+       ksu_handle_devpts(dentry->d_inode);
++       #ifdef CONFIG_SKS
++       sksu_handle_devpts(dentry->d_inode);
 +       #endif
         if (dentry->d_sb->s_magic != DEVPTS_SUPER_MAGIC)
                 return NULL;
@@ -357,4 +357,4 @@ index 32f6f1c68..d69d8eca2 100644
   * This is important for filesystems which use unnamed block devices.
 ```
 
-最後，再次建置您的核心，KernelSU 將會如期運作。
+最後，再次建置您的核心，SxKernelSU 將會如期運作。

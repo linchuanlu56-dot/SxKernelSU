@@ -1,33 +1,33 @@
-# Bagaimana Caranya untuk mengintegrasikan KernelSU ke kernel non GKI?
+﻿# Bagaimana Caranya untuk mengintegrasikan SxKernelSU ke kernel non GKI?
 
 ::: warning
 Dokumen ini hanya untuk referensi arsip dan tidak lagi diperbarui.
-Sejak KernelSU v1.0, kami telah menghentikan dukungan resmi untuk perangkat non-GKI.
+Sejak SxKernelSU v1.0, kami telah menghentikan dukungan resmi untuk perangkat non-GKI.
 :::
 
-KernelSU dapat diintegrasikan ke kernel non GKI, dan saat ini sudah di-backport ke 4.14, dan juga dapat dijalankan pada kernel di bawah 4.14.
+SxKernelSU dapat diintegrasikan ke kernel non GKI, dan saat ini sudah di-backport ke 4.14, dan juga dapat dijalankan pada kernel di bawah 4.14.
 
-Karena fragmentasi kernel non GKI, kami tidak memiliki cara yang seragam untuk membangunnya, sehingga kami tidak dapat menyediakan gambar boot non GKI. Tetapi Anda dapat membangun kernel sendiri dengan KernelSU yang terintegrasi.
+Karena fragmentasi kernel non GKI, kami tidak memiliki cara yang seragam untuk membangunnya, sehingga kami tidak dapat menyediakan gambar boot non GKI. Tetapi Anda dapat membangun kernel sendiri dengan SxKernelSU yang terintegrasi.
 
-Pertama, Anda harus dapat membangun kernel yang dapat di-boot dari kode sumber kernel, jika kernel tersebut tidak open source, maka akan sulit untuk menjalankan KernelSU untuk perangkat Anda.
+Pertama, Anda harus dapat membangun kernel yang dapat di-boot dari kode sumber kernel, jika kernel tersebut tidak open source, maka akan sulit untuk menjalankan SxKernelSU untuk perangkat Anda.
 
-Jika Anda dapat membuat kernel yang dapat di-booting, ada dua cara untuk mengintegrasikan KernelSU ke kode sumber kernel:
+Jika Anda dapat membuat kernel yang dapat di-booting, ada dua cara untuk mengintegrasikan SxKernelSU ke kode sumber kernel:
 
 1. Secara otomatis dengan `kprobe`
 2. Secara manual
 
 ## Integrasikan dengan kprobe
 
-KernelSU menggunakan kprobe untuk melakukan hook kernel, jika *kprobe* berjalan dengan baik pada kernel Anda, maka disarankan untuk menggunakan cara ini.
+SxKernelSU menggunakan kprobe untuk melakukan hook kernel, jika *kprobe* berjalan dengan baik pada kernel Anda, maka disarankan untuk menggunakan cara ini.
 
-Pertama, tambahkan KernelSU ke dalam berkas kernel source tree:
+Pertama, tambahkan SxKernelSU ke dalam berkas kernel source tree:
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -s v0.9.5
 ```
 
 :::info
-[KernelSU 1.0 dan versi yang lebih baru tidak lagi mendukung kernel non-GKI](https://github.com/tiann/KernelSU/issues/1705). Versi terakhir yang didukung adalah `v0.9.5`, pastikan untuk menggunakan versi yang benar.
+[SxKernelSU 1.0 dan versi yang lebih baru tidak lagi mendukung kernel non-GKI](https://github.com/linchuanlu56-dot/SxKernelSU/issues/1705). Versi terakhir yang didukung adalah `v0.9.5`, pastikan untuk menggunakan versi yang benar.
 :::
 
 Kemudian, Anda harus memeriksa apakah *kprobe* diaktifkan dalam konfigurasi kernel Anda, jika tidak, tambahkan konfigurasi ini ke dalamnya:
@@ -38,23 +38,23 @@ CONFIG_HAVE_KPROBES=y
 CONFIG_KPROBE_EVENTS=y
 ```
 
-Dan build kernel Anda lagi, KernelSU seharusnya bekerja dengan baik.
+Dan build kernel Anda lagi, SxKernelSU seharusnya bekerja dengan baik.
 
 Jika Anda menemukan bahwa KPROBES masih belum diaktifkan, Anda dapat mencoba mengaktifkan `CONFIG_MODULES`. (Jika masih belum berlaku, gunakan `make menuconfig` untuk mencari ketergantungan KPROBES yang lain)
 
-etapi jika Anda mengalami boot loop saat mengintegrasikan KernelSU, itu mungkin *kprobe rusak di kernel Anda*, Anda harus memperbaiki bug kprobe atau menggunakan cara kedua.
+etapi jika Anda mengalami boot loop saat mengintegrasikan SxKernelSU, itu mungkin *kprobe rusak di kernel Anda*, Anda harus memperbaiki bug kprobe atau menggunakan cara kedua.
 
 ## Memodifikasi sumber kernel secara manual
 
 Jika kprobe tidak dapat bekerja pada kernel Anda (mungkin karena bug di upstream atau kernel di bawah 4.8), maka Anda dapat mencoba cara ini:
 
-Pertama, tambahkan KernelSU ke dalam direktori kernel source tree:
+Pertama, tambahkan SxKernelSU ke dalam direktori kernel source tree:
 
 ```sh
-curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
+curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -s v0.9.5
 ```
 
-Kemudian, tambahkan panggilan KernelSU ke source kernel, berikut ini adalah patch yang dapat dirujuk:
+Kemudian, tambahkan panggilan SxKernelSU ke source kernel, berikut ini adalah patch yang dapat dirujuk:
 
 ```diff
 diff --git a/fs/exec.c b/fs/exec.c
@@ -65,20 +65,20 @@ index ac59664eaecf..bdd585e1d2cc 100644
  	return retval;
  }
  
-+extern bool ksu_execveat_hook __read_mostly;
-+extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
++extern bool sksu_execveat_hook __read_mostly;
++extern int sksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
 +			void *envp, int *flags);
-+extern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
++extern int sksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
 +				 void *argv, void *envp, int *flags);
  static int do_execveat_common(int fd, struct filename *filename,
  			      struct user_arg_ptr argv,
  			      struct user_arg_ptr envp,
  			      int flags)
  {
-+	if (unlikely(ksu_execveat_hook))
-+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
++	if (unlikely(sksu_execveat_hook))
++		sksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
 +	else
-+		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
++		sksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
  	return __do_execve_file(fd, filename, argv, envp, flags, NULL);
  }
 ```
@@ -91,7 +91,7 @@ index 05036d819197..965b84d486b8 100644
  	return ksys_fallocate(fd, mode, offset, len);
  }
  
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			 int *flags);
  /*
   * access() needs to use the real uid/gid, not the effective uid/gid.
@@ -108,7 +108,7 @@ index 05036d819197..965b84d486b8 100644
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
  
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
  
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
  		return -EINVAL;
@@ -122,15 +122,15 @@ index 650fc7e0f3a6..55be193913b6 100644
  }
  EXPORT_SYMBOL(kernel_read);
  
-+extern bool ksu_vfs_read_hook __read_mostly;
-+extern int ksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
++extern bool sksu_vfs_read_hook __read_mostly;
++extern int sksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
 +			size_t *count_ptr, loff_t **pos);
  ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
  {
  	ssize_t ret;
  
-+	if (unlikely(ksu_vfs_read_hook))
-+		ksu_handle_vfs_read(&file, &buf, &count, &pos);
++	if (unlikely(sksu_vfs_read_hook))
++		sksu_handle_vfs_read(&file, &buf, &count, &pos);
 +
  	if (!(file->f_mode & FMODE_READ))
  		return -EBADF;
@@ -145,7 +145,7 @@ index 376543199b5a..82adcef03ecc 100644
  }
  EXPORT_SYMBOL(vfs_statx_fd);
  
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +
  /**
   * vfs_statx - Get basic and extra attributes by filename
@@ -154,7 +154,7 @@ index 376543199b5a..82adcef03ecc 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_AUTOMOUNT;
  
-+	ksu_handle_stat(&dfd, &filename, &flags);
++	sksu_handle_stat(&dfd, &filename, &flags);
  	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		       AT_EMPTY_PATH | KSTAT_QUERY_FLAGS)) != 0)
  		return -EINVAL;
@@ -178,7 +178,7 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  }
  EXPORT_SYMBOL(vfs_fstat);
  
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +
  int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
  		int flag)
@@ -187,7 +187,7 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = 0;
  
-+	ksu_handle_stat(&dfd, &filename, &flag);
++	sksu_handle_stat(&dfd, &filename, &flag);
 +
  	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		      AT_EMPTY_PATH)) != 0)
@@ -205,7 +205,7 @@ index 2ff887661237..e758d7db7663 100644
  	return error;
  }
  
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			        int *flags);
 +
  /*
@@ -215,13 +215,13 @@ index 2ff887661237..e758d7db7663 100644
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
  
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 +
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
  		return -EINVAL;
 ```
 
-Untuk mengaktifkan KernelSU yang dibangun dalam SafeMode, Anda juga harus memodifikasi `input_handle_event` di `drivers/input/input.c`:
+Untuk mengaktifkan SxKernelSU yang dibangun dalam SafeMode, Anda juga harus memodifikasi `input_handle_event` di `drivers/input/input.c`:
 
 :::tip
 Fitur ini sangat direkomendasikan, serta sangat membantu untuk memulihkan pada saat bootloop!
@@ -236,22 +236,22 @@ index 45306f9ef247..815091ebfca4 100755
  	return disposition;
  }
  
-+extern bool ksu_input_hook __read_mostly;
-+extern int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
++extern bool sksu_input_hook __read_mostly;
++extern int sksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
 +
  static void input_handle_event(struct input_dev *dev,
  			       unsigned int type, unsigned int code, int value)
  {
 	int disposition = input_get_disposition(dev, type, code, &value);
 +
-+	if (unlikely(ksu_input_hook))
-+		ksu_handle_input_handle_event(&type, &code, &value);
++	if (unlikely(sksu_input_hook))
++		sksu_handle_input_handle_event(&type, &code, &value);
  
  	if (disposition != INPUT_IGNORE_EVENT && type != EV_SYN)
  		add_input_randomness(type, code, value);
 ```
 
-Terakhir, edit `KernelSU/kernel/ksu.c` dan beri komentar pada `enable_sucompat()` lalu build kernel Anda lagi, KernelSU akan bekerja dengan baik.
+Terakhir, edit `SxKernelSU/kernel/ksu.c` dan beri komentar pada `enable_sucompat()` lalu build kernel Anda lagi, SxKernelSU akan bekerja dengan baik.
 
 ### How to backport path_umount
 
@@ -302,4 +302,4 @@ Anda dapat membuat fitur "Umount modules" berfungsi pada kernel pra-GKI dengan m
   * This is important for filesystems which use unnamed block devices.
 ```
 
-Terakhir, build kembali kernel Anda, dan KernelSU akan berfungsi dengan benar.
+Terakhir, build kembali kernel Anda, dan SxKernelSU akan berfungsi dengan benar.
