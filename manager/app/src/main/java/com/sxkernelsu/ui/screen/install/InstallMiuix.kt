@@ -212,6 +212,7 @@ internal fun InstallScreenMiuix(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 12.dp),
+                        colors = CardDefaults.defaultColors(color = if (isInDarkTheme()) Color(0xFF2A1A38) else com.sxkernelsu.ui.theme.AnimeColors.pastelLavender.copy(alpha = 0.2f)),
                     ) {
                         BasicComponent(
                             title = stringResource(id = R.string.advanced_options),
@@ -252,7 +253,7 @@ internal fun InstallScreenMiuix(
                             .padding(top = 12.dp),
                         text = stringResource(id = R.string.install_next),
                         enabled = uiState.installMethod != null,
-                        colors = ButtonDefaults.textButtonColorsPrimary(),
+                        colors = ButtonDefaults.textButtonColors(color = com.sxkernelsu.ui.theme.AnimeColors.sparklePink),
                         onClick = actions.onNext
                     )
                     Spacer(
