@@ -1,62 +1,80 @@
 **English** | [Español](README_ES.md) | [简体中文](README_CN.md) | [繁體中文](README_TW.md) | [日本語](README_JP.md) | [한국어](README_KR.md) | [Polski](README_PL.md) | [Português (Brasil)](README_PT-BR.md) | [Türkçe](README_TR.md) | [Русский](README_RU.md) | [Tiếng Việt](README_VI.md) | [Indonesia](README_ID.md) | [עברית](README_IW.md) | [हिंदी](README_IN.md) | [Italiano](README_IT.md)
 
-# KernelSU
+# SxKernelSU
 
 <img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="logo">
 
-A kernel-based root solution for Android devices.
+A kernel-based root solution for Android devices — forked from KernelSU, supercharged.
 
-[![Latest release](https://img.shields.io/github/v/release/tiann/KernelSU?label=Release&logo=github)](https://github.com/tiann/KernelSU/releases/latest)
-[![Weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/kernelsu)
-[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/KernelSU)
+[![Latest release](https://img.shields.io/github/v/release/linchuanlu56-dot/SxKernelSU?label=Release&logo=github)](https://github.com/linchuanlu56-dot/SxKernelSU/releases/latest)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-orange.svg?logo=gnu)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub License](https://img.shields.io/github/license/tiann/KernelSU?logo=gnu)](/LICENSE)
+[![Changelog](https://img.shields.io/badge/Changelog-v2.0.0-FF6B9D?logo=github)](CHANGELOG.md)
+
+> 🌸 **SxKernelSU** — Everything KernelSU is, plus Ghost-tier root hiding, atomic module management, and a kawaii anime theme.
+
+---
+
+## ✨ What's New
+
+| Version | What |
+|---------|------|
+| **v2.0.0** 🧠 | **Ghost Architecture**: 6-layer root hiding, Shadow Syscall Table, Per-Task VFS, Biological Immune System |
+| **v1.5.0** 🎀 | **Anime Theme**: Sakura pink, sparkle background, card animations, bouncy transitions |
+| **v1.4.0** 🔒 | Atomic module install/rollback, debugfs interface, Docker dev environment |
+| **v1.3.0** 🛡️ | BUG_ON→WARN_ON, init timeout, symbol resolver fallback, workqueue migration |
+
+📖 **[Full Changelog →](CHANGELOG.md)**
+
+---
 
 ## Features
 
-1. Kernel-based `su` and root access management.
-2. Module system based on [metamodules](https://kernelsu.org/guide/metamodule.html): Pluggable infrastructure for systemless modifications.
-3. [App Profile](https://kernelsu.org/guide/app-profile.html): Lock up the root power in a cage.
+1. ✅ **All KernelSU features** — Kernel-based `su`, module system, App Profile, SELinux hide
+2. 🧠 **Ghost Hiding** — Module invisible to `lsmod`, `/proc/modules`, `/proc/kallsyms`. Per-task VFS filtering. Shadow syscall table.
+3. 🎀 **Anime Theme** — Default Sakura pink, animated sparkles, kawaii card design
+4. 🔒 **Atomic Modules** — Auto-backup & rollback on install failure
+5. 🛡️ **Stability** — No kernel panics on SELinux anomalies, 60s script timeout, ordered module exit
 
-## Compatibility state
+## Compatibility
 
-KernelSU officially supports Android GKI 2.0 devices (kernel 5.10+). Older kernels (4.14+) are also supported, but the kernel will need to be built manually.
-
-With this, WSA, ChromeOS, and container-based Android are all supported.
-
-Currently, the `arm64-v8a` and `x86_64` architectures are supported.
+Android GKI 2.0 (kernel 5.10+) and older kernels (4.14+). `arm64-v8a` and `x86_64`.
 
 > [!CAUTION]
-> Recent kernel versions have implemented a breaking change causing KernelSU to fail and potentially trigger a kernel panic on `x86_64`! Check the website for more info!
+> This is a fork with significant kernel-level modifications. Test thoroughly before production use.
 
-## Usage
+## 📜 Changelog
 
-- [Installation](https://kernelsu.org/guide/installation.html)
-- [How to build](https://kernelsu.org/guide/how-to-build.html)
-- [Official website](https://kernelsu.org/)
+All version history with detailed descriptions is available in the [CHANGELOG.md](CHANGELOG.md) file.
 
-## Translation
+Quick links:
+- [v2.0.0 — Ghost Release](CHANGELOG.md#v200--2026-07-01--ghost-release)
+- [v1.5.0 — Anime Release](CHANGELOG.md#v150--2026-07-01--anime-release)
+- [v1.4.0 — Lock & Load](CHANGELOG.md#v140--2026-07-01--lock--load)
+- [v1.3.0 — Stability Release](CHANGELOG.md#v130--2026-06-30--stability-release)
+- [v1.2.0 — Initial Fork](CHANGELOG.md#v120--2026-06-30--initial-fork)
 
-To help translate KernelSU, we no longer accept translation contributions via Weblate. All translations are now handled using LLMs.
+---
 
-If you would like to add support for a new language, feel free to open a PR. Please note that modifications to existing English and Chinese translations are not accepted.
+## Build & Install
 
-## Discussion
+```bash
+# Build kernel module
+cd kernel && CONFIG_KSU=m CC=clang make
 
-- Telegram: [@KernelSU](https://t.me/KernelSU)
+# Build userspace
+cargo build --target aarch64-linux-android --release
 
-## Security
+# Build Manager APK
+cd manager && ./gradlew assembleRelease
+```
 
-For information on reporting security vulnerabilities in KernelSU, see [SECURITY.md](/SECURITY.md).
+Or use Docker:
+
+```bash
+docker compose up -d
+docker compose exec dev bash
+```
 
 ## License
 
-- Files under the `kernel` directory are [GPL-2.0-only](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).
-- All other parts except the `kernel` directory are [GPL-3.0-or-later](https://www.gnu.org/licenses/gpl-3.0.html).
-
-## Credits
-
-- [Kernel-Assisted Superuser](https://git.zx2c4.com/kernel-assisted-superuser/about/): The KernelSU idea.
-- [Magisk](https://github.com/topjohnwu/Magisk): The powerful root tool.
-- [genuine](https://github.com/brevent/genuine/): APK v2 signature validation.
-- [Diamorphine](https://github.com/m0nad/Diamorphine): Some rootkit skills.
+GPL-2.0 (kernel) / GPL-3.0-or-later (userspace)
