@@ -127,6 +127,7 @@ internal fun InstallScreenMiuix(
                 item {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.defaultColors(color = if (com.sxkernelsu.ui.theme.isInDarkTheme()) Color(0xFF2A1A38) else com.sxkernelsu.ui.theme.AnimeColors.candyPink.copy(alpha = 0.25f)),
                     ) {
                         SelectInstallMethod(
                             state = uiState,
