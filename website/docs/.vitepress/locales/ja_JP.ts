@@ -18,7 +18,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/tiann/SxKernelSU' }
+      { icon: 'github', link: 'https://github.com/linchuanlu56-dot/SxKernelSU' }
     ],
 
     footer: {
@@ -27,7 +27,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/tiann/SxKernelSU/edit/main/website/docs/:path',
+      pattern: 'https://github.com/linchuanlu56-dot/SxKernelSU/edit/main/website/docs/:path',
       text: 'GitHub でこのページを編集'
     }
   }

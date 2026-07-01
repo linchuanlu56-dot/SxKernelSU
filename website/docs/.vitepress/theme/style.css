@@ -103,4 +103,32 @@ a:hover {
   line-height: 1.2;
 }
 
-/* SxKernelSU - trigger deploy */
+.VPHero .tagline {
+  font-size: 18px;
+  color: #C44AFF;
+  opacity: 0.9;
+}
+
+.VPImage.logo {
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.VPImage.logo:hover {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 0 8px 30px rgba(196, 74, 255, 0.4);
+}
+
+/* Feature cards */
+.VPFeature {
+  border-radius: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid rgba(196, 74, 255, 0.15);
+}
+
+.VPFeature:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(255, 107, 157, 0.2);
+  border-color: rgba(255, 107, 157, 0.3);
+}

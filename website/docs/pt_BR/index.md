@@ -15,7 +15,7 @@ hero:
       link: /pt_BR/guide/what-is-kernelsu
     - theme: alt
       text: Ver no GitHub
-      link: https://github.com/tiann/SxKernelSU
+      link: https://github.com/linchuanlu56-dot/SxKernelSU
 
 features:
   - title: Baseado em kernel

@@ -15,7 +15,7 @@ hero:
       link: /zh_CN/guide/what-is-kernelsu
     - theme: alt
       text: 在 GitHub 中查看
-      link: https://github.com/tiann/SxKernelSU
+      link: https://github.com/linchuanlu56-dot/SxKernelSU
 
 features:
   - title: 基于内核

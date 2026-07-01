@@ -15,7 +15,7 @@ hero:
       link: /ja_JP/guide/what-is-kernelsu
     - theme: alt
       text: GitHub で表示
-      link: https://github.com/tiann/SxKernelSU
+      link: https://github.com/linchuanlu56-dot/SxKernelSU
 
 features:
   - title: カーネルベース

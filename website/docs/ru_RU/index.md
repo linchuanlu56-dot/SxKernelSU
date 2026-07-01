@@ -15,7 +15,7 @@ hero:
       link: /ru_RU/guide/what-is-kernelsu
     - theme: alt
       text: Посмотр на GitHub
-      link: https://github.com/tiann/SxKernelSU
+      link: https://github.com/linchuanlu56-dot/SxKernelSU
 
 features:
   - title: Основанный на ядре
