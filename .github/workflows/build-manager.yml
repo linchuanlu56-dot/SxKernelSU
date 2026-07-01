@@ -231,6 +231,12 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
 
+      - name: Clear corrupted Gradle cache (fix digest-mismatch)
+        run: |
+          rm -rf ~/.gradle/caches/transforms-4/*/error_prone* 2>/dev/null || true
+          rm -rf ~/.gradle/caches/modules-2/files-2.1/com.google.errorprone/ 2>/dev/null || true
+          echo "Cleaned error_prone cache"
+
       - name: Download gradle manager artifact
         uses: actions/download-artifact@v8
         with:
