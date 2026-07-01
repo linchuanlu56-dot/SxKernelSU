@@ -109,16 +109,16 @@ Open the manager, click the installation icon in the upper right corner, and sev
 2. Direct install. If your device is already rooted, you can choose this option. The manager will automatically get your device information, and then automatically patch the official firmware, and flash it automatically. You can consider using `fastboot boot` SxKernelSU's GKI kernel to get temporary root and install the manager, and then use this option. This is also the main way to upgrade SxKernelSU.
 3. Install to inactive slot. If your device supports A/B partition, you can choose this option. The manager will automatically patch the official firmware and install it to another partition. This method is suitable for devices after OTA, you can directly install it to the inactive slot after OTA.
 
-If you don't want to use the manager, you can also use the command line to install LKM. The `ksud` tool provided by SxKernelSU can help you patch the official firmware quickly and then flash it.
+If you don't want to use the manager, you can also use the command line to install LKM. The `sksud` tool provided by SxKernelSU can help you patch the official firmware quickly and then flash it.
 
-The usage of `ksud` is as follows:
+The usage of `sksud` is as follows:
 
 ```sh
-ksud boot-patch 
+sksud boot-patch 
 ```
 
 ```txt
-Usage: ksud boot-patch [OPTIONS]
+Usage: sksud boot-patch [OPTIONS]
 
 Options:
   -b, --boot <BOOT>              Boot image be patched
@@ -135,13 +135,13 @@ Options:
 
 A few options that need to be explained:
 
-1. The `--magiskboot` option can specify the path of magiskboot. If not specified, ksud will look for it in the environment variables. If you don’t know how to get magiskboot, you can check [here](#patch-boot-image).
+1. The `--magiskboot` option can specify the path of magiskboot. If not specified, sksud will look for it in the environment variables. If you don’t know how to get magiskboot, you can check [here](#patch-boot-image).
 2. The `--kmi` option can specify the `KMI` version. If the kernel name of your device doesn't follow the KMI specification, you can specify it using this option.
 
 The most common usage is:
 
 ```sh
-ksud boot-patch -b <boot.img> --kmi android13-5.10
+sksud boot-patch -b <boot.img> --kmi android13-5.10
 ```
 
 ## LKM mode installation
@@ -182,7 +182,7 @@ PS. Данный способ подходит для любой установ�
 
 PS. Этот способ более удобен при обновлении SxKernelSU и может быть выполнен без компьютера (сначала сделайте резервную копию!). .
 
-## Установка с помощью boot.img, предоставленного SxKernelSU {#install-by-kernelsu-boot-image}
+## Установка с помощью boot.img, предоставленного SxKernelSU {#install-by-sxkernelsu-boot-image}
 
 Этот способ не требует наличия TWRP и root-прав на телефоне; он подходит для первой установки SxKernelSU.
 

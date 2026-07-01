@@ -6,13 +6,13 @@
 
 #include "policy/allowlist.h"
 #include "klog.h" // IWYU pragma: keep
-#include "runtime/ksud_boot.h"
-#include "runtime/ksud.h"
+#include "runtime/sksud_boot.h"
+#include "runtime/sksud.h"
 #include "manager/manager_observer.h"
 #include "manager/throne_tracker.h"
 
-bool ksu_module_mounted __read_mostly = false;
-bool ksu_boot_completed __read_mostly = false;
+bool sksu_module_mounted __read_mostly = false;
+bool sksu_boot_completed __read_mostly = false;
 
 void on_post_fs_data(void)
 {
@@ -26,11 +26,11 @@ void on_post_fs_data(void)
     done = true;
     pr_info("on_post_fs_data!\n");
 
-    ksu_load_allow_list();
-    ksu_observer_init();
+    sksu_load_allow_list();
+    sksu_observer_init();
     // Sanity check for safe mode only needs early-boot input samples.
-    ksu_stop_input_hook_runtime();
-    ksu_selinux_hide_handle_post_fs_data();
+    sksu_stop_input_hook_runtime();
+    sksu_selinux_hide_handle_post_fs_data();
 }
 
 extern void ext4_unregister_sysfs(struct super_block *sb);
@@ -59,13 +59,13 @@ int nuke_ext4_sysfs(const char *mnt)
 void on_module_mounted(void)
 {
     pr_info("on_module_mounted!\n");
-    ksu_module_mounted = true;
+    sksu_module_mounted = true;
 }
 
 void on_boot_completed(void)
 {
-    ksu_boot_completed = true;
+    sksu_boot_completed = true;
     pr_info("on_boot_completed!\n");
     track_throne(true);
-    ksu_selinux_hide_drop_backup_if_unused();
+    sksu_selinux_hide_drop_backup_if_unused();
 }

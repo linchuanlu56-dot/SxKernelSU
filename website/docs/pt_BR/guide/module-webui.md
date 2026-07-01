@@ -26,19 +26,19 @@ Se sua página contém CSS e JavaScript, você também precisa colocá-la neste 
 
 Se for apenas uma página de exibição, ela funcionará como uma página web comum. No entanto, o mais importante é que o SxKernelSU oferece uma série de APIs de sistema, permitindo a implementação de funções exclusivas do módulo.
 
-O SxKernelSU disponibiliza uma biblioteca JavaScript, que está publicada no [npm](https://www.npmjs.com/package/kernelsu) e pode ser usada no código JavaScript das suas páginas web.
+O SxKernelSU disponibiliza uma biblioteca JavaScript, que está publicada no [npm](https://www.npmjs.com/package/sxkernelsu) e pode ser usada no código JavaScript das suas páginas web.
 
 Por exemplo, você pode executar um comando shell para obter uma configuração específica ou modificar uma propriedade:
 
 ```JavaScript
-import { exec } from 'kernelsu';
+import { exec } from 'sxkernelsu';
 
 const { errno, stdout } = exec("getprop ro.product.model");
 ```
 
 Para outro exemplo, você pode fazer com que a página web seja exibida em tela inteira ou exibir um dica.
 
-[Documentação da API](https://www.npmjs.com/package/kernelsu)
+[Documentação da API](https://www.npmjs.com/package/sxkernelsu)
 
 Se você achar que a API existente não atende às suas necessidades ou é inconveniente de usar, fique à vontade para nos dar sugestões [aqui](https://github.com/tiann/SxKernelSU/issues)!
 

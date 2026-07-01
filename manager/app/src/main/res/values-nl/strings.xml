@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home">Home</string>
-    <string name="home_not_installed">Niet geïnstalleerd</string>
+    <string name="home_not_installed">Niet ge茂nstalleerd</string>
     <string name="home_click_to_install">Tik om te installeren</string>
     <string name="home_working">Werkend</string>
     <string name="home_working_version">Versie: %s</string>
@@ -18,7 +18,7 @@
     <string name="superuser">Supergebruiker</string>
     <string name="module_failed_to_enable">Mislukt om module in te schakelen: %s</string>
     <string name="module_failed_to_disable">Mislukt om module uit te schakelen: %s</string>
-    <string name="module_empty">Geen module geïnstalleerde</string>
+    <string name="module_empty">Geen module ge茂nstalleerde</string>
     <string name="module">Module</string>
     <string name="uninstall">Verwijderen</string>
     <string name="module_install">Installeren</string>
@@ -41,9 +41,9 @@
     <string name="safe_mode">Safe mode</string>
     <string name="reboot_to_apply">Herstart om effect te hebben</string>
     <string name="module_magisk_conflict">Modules zijn niet beschikbaar vanwege een conflict met Magisk!</string>
-    <string name="home_learn_kernelsu">Leer SxKernelSU</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
-    <string name="home_click_to_learn_kernelsu">Leer hoe SxKernelSU te installeren en modules te gebruiken.</string>
+    <string name="home_learn_sxkernelsu">Leer SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Leer hoe SxKernelSU te installeren en modules te gebruiken.</string>
     <string name="home_support_title">Ondersteun ons</string>
     <string name="home_support_content">SxKernelSU is en blijft gratis en open source. U kunt ons echter laten zien dat u ons steunt door een donatie te doen.</string>
     <string name="about_source_code"><![CDATA[Bekijk source code op %1$s<br/>Vervoeg ons %2$s kanaal]]></string>
@@ -55,7 +55,7 @@
     <string name="profile_namespace">Koppel naamruimte</string>
     <string name="profile_namespace_inherited">Overgenomen</string>
     <string name="profile_namespace_global">Globaal</string>
-    <string name="profile_namespace_individual">Individuëel</string>
+    <string name="profile_namespace_individual">Individu毛el</string>
     <string name="profile_groups">Groepen</string>
     <string name="profile_capabilities">Mogelijkheden</string>
     <string name="profile_selinux_context">SELinux context</string>
@@ -97,7 +97,7 @@
     <string name="enable_web_debugging">WebView foutopsporing</string>
     <string name="enable_web_debugging_summary">Kan worden gebruikt om WebUI te debuggen. Schakel dit alleen in als dat nodig is.</string>
     <string name="app_profile_template_export_empty">Kan niet geen lokale sjabloon vinden om te exporteren!</string>
-    <string name="app_profile_template_import_success">Succesvol geïmporteerd</string>
+    <string name="app_profile_template_import_success">Succesvol ge茂mporteerd</string>
     <string name="open">Open</string>
     <string name="settings_check_update_summary">Controleer automatisch op updates bij het openen van de app.</string>
     <string name="direct_install">Directe installatie (aanbevolen)</string>
@@ -116,7 +116,7 @@
     <string name="settings_restore_stock_image">Herstel stockafbeelding</string>
     <string name="settings_uninstall_temporary_message">Verwijder SxKernelSU tijdelijk en herstel het naar de oorspronkelijke staat na de volgende herstart.</string>
     <string name="settings_uninstall_permanent_message">Het verwijderen van SxKernelSU (root en alle modules) volledig en permanent.</string>
-    <string name="settings_restore_stock_image_message">Herstel de standaard fabrieksimage (als er een back-up bestaat), die normaal gesproken vóór OTA wordt gebruikt. Als u SxKernelSU moet verwijderen, gebruikt u permanent verwijderen.</string>
+    <string name="settings_restore_stock_image_message">Herstel de standaard fabrieksimage (als er een back-up bestaat), die normaal gesproken v贸贸r OTA wordt gebruikt. Als u SxKernelSU moet verwijderen, gebruikt u permanent verwijderen.</string>
     <string name="flashing">Knipperen</string>
     <string name="save_log">Logboeken Opslaan</string>
     <string name="flash_success">Flash-succes</string>
@@ -126,7 +126,7 @@
     <string name="log_saved">Logs opgeslagen</string>
     <string name="module_sort_enabled_first">Eerst ingeschakeld</string>
     <string name="module_sort_action_first">Eerst actie ondernemen</string>
-    <string name="module_install_prompt_with_name">De volgende modules worden geïnstalleerd: %1$s</string>
+    <string name="module_install_prompt_with_name">De volgende modules worden ge茂nstalleerd: %1$s</string>
     <string name="su_not_allowed">Kan geen Superuser-toegang verlenen aan %s</string>
     <string name="confirm">Bevestigen</string>
     <string name="settings_module_check_update">Controleer op module-updates</string>
@@ -136,13 +136,13 @@
     <string name="settings_sucompat_summary">Stelt apps met Superuser-toestemming in App Profiel in staat om een superuser-shell te verkrijgen door /system/bin/su uit te voeren; alleen effectief voor nieuwe processen.</string>
     <string name="settings_kernel_umount">Modules ontkoppelen (op kernelniveau)</string>
     <string name="settings_kernel_umount_summary">Kernel-niveau ontkoppelgedrag beheerd door SxKernelSU.</string>
-    <string name="processing">Verwerken…</string>
+    <string name="processing">Verwerken鈥?/string>
     <string name="refresh_pulling">Trek omlaag om te vernieuwen</string>
     <string name="refresh_release">Vrijgeven om te vernieuwen</string>
-    <string name="refresh_refresh">Verfrissend…</string>
+    <string name="refresh_refresh">Verfrissend鈥?/string>
     <string name="refresh_complete">Succesvol vernieuwd</string>
     <string name="module_repos">Rest</string>
-    <string name="module_repos_sort_name">Naam (A → Z)</string>
+    <string name="module_repos_sort_name">Naam (A 鈫?Z)</string>
     <string name="module_repos_source_code">Broncode</string>
     <string name="metamodule_uninstall_confirm">Weet je zeker dat je module %s wilt verwijderen? Deze actie heeft gevolgen voor alle modules en bepaalde functies van de metamodule (zoals mounten) zullen niet meer werken.</string>
     <string name="safe_mode_module_disabled">Module-installatie is uitgeschakeld in de veilige modus</string>

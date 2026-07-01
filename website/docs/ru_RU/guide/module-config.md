@@ -1,6 +1,6 @@
 # Конфигурация модулей
 
-SxKernelSU предоставляет встроенную систему конфигурации, которая позволяет модулям хранить постоянные или временные настройки в формате ключ-значение. Конфигурации хранятся в бинарном формате по пути `/data/adb/ksu/module_configs/<module_id>/` и имеют следующие характеристики:
+SxKernelSU предоставляет встроенную систему конфигурации, которая позволяет модулям хранить постоянные или временные настройки в формате ключ-значение. Конфигурации хранятся в бинарном формате по пути `/data/adb/sks/module_configs/<module_id>/` и имеют следующие характеристики:
 
 ## Типы конфигурации
 
@@ -11,44 +11,44 @@ SxKernelSU предоставляет встроенную систему кон
 
 ## Использование конфигурации в скриптах модуля
 
-Все скрипты модуля (`post-fs-data.sh`, `service.sh`, `boot-completed.sh` и др.) выполняются с установленной переменной окружения `KSU_MODULE`, содержащей ID модуля. Вы можете использовать команды `ksud module config` для управления конфигурацией модуля:
+Все скрипты модуля (`post-fs-data.sh`, `service.sh`, `boot-completed.sh` и др.) выполняются с установленной переменной окружения `SKS_MODULE`, содержащей ID модуля. Вы можете использовать команды `sksud module config` для управления конфигурацией модуля:
 
 ```bash
 # Получить значение конфигурации
-value=$(ksud module config get my_setting)
+value=$(sksud module config get my_setting)
 
 # Установить постоянное значение конфигурации
-ksud module config set my_setting "some value"
+sksud module config set my_setting "some value"
 
 # Установить временное значение конфигурации (очищается после перезагрузки)
-ksud module config set --temp runtime_state "active"
+sksud module config set --temp runtime_state "active"
 
 # Установить значение из stdin (полезно для многострочного или сложного текста)
-ksud module config set my_key <<EOF
+sksud module config set my_key <<EOF
 многострочное
 текстовое значение
 EOF
 
 # Или передать через pipe из команды
-echo "значение" | ksud module config set my_key
+echo "значение" | sksud module config set my_key
 
 # Явный флаг stdin
-cat file.json | ksud module config set json_data --stdin
+cat file.json | sksud module config set json_data --stdin
 
 # Вывести все записи конфигурации (объединенные постоянные и временные)
-ksud module config list
+sksud module config list
 
 # Удалить запись конфигурации
-ksud module config delete my_setting
+sksud module config delete my_setting
 
 # Удалить временную запись конфигурации
-ksud module config delete --temp runtime_state
+sksud module config delete --temp runtime_state
 
 # Очистить все постоянные конфигурации
-ksud module config clear
+sksud module config clear
 
 # Очистить все временные конфигурации
-ksud module config clear --temp
+sksud module config clear --temp
 ```
 
 ## Ограничения валидации
@@ -85,7 +85,7 @@ ksud module config clear --temp
 - Используйте постоянную конфигурацию для пользовательских настроек, которые должны сохраняться после перезагрузки
 - Используйте временную конфигурацию для состояния во время выполнения или флагов функций, которые должны сбрасываться при загрузке
 - Проверяйте значения конфигурации в скриптах перед их использованием
-- Используйте команду `ksud module config list` для отладки проблем с конфигурацией
+- Используйте команду `sksud module config list` для отладки проблем с конфигурацией
 :::
 
 ## Расширенные возможности
@@ -98,7 +98,7 @@ ksud module config clear --temp
 
 ```bash
 # Переопределить описание модуля
-ksud module config set override.description "Пользовательское описание, отображаемое в менеджере"
+sksud module config set override.description "Пользовательское описание, отображаемое в менеджере"
 ```
 
 При получении списка модулей, если существует конфигурация `override.description`, она заменит исходное описание из `module.prop`. Это полезно для:
@@ -116,13 +116,13 @@ ksud module config set override.description "Пользовательское о
 
 ```bash
 # Объявить, что этот модуль управляет совместимостью SU и включает её
-ksud module config set manage.su_compat true
+sksud module config set manage.su_compat true
 
 # Объявить, что этот модуль управляет размонтированием ядра и отключает его
-ksud module config set manage.kernel_umount false
+sksud module config set manage.kernel_umount false
 
 # Удалить управление функцией (модуль больше не контролирует эту функцию)
-ksud module config delete manage.su_compat
+sksud module config delete manage.su_compat
 ```
 
 **Как это работает:**

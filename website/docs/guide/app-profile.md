@@ -1,4 +1,4 @@
-# App Profile
+﻿# App Profile
 
 The App Profile is a mechanism provided by SxKernelSU for customizing the configuration of various apps.
 
@@ -117,5 +117,5 @@ Additionally, the SxKernelSU manager's settings interface provides the "Umount m
 2. Disable the "Umount modules by default" option and individually enable the "Umount modules" option in the App Profile for apps requiring module loading (acting as a "blacklist").
 
 ::: info
-In devices running kernel version 5.10 and above, the kernel performs without any further action the unloading of modules. However, for devices running kernel versions below 5.10, this option is merely a configuration setting, and SxKernelSU itself doesn't take any action. If you want to use the "Umount modules" option in kernel versions before 5.10 you need to backport the `path_umount` function in `fs/namespace.c`. You can get more information at the end of the [Integrate for non-GKI devices](https://github.com/linchuanlu56-dot/SxKernelSU/guide/how-to-integrate-for-non-gki.html#how-to-backport-path_umount) page. Some modules, such as Zygisksu, may also use this option to determine if module unloading is necessary.
+In devices running kernel version 5.10 and above, the kernel performs without any further action the unloading of modules. However, for devices running kernel versions below 5.10, this option is merely a configuration setting, and SxKernelSU itself doesn't take any action. If you want to use the "Umount modules" option in kernel versions before 5.10 you need to backport the `path_umount` function in `fs/namespace.c`. You can get more information at the end of the [Integrate for non-GKI devices](https://sxkernelsu1.netlify.app/guide/how-to-integrate-for-non-gki.html#how-to-backport-path_umount) page. Some modules, such as Zygisksu, may also use this option to determine if module unloading is necessary.
 :::

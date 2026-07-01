@@ -3,18 +3,18 @@
 
 #include <linux/mutex.h>
 
-static const struct ksu_feature_handler *feature_handlers[KSU_FEATURE_MAX];
+static const struct sksu_feature_handler *feature_handlers[SKS_FEATURE_MAX];
 
 static DEFINE_MUTEX(feature_mutex);
 
-int __init ksu_register_feature_handler(const struct ksu_feature_handler *handler)
+int __init sksu_register_feature_handler(const struct sksu_feature_handler *handler)
 {
     if (!handler) {
         pr_err("feature: register handler is NULL\n");
         return -EINVAL;
     }
 
-    if (handler->feature_id >= KSU_FEATURE_MAX) {
+    if (handler->feature_id >= SKS_FEATURE_MAX) {
         pr_err("feature: invalid feature_id %u\n", handler->feature_id);
         return -EINVAL;
     }
@@ -39,11 +39,11 @@ int __init ksu_register_feature_handler(const struct ksu_feature_handler *handle
     return 0;
 }
 
-int ksu_unregister_feature_handler(u32 feature_id)
+int sksu_unregister_feature_handler(u32 feature_id)
 {
     int ret = 0;
 
-    if (feature_id >= KSU_FEATURE_MAX) {
+    if (feature_id >= SKS_FEATURE_MAX) {
         pr_err("feature: invalid feature_id %u\n", feature_id);
         return -EINVAL;
     }
@@ -65,12 +65,12 @@ out:
     return ret;
 }
 
-int ksu_get_feature(u32 feature_id, u64 *value, bool *supported)
+int sksu_get_feature(u32 feature_id, u64 *value, bool *supported)
 {
     int ret = 0;
-    const struct ksu_feature_handler *handler;
+    const struct sksu_feature_handler *handler;
 
-    if (feature_id >= KSU_FEATURE_MAX) {
+    if (feature_id >= SKS_FEATURE_MAX) {
         pr_err("feature: invalid feature_id %u\n", feature_id);
         return -EINVAL;
     }
@@ -109,12 +109,12 @@ out:
     return ret;
 }
 
-int ksu_set_feature(u32 feature_id, u64 value)
+int sksu_set_feature(u32 feature_id, u64 value)
 {
     int ret = 0;
-    const struct ksu_feature_handler *handler;
+    const struct sksu_feature_handler *handler;
 
-    if (feature_id >= KSU_FEATURE_MAX) {
+    if (feature_id >= SKS_FEATURE_MAX) {
         pr_err("feature: invalid feature_id %u\n", feature_id);
         return -EINVAL;
     }
@@ -145,24 +145,24 @@ out:
     return ret;
 }
 
-void __init ksu_feature_init(void)
+void __init sksu_feature_init(void)
 {
     int i;
 
-    for (i = 0; i < KSU_FEATURE_MAX; i++) {
+    for (i = 0; i < SKS_FEATURE_MAX; i++) {
         feature_handlers[i] = NULL;
     }
 
     pr_info("feature: feature management initialized\n");
 }
 
-void __exit ksu_feature_exit(void)
+void __exit sksu_feature_exit(void)
 {
     int i;
 
     mutex_lock(&feature_mutex);
 
-    for (i = 0; i < KSU_FEATURE_MAX; i++) {
+    for (i = 0; i < SKS_FEATURE_MAX; i++) {
         feature_handlers[i] = NULL;
     }
 

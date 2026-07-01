@@ -7,8 +7,8 @@ on:
       - '.github/workflows/build-manager.yml'
       - '.github/workflows/build-lkm.yml'
       - '.github/workflows/ddk-lkm.yml'
-      - '.github/workflows/ksud.yml'
-      - '.github/workflows/ksud-extra.yml'
+      - '.github/workflows/sksud.yml'
+      - '.github/workflows/sksud-extra.yml'
       - '.github/scripts/setup-rust-build.sh'
       - 'repack_apk.py'
       - 'manager/**'
@@ -20,8 +20,8 @@ on:
       - '.github/workflows/build-manager.yml'
       - '.github/workflows/build-lkm.yml'
       - '.github/workflows/ddk-lkm.yml'
-      - '.github/workflows/ksud.yml'
-      - '.github/workflows/ksud-extra.yml'
+      - '.github/workflows/sksud.yml'
+      - '.github/workflows/sksud-extra.yml'
       - '.github/scripts/setup-rust-build.sh'
       - 'repack_apk.py'
       - 'manager/**'
@@ -55,7 +55,7 @@ jobs:
             -validity 1 \
             -storepass "$KEYSTORE_PASSWORD" \
             -keypass "$KEY_PASSWORD" \
-            -dname "CN=KernelSU PR Build" \
+            -dname "CN=SxKernelSU PR Build" \
             -storetype JKS \
             -keystore pr-key.jks
 
@@ -94,24 +94,24 @@ jobs:
       expected_hash2: ${{ needs.generate-key.outputs.expected_hash || '' }}
     secrets: inherit
 
-  build-ksuinit:
-    uses: ./.github/workflows/ksuinit.yml
+  build-sksuinit:
+    uses: ./.github/workflows/sksuinit.yml
 
-  build-ksud:
-    needs: [build-lkm, build-ksuinit]
+  build-sksud:
+    needs: [build-lkm, build-sksuinit]
     strategy:
       matrix:
         include:
           - target: aarch64-linux-android
           - target: x86_64-linux-android
-    uses: ./.github/workflows/ksud.yml
+    uses: ./.github/workflows/sksud.yml
     with:
       target: ${{ matrix.target }}
       pack_lkm: true
-      pack_ksuinit: true
+      pack_sksuinit: true
   
-  build-ksud-extra:
-    needs: [build-lkm, build-ksuinit]
+  build-sksud-extra:
+    needs: [build-lkm, build-sksuinit]
     strategy:
       matrix:
         include:
@@ -125,12 +125,12 @@ jobs:
             os: ubuntu-latest
           - target: x86_64-unknown-linux-musl # x86 Linux
             os: ubuntu-latest
-    uses: ./.github/workflows/ksud-extra.yml
+    uses: ./.github/workflows/sksud-extra.yml
     with:
       target: ${{ matrix.target }}
       os: ${{ matrix.os }}
       pack_lkm: true
-      pack_ksuinit: true
+      pack_sksuinit: true
 
   build-manager:
     needs: [generate-key]
@@ -142,7 +142,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -186,6 +186,21 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
 
+      - name: Accept Android SDK licenses
+        run: |
+          if [ -n "$ANDROID_SDK_ROOT" ]; then
+            yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+            yes | "$ANDROID_SDK_ROOT/tools/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+          fi
+          # Also try the common locations
+          for sdk in /usr/local/lib/android/sdk /usr/lib/android-sdk $HOME/android-sdk; do
+            if [ -d "$sdk" ]; then
+              yes | "$sdk/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+              yes | "$sdk/tools/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+            fi
+          done
+          echo "SDK licenses accepted (if available)"
+
       - name: Build with Gradle
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
@@ -198,7 +213,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' || (github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')) || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v7
         with:
-          name: manager-release
+          name: manager-gradle
           path: manager/app/build/outputs/apk/release/*.apk
 
       - name: Upload mappings
@@ -209,13 +224,13 @@ jobs:
           path: "manager/app/build/outputs/mapping/release/"
 
   repack-manager:
-    needs: [build-manager, build-ksud, generate-key]
-    if: always() && needs.build-manager.result == 'success' && needs.build-ksud.result == 'success' && needs.generate-key.result == 'success'
+    needs: [build-manager, build-sksud, generate-key]
+    if: always() && needs.build-manager.result == 'success' && needs.build-sksud.result == 'success' && needs.generate-key.result == 'success'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -231,31 +246,25 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
 
-      - name: Clear corrupted Gradle cache (fix digest-mismatch)
-        run: |
-          rm -rf ~/.gradle/caches/transforms-4/*/error_prone* 2>/dev/null || true
-          rm -rf ~/.gradle/caches/modules-2/files-2.1/com.google.errorprone/ 2>/dev/null || true
-          echo "Cleaned error_prone cache"
-
       - name: Download gradle manager artifact
         uses: actions/download-artifact@v8
         with:
           name: manager-gradle
           path: artifacts/manager-gradle
 
-      - name: Download arm64 ksud
+      - name: Download arm64 sksud
         uses: actions/download-artifact@v8
         with:
-          name: ksud-aarch64-linux-android
-          path: artifacts/ksud-aarch64-linux-android
+          name: sksud-aarch64-linux-android
+          path: artifacts/sksud-aarch64-linux-android
 
-      - name: Download x86_64 ksud
+      - name: Download x86_64 sksud
         uses: actions/download-artifact@v8
         with:
-          name: ksud-x86_64-linux-android
-          path: artifacts/ksud-x86_64-linux-android
+          name: sksud-x86_64-linux-android
+          path: artifacts/sksud-x86_64-linux-android
 
-      - name: Place manager apk and ksud artifacts
+      - name: Place manager apk and sksud artifacts
         run: |
           mkdir -p manager/app/build/outputs/apk/release
           APK=$(find artifacts/manager-gradle -type f -name "*.apk" | head -n 1)
@@ -264,12 +273,12 @@ jobs:
 
           mkdir -p target/aarch64-linux-android/release
           mkdir -p target/x86_64-linux-android/release
-          ARM64_KSUD=$(find artifacts/ksud-aarch64-linux-android -type f -name ksud | head -n 1)
-          X86_64_KSUD=$(find artifacts/ksud-x86_64-linux-android -type f -name ksud | head -n 1)
-          test -n "$ARM64_KSUD"
-          test -n "$X86_64_KSUD"
-          cp -f "$ARM64_KSUD" target/aarch64-linux-android/release/ksud
-          cp -f "$X86_64_KSUD" target/x86_64-linux-android/release/ksud
+          ARM64_SKSUD=$(find artifacts/sksud-aarch64-linux-android -type f -name sksud | head -n 1)
+          X86_64_SKSUD=$(find artifacts/sksud-x86_64-linux-android -type f -name sksud | head -n 1)
+          test -n "$ARM64_SKSUD"
+          test -n "$X86_64_SKSUD"
+          cp -f "$ARM64_SKSUD" target/aarch64-linux-android/release/sksud
+          cp -f "$X86_64_SKSUD" target/x86_64-linux-android/release/sksud
 
       - name: Prepare signing inputs
         if: ${{ github.event_name == 'pull_request' || (github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')) || github.ref_type == 'tag' }}
@@ -321,7 +330,7 @@ jobs:
       - name: Bot session cache
         if: github.event_name != 'pull_request' && steps.need_upload.outputs.UPLOAD == 'true'
         id: bot_session_cache
-        uses: actions/cache@v6
+        uses: actions/cache@v5
         with:
           path: scripts/ksubot.session
           key: ${{ runner.os }}-bot-session

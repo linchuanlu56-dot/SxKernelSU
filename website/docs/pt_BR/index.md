@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: Iniciar
-      link: /pt_BR/guide/what-is-kernelsu
+      link: /pt_BR/guide/what-is-sxkernelsu
     - theme: alt
       text: Ver no GitHub
-      link: https://github.com/linchuanlu56-dot/SxKernelSU
+      link: https://github.com/tiann/SxKernelSU
 
 features:
   - title: Baseado em kernel

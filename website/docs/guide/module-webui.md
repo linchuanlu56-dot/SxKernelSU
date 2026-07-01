@@ -26,19 +26,19 @@ If your page contains CSS and JavaScript, you need to place it in this directory
 
 If it's just a display page, it will function like a regular web page. However, the most important thing is that SxKernelSU provides a series of system APIs, allowing the implementation of module-specific functions.
 
-SxKernelSU provides a JavaScript library, which is published on [npm](https://www.npmjs.com/package/kernelsu) and can be used in the JavaScript code of your web pages.
+SxKernelSU provides a JavaScript library, which is published on [npm](https://www.npmjs.com/package/sxkernelsu) and can be used in the JavaScript code of your web pages.
 
 For example, you can execute a shell command to obtain a specific configuration or modify a property:
 
 ```JavaScript
-import { exec } from 'kernelsu';
+import { exec } from 'sxkernelsu';
 
 const { errno, stdout } = exec("getprop ro.product.model");
 ```
 
 You can also make the page full screen or display a toast.
 
-[API documentation](https://www.npmjs.com/package/kernelsu)
+[API documentation](https://www.npmjs.com/package/sxkernelsu)
 
 If you find that the existing API doesn't meet your needs or is inconvenient to use, you're welcome to give us suggestions [here](https://github.com/tiann/SxKernelSU/issues)!
 

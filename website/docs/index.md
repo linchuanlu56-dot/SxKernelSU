@@ -5,24 +5,24 @@ title: Home
 hero:
   name: SxKernelSU
   text: A kernel-based root solution for Android
-  tagline: Forked from KernelSU — supercharged with Ghost hiding, atomic modules, and a kawaii theme 🎀
+  tagline: ""
   image:
-    src: /icon.jpg
+    src: /logo.png
     alt: SxKernelSU
   actions:
     - theme: brand
       text: Get started
-      link: /guide/what-is-kernelsu
+      link: /guide/what-is-sxkernelsu
     - theme: alt
       text: View on GitHub
-      link: https://github.com/linchuanlu56-dot/SxKernelSU
+      link: https://github.com/tiann/SxKernelSU
 
 features:
-  - title: 🧠 Ghost Architecture
-    details: 6-layer root hiding — module invisible to lsmod, per-task VFS filtering, shadow syscall table, timing jitter, memory encryption.
-  - title: 🎀 Anime Theme
-    details: Sakura pink default, animated sparkles, kawaii card design with bouncy transitions and custom icons.
-  - title: 🛡️ Kernel-based
-    details: Runs inside the Linux kernel for ultimate control. Only permitted apps can see and access su.
-  - title: 🔒 Atomic Modules
-    details: Module installation with automatic backup & rollback. Never brick your device from a failed module install again.
+  - title: Kernel-based
+    details: As the name suggests, SxKernelSU runs inside the Linux kernel, giving it more control over userspace apps.
+  - title: Root access control
+    details: Only permitted apps can access or see su; all other apps remain unaware of it.
+  - title: Customizable root privileges
+    details: SxKernelSU allows customization of su's uid, gid, groups, capabilities, and SELinux rules, hardening root privileges.
+  - title: Metamodule system
+    details: Pluggable module infrastructure allows systemless /system modifications. Install a metamodule like meta-overlayfs to enable module mounting.

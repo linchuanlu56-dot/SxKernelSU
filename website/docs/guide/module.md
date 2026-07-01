@@ -18,14 +18,14 @@ SxKernelSU provides a built-in configuration system that allows modules to store
 
 ## BusyBox
 
-SxKernelSU ships with a feature-complete BusyBox binary (including full SELinux support). The executable is located at `/data/adb/ksu/bin/busybox`. SxKernelSU's BusyBox supports runtime toggle-able "ASH Standalone Shell Mode". What this Standalone Mode means is that when running in the `ash` shell of BusyBox, every single command will directly use the applet within BusyBox, regardless of what is set as `PATH`. For example, commands like `ls`, `rm`, `chmod` will **NOT** use what is in `PATH` (in the case of Android by default it will be `/system/bin/ls`, `/system/bin/rm`, and `/system/bin/chmod` respectively), but will instead directly call internal BusyBox applets. This makes sure that scripts always run in a predictable environment and always have the full suite of commands no matter which Android version it is running on. To force a command _not_ to use BusyBox, you have to call the executable with full paths.
+SxKernelSU ships with a feature-complete BusyBox binary (including full SELinux support). The executable is located at `/data/adb/sks/bin/busybox`. SxKernelSU's BusyBox supports runtime toggle-able "ASH Standalone Shell Mode". What this Standalone Mode means is that when running in the `ash` shell of BusyBox, every single command will directly use the applet within BusyBox, regardless of what is set as `PATH`. For example, commands like `ls`, `rm`, `chmod` will **NOT** use what is in `PATH` (in the case of Android by default it will be `/system/bin/ls`, `/system/bin/rm`, and `/system/bin/chmod` respectively), but will instead directly call internal BusyBox applets. This makes sure that scripts always run in a predictable environment and always have the full suite of commands no matter which Android version it is running on. To force a command _not_ to use BusyBox, you have to call the executable with full paths.
 
 Every single shell script running in the context of SxKernelSU will be executed in BusyBox's `ash` shell with Standalone Mode enabled. For what is relevant to 3rd party developers, this includes all boot scripts and module installation scripts.
 
 For those who want to use this Standalone Mode feature outside of SxKernelSU, there are 2 ways to enable it:
 
-1. Set environment variable `ASH_STANDALONE` to `1` <br>Example: `ASH_STANDALONE=1 /data/adb/ksu/bin/busybox sh <script>`
-2. Toggle with command-line options:<br>`/data/adb/ksu/bin/busybox sh -o standalone <script>`
+1. Set environment variable `ASH_STANDALONE` to `1` <br>Example: `ASH_STANDALONE=1 /data/adb/sks/bin/busybox sh <script>`
+2. Toggle with command-line options:<br>`/data/adb/sks/bin/busybox sh -o standalone <script>`
 
 To make sure all subsequent `sh` shell executed also runs in Standalone Mode, option 1 is the preferred method (and this is what SxKernelSU and the SxKernelSU manager use internally) as environment variables are inherited down to child processes.
 
@@ -71,9 +71,6 @@ A SxKernelSU module is a folder placed in `/data/adb/modules` with the structure
 |   ├── action.sh           <--- This script will be executed when user click the Action button in SxKernelSU app
 │   ├── system.prop         <--- Properties in this file will be loaded as system properties by resetprop
 │   ├── sepolicy.rule       <--- Additional custom sepolicy rules
-│   ├── initrc/             <--- .rc files in this directory will be injected into init.rc on boot
-│   │   ├── myservice.rc
-│   │   └── ...
 │   │
 │   │      *** Auto Generated, DO NOT MANUALLY CREATE OR MODIFY ***
 │   │
@@ -189,80 +186,6 @@ This file follows the same format as `build.prop`. Each line comprises of `[key]
 
 If your module requires some additional sepolicy patches, please add those rules into this file. Each line in this file will be treated as a policy statement.
 
-### initrc Injection {#initrc-injection}
-
-SxKernelSU provides a mechanism to inject custom Android Init RC directives into the system's `init.rc`. This allows modules to register custom Android services, set property triggers, or perform other Init language actions without modifying the system partition.
-
-During boot, the SxKernelSU kernel module intercepts `read()` and `fstat()` system calls. When the Android init process reads `/system/etc/init/hw/init.rc`, SxKernelSU transparently appends the custom RC content to the end of the file. The init process parses these injected directives just like the original init.rc content.
-
-On the userspace side, ksud concatenates all `.rc` files from enabled modules into a single `modules.rc` file, stored on the `/metadata` partition. This file is automatically regenerated whenever a module's state changes (install, enable, disable, uninstall, etc.).
-
-#### Module initrc Files
-
-Create an `initrc/` subdirectory in your module directory and place your `.rc` files there:
-
-```txt
-/data/adb/modules/<MODID>/
-├── initrc/
-│   ├── myservice.rc
-│   └── another.rc
-└── ...
-```
-
-::: tip
-- Files must have an `.rc` extension.
-- As long as the module is enabled, all `.rc` files in the `initrc/` directory will be included (executable permission is not required).
-- Files are processed in **alphabetical order of file name** within the directory, and modules are processed in **alphabetical order of module ID**.
-:::
-
-#### General initrc Files
-
-In addition to module-level RC files, you can place `.rc` files in the global directory:
-
-```txt
-/data/adb/initrc.d/
-├── myservice.rc
-└── another.rc
-```
-
-::: warning General initrc files require executable permission
-Unlike the module `initrc/` directory, files in `/data/adb/initrc.d/` **must have executable permissions** to be included. Non-executable `.rc` files will be silently skipped.
-:::
-
-General `initrc.d/` files are processed before any module RC files.
-
-#### Example
-
-Here is an example `.rc` file that registers a custom Android service:
-
-```rc
-service myservice /data/adb/modules/mymodule/bin/myservice
-    user root
-    group root
-    disabled
-    seclabel u:r:ksu:s0
-
-on property:sys.boot_completed=1
-    start myservice
-```
-
-If this file is placed at `/data/adb/modules/mymodule/initrc/myservice.rc`, it will register a service named `myservice` at boot and start it when `sys.boot_completed=1` is reached.
-
-#### Manual Refresh
-
-You can manually trigger the regeneration of `modules.rc` with the following command (changes take effect on the next boot):
-
-```sh
-ksud initrc refresh
-```
-
-::: tip
-- initrc injection happens extremely early in the boot process (when init reads init.rc), **before** post-fs-data and any module scripts are executed.
-- The injected RC content is treated by init as part of the original init.rc, supporting all Android Init language syntax (service definitions, triggers, property settings, etc.).
-- initrc injection is **not available** in **late-load mode**, as the system call hooks are not installed in that mode.
-- Module RC injection can be disabled by passing the `--no-custom-rc` parameter when patching the image with ksud.
-:::
-
 ## Module installer
 
 A SxKernelSU module installer is a SxKernelSU module packaged in a ZIP file that can be flashed in the SxKernelSU manager. The simplest SxKernelSU module installer is just a SxKernelSU module packed as a ZIP file.
@@ -292,9 +215,9 @@ The `customize.sh` script runs in SxKernelSU's BusyBox `ash` shell with Standalo
 #### Variables
 
 - `KSU` (bool): a variable to mark that the script is running in the SxKernelSU environment, and the value of this variable will always be true. You can use it to distinguish between SxKernelSU and Magisk.
-- `KSU_VER` (string): the version string of currently installed SxKernelSU (e.g. `v0.4.0`).
-- `KSU_VER_CODE` (int): the version code of currently installed SxKernelSU in userspace (e.g. `10672`).
-- `KSU_KERNEL_VER_CODE` (int): the version code of currently installed SxKernelSU in kernel space (e.g. `10672`).
+- `SKS_VER` (string): the version string of currently installed SxKernelSU (e.g. `v0.4.0`).
+- `SKS_VER_CODE` (int): the version code of currently installed SxKernelSU in userspace (e.g. `10672`).
+- `SKS_KERNEL_VER_CODE` (int): the version code of currently installed SxKernelSU in kernel space (e.g. `10672`).
 - `BOOTMODE` (bool): always be `true` in SxKernelSU.
 - `MODPATH` (path): the path where your module files should be installed.
 - `TMPDIR` (path): a place where you can temporarily store files.
@@ -302,9 +225,6 @@ The `customize.sh` script runs in SxKernelSU's BusyBox `ash` shell with Standalo
 - `ARCH` (string): the CPU architecture of the device. Value is either `arm`, `arm64`, `x86`, or `x64`.
 - `IS64BIT` (bool): `true` if `$ARCH` is either `arm64` or `x64`.
 - `API` (int): the API level (Android version) of the device (e.g., `23` for Android 6.0).
-- `KSU_UAPI_VER` (int): the UAPI version of SxKernelSU userspace (ksud) (e.g., `2`). This version is incremented when there are breaking changes in the kernel driver, and can be used by modules to check compatibility.
-- `KSU_RUNTIME_MODE` (string): the current SxKernelSU runtime mode. Possible values are `built-in` (a.k.a. GKI mode, compiled into the kernel), `lkm` (loaded as a kernel module at boot), or `late-load` (loaded as a kernel module after boot).
-- `KSU_LATE_LOAD` (int?): if SxKernelSU is late-loaded after boot, this variable is set to `1`; otherwise it is not set.
 
 ::: warning
 In SxKernelSU, `MAGISK_VER_CODE` is always `25200`, and `MAGISK_VER` is always `v25.2`. Please don't use these two variables to determine whether SxKernelSU is running or not.
@@ -378,11 +298,10 @@ load kernel:
 
 1. kernel exec init (OEM logo on screen):
     - GKI mode: stock init
-    - LKM mode: exec ksuinit, insmod kernelsu.ko, exec stock init
+    - LKM mode: exec sksuinit, insmod sxkernelsu.ko, exec stock init
 mount /dev, /dev/pts, /proc, /sys, etc.
 property-init -> read default props
 read init.rc
-  *initrc injection: Kernel hook appends SxKernelSU core RC and module modules.rc to init.rc
 ...
 early-init -> init -> late_init
 early-fs
@@ -438,9 +357,9 @@ In addition to the standard boot flow described above, SxKernelSU supports a **l
 
 ### When does late-load happen?
 
-Late-load is triggered by running the `ksud late-load` command. This command:
+Late-load is triggered by running the `sksud late-load` command. This command:
 
-1. Detects the current KMI version and loads the corresponding `kernelsu.ko` from embedded assets.
+1. Detects the current KMI version and loads the corresponding `sxkernelsu.ko` from embedded assets.
 2. Performs module initialization (SELinux rules, allowlist, features, etc.) that would normally happen during boot.
 
 Since the system is already fully running, certain boot-time mechanisms are unavailable or unnecessary.
@@ -450,8 +369,7 @@ Since the system is already fully running, certain boot-time mechanisms are unav
 | Behavior | Standard boot | Late-load mode |
 |----------|:---:|:---:|
 | Kernel module loaded by init (PID 1) | Yes | No (loaded after boot) |
-| initrc injection (module `.rc` files to init.rc) | Yes | Unavailable |
-| kprobe hooks for ksud (execve/read/fstat/input) | Yes | Skipped |
+| kprobe hooks for sksud (execve/read/fstat/input) | Yes | Skipped |
 | Safe mode detection (volume key) | Yes | Always disabled |
 | Boot log capture (logcat/dmesg) | Yes | Skipped |
 | Magisk coexistence check | Yes | Skipped |
@@ -463,7 +381,7 @@ Since the system is already fully running, certain boot-time mechanisms are unav
 | `post-mount.sh` / `post-mount.d/` scripts | Yes | Yes |
 | `service.sh` / `service.d/` scripts | Yes | Yes |
 | `boot-completed.sh` / `boot-completed.d/` scripts | Yes | Yes |
-| `KSU_LATE_LOAD` environment variable | Not set | Set to `1` |
+| `SKS_LATE_LOAD` environment variable | Not set | Set to `1` |
 | Kernel info flag `0x4` | Not set | Set |
 
 ### Script execution order
@@ -471,8 +389,8 @@ Since the system is already fully running, certain boot-time mechanisms are unav
 In late-load mode, the script execution order is:
 
 ```txt
-ksud late-load:
-  1. Load kernelsu.ko (if not already loaded)
+sksud late-load:
+  1. Load sxkernelsu.ko (if not already loaded)
   2. Extract binaries, handle module updates, load SELinux rules, init features
   3. Execute late-load.d/ and module late-load scripts (blocking)
   4. Load system.prop (resetprop -n)
@@ -490,10 +408,10 @@ Additionally, general scripts can be placed in `/data/adb/late-load.d/` to run d
 
 ### Detecting late-load mode in scripts
 
-Modules can detect late-load mode by checking the `KSU_LATE_LOAD` environment variable:
+Modules can detect late-load mode by checking the `SKS_LATE_LOAD` environment variable:
 
 ```sh
-if [ "$KSU_LATE_LOAD" = "1" ]; then
+if [ "$SKS_LATE_LOAD" = "1" ]; then
     # Running in late-load mode
     echo "Late-load mode detected"
 fi

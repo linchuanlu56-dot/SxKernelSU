@@ -9,12 +9,12 @@
 #include <android/log.h>
 #include <cstring>
 
-#include "ksu.h"
+#include "sks.h"
 #include "logging.h"
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_sxkernelsu_Natives_getVersion(JNIEnv *env, jobject) {
+Java_me_weishu_sxkernelsu_Natives_getVersion(JNIEnv *env, jobject) {
     int version = get_version();
     if (version > 0) {
         return version;
@@ -25,20 +25,20 @@ Java_com_sxkernelsu_Natives_getVersion(JNIEnv *env, jobject) {
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_sxkernelsu_Natives_getKernelUAPIVersion(JNIEnv *env, jobject) {
+Java_me_weishu_sxkernelsu_Natives_getKernelUAPIVersion(JNIEnv *env, jobject) {
     return get_kernel_uapi_version();
 }
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_sxkernelsu_Natives_getManagerUAPIVersion(JNIEnv *env, jobject) {
+Java_me_weishu_sxkernelsu_Natives_getManagerUAPIVersion(JNIEnv *env, jobject) {
     return get_manager_uapi_version();
 }
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_sxkernelsu_Natives_getSuperuserCount(JNIEnv *env, jobject) {
-    struct ksu_new_get_allow_list_cmd cmd = {
+Java_me_weishu_sxkernelsu_Natives_getSuperuserCount(JNIEnv *env, jobject) {
+    struct sksu_new_get_allow_list_cmd cmd = {
         .count = 0
     };
     bool result = get_allow_list(&cmd);
@@ -47,31 +47,31 @@ Java_com_sxkernelsu_Natives_getSuperuserCount(JNIEnv *env, jobject) {
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_isSafeMode(JNIEnv *env, jclass clazz) {
+Java_me_weishu_sxkernelsu_Natives_isSafeMode(JNIEnv *env, jclass clazz) {
     return is_safe_mode();
 }
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_isLkmMode(JNIEnv *env, jclass clazz) {
+Java_me_weishu_sxkernelsu_Natives_isLkmMode(JNIEnv *env, jclass clazz) {
     return is_lkm_mode();
 }
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_isLateLoadMode(JNIEnv *env, jclass clazz) {
+Java_me_weishu_sxkernelsu_Natives_isLateLoadMode(JNIEnv *env, jclass clazz) {
     return is_late_load_mode();
 }
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_isManager(JNIEnv *env, jclass clazz) {
+Java_me_weishu_sxkernelsu_Natives_isManager(JNIEnv *env, jclass clazz) {
     return is_manager();
 }
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_isPrBuild(JNIEnv *env, jclass clazz) {
+Java_me_weishu_sxkernelsu_Natives_isPrBuild(JNIEnv *env, jclass clazz) {
     return is_pr_build();
 }
 
@@ -134,8 +134,8 @@ static void fillArrayWithList(JNIEnv *env, jobject list, int *data, int count) {
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_sxkernelsu_Natives_getAppProfile(JNIEnv *env, jobject, jstring pkg, jint uid) {
-    if (env->GetStringLength(pkg) > KSU_MAX_PACKAGE_NAME) {
+Java_me_weishu_sxkernelsu_Natives_getAppProfile(JNIEnv *env, jobject, jstring pkg, jint uid) {
+    if (env->GetStringLength(pkg) > SKS_MAX_PACKAGE_NAME) {
         return nullptr;
     }
 
@@ -145,14 +145,14 @@ Java_com_sxkernelsu_Natives_getAppProfile(JNIEnv *env, jobject, jstring pkg, jin
     env->ReleaseStringUTFChars(pkg, cpkg);
 
     app_profile profile = {};
-    profile.version = KSU_APP_PROFILE_VER;
+    profile.version = SKS_APP_PROFILE_VER;
 
     strcpy(profile.key, key);
     profile.curr_uid = uid;
 
     bool useDefaultProfile = get_app_profile(&profile) != 0;
 
-    auto cls = env->FindClass("com/sxkernelsu/Natives$Profile");
+    auto cls = env->FindClass("me/weishu/sxkernelsu/Natives$Profile");
     auto constructor = env->GetMethodID(cls, "<init>", "()V");
     auto obj = env->NewObject(cls, constructor);
     auto keyField = env->GetFieldID(cls, "name", "Ljava/lang/String;");
@@ -203,9 +203,9 @@ Java_com_sxkernelsu_Natives_getAppProfile(JNIEnv *env, jobject, jstring pkg, jin
 
         jobject groupList = env->GetObjectField(obj, groupsField);
         int groupCount = profile.rp_config.profile.groups_count;
-        if (groupCount > KSU_MAX_GROUPS) {
+        if (groupCount > SKS_MAX_GROUPS) {
             LOGD("kernel group count too large: %d???", groupCount);
-            groupCount = KSU_MAX_GROUPS;
+            groupCount = SKS_MAX_GROUPS;
         }
         fillIntArray(env, groupList, profile.rp_config.profile.groups, groupCount);
 
@@ -232,8 +232,8 @@ Java_com_sxkernelsu_Natives_getAppProfile(JNIEnv *env, jobject, jstring pkg, jin
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_setAppProfile(JNIEnv *env, jobject clazz, jobject profile) {
-    auto cls = env->FindClass("com/sxkernelsu/Natives$Profile");
+Java_me_weishu_sxkernelsu_Natives_setAppProfile(JNIEnv *env, jobject clazz, jobject profile) {
+    auto cls = env->FindClass("me/weishu/sxkernelsu/Natives$Profile");
 
     auto keyField = env->GetFieldID(cls, "name", "Ljava/lang/String;");
     auto currentUidField = env->GetFieldID(cls, "currentUid", "I");
@@ -257,7 +257,7 @@ Java_com_sxkernelsu_Natives_setAppProfile(JNIEnv *env, jobject clazz, jobject pr
     if (!key) {
         return false;
     }
-    if (env->GetStringLength((jstring) key) > KSU_MAX_PACKAGE_NAME) {
+    if (env->GetStringLength((jstring) key) > SKS_MAX_PACKAGE_NAME) {
         return false;
     }
 
@@ -277,7 +277,7 @@ Java_com_sxkernelsu_Natives_setAppProfile(JNIEnv *env, jobject clazz, jobject pr
     auto umountModules = env->GetBooleanField(profile, umountModulesField);
 
     app_profile p = {};
-    p.version = KSU_APP_PROFILE_VER;
+    p.version = SKS_APP_PROFILE_VER;
 
     strcpy(p.key, p_key);
     p.allow_su = allowSu;
@@ -296,7 +296,7 @@ Java_com_sxkernelsu_Natives_setAppProfile(JNIEnv *env, jobject clazz, jobject pr
         p.rp_config.profile.gid = gid;
 
         int groups_count = getListSize(env, groups);
-        if (groups_count > KSU_MAX_GROUPS) {
+        if (groups_count > SKS_MAX_GROUPS) {
             LOGD("groups count too large: %d", groups_count);
             return false;
         }
@@ -321,47 +321,47 @@ Java_com_sxkernelsu_Natives_setAppProfile(JNIEnv *env, jobject clazz, jobject pr
 }
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_uidShouldUmount(JNIEnv *env, jobject thiz, jint uid) {
+Java_me_weishu_sxkernelsu_Natives_uidShouldUmount(JNIEnv *env, jobject thiz, jint uid) {
     return uid_should_umount(uid);
 }
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_isSuEnabled(JNIEnv *env, jobject thiz) {
+Java_me_weishu_sxkernelsu_Natives_isSuEnabled(JNIEnv *env, jobject thiz) {
     return is_su_enabled();
 }
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_setSuEnabled(JNIEnv *env, jobject thiz, jboolean enabled) {
+Java_me_weishu_sxkernelsu_Natives_setSuEnabled(JNIEnv *env, jobject thiz, jboolean enabled) {
     return set_su_enabled(enabled);
 }
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_isKernelUmountEnabled(JNIEnv *env, jobject thiz) {
+Java_me_weishu_sxkernelsu_Natives_isKernelUmountEnabled(JNIEnv *env, jobject thiz) {
     return is_kernel_umount_enabled();
 }
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_setKernelUmountEnabled(JNIEnv *env, jobject thiz, jboolean enabled) {
+Java_me_weishu_sxkernelsu_Natives_setKernelUmountEnabled(JNIEnv *env, jobject thiz, jboolean enabled) {
     return set_kernel_umount_enabled(enabled);
 }
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_sxkernelsu_Natives_isSelinuxHideEnabled(JNIEnv *env, jobject thiz) {
+Java_me_weishu_sxkernelsu_Natives_isSelinuxHideEnabled(JNIEnv *env, jobject thiz) {
     return is_selinux_hide_enabled();
 }
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_sxkernelsu_Natives_setSelinuxHideEnabled(JNIEnv *env, jobject thiz, jboolean enabled) {
+Java_me_weishu_sxkernelsu_Natives_setSelinuxHideEnabled(JNIEnv *env, jobject thiz, jboolean enabled) {
     return set_selinux_hide_enabled(enabled);
 }
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_sxkernelsu_Natives_getUserName(JNIEnv *env, jobject thiz, jint uid) {
+Java_me_weishu_sxkernelsu_Natives_getUserName(JNIEnv *env, jobject thiz, jint uid) {
     struct passwd *pw = getpwuid((uid_t) uid);
     if (pw && pw->pw_name && pw->pw_name[0] != '\0') {
         return env->NewStringUTF(pw->pw_name);
@@ -369,7 +369,7 @@ Java_com_sxkernelsu_Natives_getUserName(JNIEnv *env, jobject thiz, jint uid) {
     return nullptr;
 }
 
-int fork_dont_care_and_exec_ksud(const char *path, const char *pkg) {
+int fork_dont_care_and_exec_sksud(const char *path, const char *pkg) {
     int pid = fork();
     if (pid < 0) {
         PLOGE("fork");
@@ -399,19 +399,19 @@ int fork_dont_care_and_exec_ksud(const char *path, const char *pkg) {
         _exit(0);
     }
 
-    execl(path, "ksud", "late-load", "--magica", "5555", "--package-name", pkg, nullptr);
+    execl(path, "sksud", "late-load", "--magica", "5555", "--package-name", pkg, nullptr);
     PLOGE("exec magica");
     _exit(1);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_sxkernelsu_magica_AppZygotePreload_forkDontCareAndExecKsud(JNIEnv *env, jclass clazz,
-                                                                        jstring ksud_path, jstring pkg_name) {
-    auto path = env->GetStringUTFChars(ksud_path, nullptr);
+Java_me_weishu_sxkernelsu_magica_AppZygotePreload_forkDontCareAndExecKsud(JNIEnv *env, jclass clazz,
+                                                                        jstring sksud_path, jstring pkg_name) {
+    auto path = env->GetStringUTFChars(sksud_path, nullptr);
     auto pkg = env->GetStringUTFChars(pkg_name, nullptr);
     LOGD("executing magica %s (pkg %s)", path, pkg);
-    fork_dont_care_and_exec_ksud(path, pkg);
-    env->ReleaseStringUTFChars(ksud_path, path);
+    fork_dont_care_and_exec_sksud(path, pkg);
+    env->ReleaseStringUTFChars(sksud_path, path);
     env->ReleaseStringUTFChars(pkg_name, pkg);
 }

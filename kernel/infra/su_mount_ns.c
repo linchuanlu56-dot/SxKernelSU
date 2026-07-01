@@ -17,7 +17,7 @@
 
 #include "arch.h"
 #include "klog.h" // IWYU pragma: keep
-#include "ksu.h"
+#include "sksu.h"
 #include "infra/su_mount_ns.h"
 #include "util.h"
 
@@ -30,7 +30,7 @@ extern long __arm64_sys_setns(const struct pt_regs *regs);
 extern long __x64_sys_setns(const struct pt_regs *regs);
 #endif
 
-static long ksu_sys_setns(int fd, int flags)
+static long sksu_sys_setns(int fd, int flags)
 {
     struct pt_regs regs;
     memset(&regs, 0, sizeof(regs));
@@ -48,7 +48,7 @@ static long ksu_sys_setns(int fd, int flags)
 }
 
 // global mode , need CAP_SYS_ADMIN and CAP_SYS_CHROOT to perform setns
-static void ksu_mnt_ns_global(void)
+static void sksu_mnt_ns_global(void)
 {
     // save current working directory as absolute path before setns
     char *pwd_path = NULL;
@@ -97,7 +97,7 @@ try_setns:
         pr_warn("failed get path for init mount namespace: %ld\n", ret);
         goto out;
     }
-    struct file *ns_file = dentry_open(&ns_path, O_RDONLY, ksu_cred);
+    struct file *ns_file = dentry_open(&ns_path, O_RDONLY, sksu_cred);
 
     path_put(&ns_path);
     if (IS_ERR(ns_file)) {
@@ -113,9 +113,9 @@ try_setns:
     }
 
     fd_install(fd, ns_file);
-    ret = ksu_sys_setns(fd, CLONE_NEWNS);
+    ret = sksu_sys_setns(fd, CLONE_NEWNS);
 
-    ksu_close_fd(fd);
+    sksu_close_fd(fd);
 
     if (ret) {
         pr_warn("call setns failed: %ld\n", ret);
@@ -137,7 +137,7 @@ out:
 }
 
 // individual mode , need CAP_SYS_ADMIN to perform unshare and remount
-static void ksu_mnt_ns_individual(void)
+static void sksu_mnt_ns_individual(void)
 {
     long ret = ksys_unshare(CLONE_NEWNS);
     if (ret) {
@@ -159,21 +159,21 @@ static void ksu_mnt_ns_individual(void)
 void setup_mount_ns(int32_t ns_mode)
 {
     // inherit mode
-    if (ns_mode == KSU_NS_INHERITED) {
+    if (ns_mode == SKS_NS_INHERITED) {
         // do nothing
         return;
     }
 
-    if (ns_mode != KSU_NS_GLOBAL && ns_mode != KSU_NS_INDIVIDUAL) {
+    if (ns_mode != SKS_NS_GLOBAL && ns_mode != SKS_NS_INDIVIDUAL) {
         pr_warn("pid: %d ,unknown mount namespace mode: %d\n", current->pid, ns_mode);
         return;
     }
 
-    const struct cred *old_cred = override_creds(ksu_cred);
-    if (ns_mode == KSU_NS_GLOBAL) {
-        ksu_mnt_ns_global();
+    const struct cred *old_cred = override_creds(sksu_cred);
+    if (ns_mode == SKS_NS_GLOBAL) {
+        sksu_mnt_ns_global();
     } else {
-        ksu_mnt_ns_individual();
+        sksu_mnt_ns_individual();
     }
     revert_creds(old_cred);
 }

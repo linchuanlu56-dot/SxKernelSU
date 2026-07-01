@@ -110,17 +110,17 @@ Open the manager, click the installation icon in the upper right corner, and sev
 
 ### Use the command line
 
-If you don't want to use the manager, you can also use the command line to install LKM. The `ksud` tool provided by SxKernelSU can help you quickly patch the official firmware and then flash it.
+If you don't want to use the manager, you can also use the command line to install LKM. The `sksud` tool provided by SxKernelSU can help you quickly patch the official firmware and then flash it.
 
 This tool supports macOS, Linux, and Windows. You can download the corresponding version from [GitHub Release](https://github.com/tiann/SxKernelSU/releases).
 
-Usage: `ksud boot-patch` you can check the command line help for specific options.
+Usage: `sksud boot-patch` you can check the command line help for specific options.
 
 ```sh
-oriole:/ # ksud boot-patch -h
+oriole:/ # sksud boot-patch -h
 Patch boot or init_boot images to apply SxKernelSU
 
-Usage: ksud boot-patch [OPTIONS]
+Usage: sksud boot-patch [OPTIONS]
 
 Options:
   -b, --boot <BOOT>              Boot image path. If not specified, it will try to find the boot image automatically
@@ -137,13 +137,13 @@ Options:
 
 A few options that need to be explained:
 
-1. The `--magiskboot` option can specify the path of magiskboot. If not specified, ksud will look for it in the environment variables. If you don’t know how to get magiskboot, you can check [here](#patch-boot-image).
+1. The `--magiskboot` option can specify the path of magiskboot. If not specified, sksud will look for it in the environment variables. If you don’t know how to get magiskboot, you can check [here](#patch-boot-image).
 2. The `--kmi` option can specify the `KMI` version. If the kernel name of your device doesn't follow the KMI specification, you can specify it using this option.
 
 The most common usage is:
 
 ```sh
-ksud boot-patch -b <boot.img> --kmi android13-5.10
+sksud boot-patch -b <boot.img> --kmi android13-5.10
 ```
 
 ## GKI mode installation

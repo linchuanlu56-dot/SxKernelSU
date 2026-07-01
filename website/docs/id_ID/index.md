@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: Permulaan
-      link: /id_ID/guide/what-is-kernelsu
+      link: /id_ID/guide/what-is-sxkernelsu
     - theme: alt
       text: Lihat di GitHub
-      link: https://github.com/linchuanlu56-dot/SxKernelSU
+      link: https://github.com/tiann/SxKernelSU
 
 features:
   - title: Kernel-based

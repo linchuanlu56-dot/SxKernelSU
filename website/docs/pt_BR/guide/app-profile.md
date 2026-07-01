@@ -1,82 +1,82 @@
-# Perfil do Aplicativo
+﻿# Perfil do Aplicativo
 
-O Perfil do Aplicativo é um mecanismo fornecido pelo SxKernelSU para personalizar a configuração de vários apps.
+O Perfil do Aplicativo 茅 um mecanismo fornecido pelo SxKernelSU para personalizar a configura莽茫o de v谩rios apps.
 
-Para apps com privilégios root (ou seja, capazes de usar `su`), o Perfil do Aplicativo também pode ser chamado de Perfil root. Ele permite a customização das regras `uid`, `gid`, `grupos`, `capacidades` e `SELinux` do comando `su`, restringindo assim os privilégios do usuário root. Por exemplo, ele pode conceder permissões de rede apenas para apps de firewall enquanto nega permissões de acesso a arquivos, ou pode conceder permissões de shell em vez de acesso root completo para apps congelados: **mantendo o poder confinado com o princípio do menor privilégio.**
+Para apps com privil茅gios root (ou seja, capazes de usar `su`), o Perfil do Aplicativo tamb茅m pode ser chamado de Perfil root. Ele permite a customiza莽茫o das regras `uid`, `gid`, `grupos`, `capacidades` e `SELinux` do comando `su`, restringindo assim os privil茅gios do usu谩rio root. Por exemplo, ele pode conceder permiss玫es de rede apenas para apps de firewall enquanto nega permiss玫es de acesso a arquivos, ou pode conceder permiss玫es de shell em vez de acesso root completo para apps congelados: **mantendo o poder confinado com o princ铆pio do menor privil茅gio.**
 
-Para apps comuns sem privilégios root, o Perfil do Aplicativo pode controlar o comportamento do kernel e do sistema de módulos em relação a esses apps. Por exemplo, pode determinar se as modificações resultantes dos módulos devem ser abordadas. O kernel e o sistema de módulos podem tomar decisões com base nesta configuração, como realizar operações semelhantes a "ocultar".
+Para apps comuns sem privil茅gios root, o Perfil do Aplicativo pode controlar o comportamento do kernel e do sistema de m贸dulos em rela莽茫o a esses apps. Por exemplo, pode determinar se as modifica莽玫es resultantes dos m贸dulos devem ser abordadas. O kernel e o sistema de m贸dulos podem tomar decis玫es com base nesta configura莽茫o, como realizar opera莽玫es semelhantes a "ocultar".
 
 ## Perfil root
 
 ### UID, GID e Grupos
 
-Os sistemas Linux possuem dois conceitos: usuários e grupos. Cada usuário possui um ID de usuário (UID) e pode pertencer a vários grupos, cada um com seu próprio ID de grupo (GID). Esses IDs são usados ​​para identificar usuários no sistema e determinar quais recursos do sistema eles podem acessar.
+Os sistemas Linux possuem dois conceitos: usu谩rios e grupos. Cada usu谩rio possui um ID de usu谩rio (UID) e pode pertencer a v谩rios grupos, cada um com seu pr贸prio ID de grupo (GID). Esses IDs s茫o usados 鈥嬧€媝ara identificar usu谩rios no sistema e determinar quais recursos do sistema eles podem acessar.
 
-Os usuários com UID 0 são conhecidos como usuários root, e grupos com GID 0 são chamados de grupos root. O grupo de usuários root geralmente tem os privilégios mais altos no sistema.
+Os usu谩rios com UID 0 s茫o conhecidos como usu谩rios root, e grupos com GID 0 s茫o chamados de grupos root. O grupo de usu谩rios root geralmente tem os privil茅gios mais altos no sistema.
 
-No caso do sistema Android, cada app funciona como um usuário separado (exceto em casos de UID compartilhado) e recebe um UID exclusivo. Por exemplo, `0` representa o usuário root, `1000` representa `system`, `2000` ao ADB shell e os UIDs de `10000` a `19999` são atribuídos a apps comuns.
+No caso do sistema Android, cada app funciona como um usu谩rio separado (exceto em casos de UID compartilhado) e recebe um UID exclusivo. Por exemplo, `0` representa o usu谩rio root, `1000` representa `system`, `2000` ao ADB shell e os UIDs de `10000` a `19999` s茫o atribu铆dos a apps comuns.
 
-::: info INFORMAÇÕES
-Aqui, o UID mencionado não é o mesmo que o conceito de múltiplos usuários ou perfis de trabalho no sistema Android. Os perfis de trabalho são, na verdade, implementados particionando o intervalo UID. Por exemplo, 10000-19999 representa o usuário principal, enquanto 110000-119999 representa um perfil de trabalho. Cada app comum entre eles possui seu próprio UID exclusivo.
+::: info INFORMA脟脮ES
+Aqui, o UID mencionado n茫o 茅 o mesmo que o conceito de m煤ltiplos usu谩rios ou perfis de trabalho no sistema Android. Os perfis de trabalho s茫o, na verdade, implementados particionando o intervalo UID. Por exemplo, 10000-19999 representa o usu谩rio principal, enquanto 110000-119999 representa um perfil de trabalho. Cada app comum entre eles possui seu pr贸prio UID exclusivo.
 :::
 
-Cada app pode ter vários grupos, com o GID representando o grupo principal, que geralmente corresponde ao UID. Outros grupos são conhecidos como grupos suplementares. Certas permissões são controladas por meio de grupos, como permissões de acesso à rede ou acesso Bluetooth.
+Cada app pode ter v谩rios grupos, com o GID representando o grupo principal, que geralmente corresponde ao UID. Outros grupos s茫o conhecidos como grupos suplementares. Certas permiss玫es s茫o controladas por meio de grupos, como permiss玫es de acesso 脿 rede ou acesso Bluetooth.
 
-Por exemplo, se executarmos o comando `id` no ADB shell, a saída pode ser semelhante a esta:
+Por exemplo, se executarmos o comando `id` no ADB shell, a sa铆da pode ser semelhante a esta:
 
 ```sh
 oriole:/ $ id
 uid=2000(shell) gid=2000(shell) groups=2000(shell),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs) context=u:r:shell:s0
 ```
 
-Aqui, o UID é `2000` e o GID (ID do grupo primário) também é `2000`. Além disso, pertence a vários grupos suplementares, como `inet` (indicando a capacidade de criar soquetes `AF_INET` e `AF_INET6`) e `sdcard_rw` (indicando permissões de leitura/gravação para o cartão SD).
+Aqui, o UID 茅 `2000` e o GID (ID do grupo prim谩rio) tamb茅m 茅 `2000`. Al茅m disso, pertence a v谩rios grupos suplementares, como `inet` (indicando a capacidade de criar soquetes `AF_INET` e `AF_INET6`) e `sdcard_rw` (indicando permiss玫es de leitura/grava莽茫o para o cart茫o SD).
 
-O Perfil root do SxKernelSU permite personalizar o UID, GID e grupos para o processo root após a execução de `su`. Por exemplo, o Perfil root de um app root pode definir seu UID como `2000`, o que significa que, ao usar `su`, as permissões reais do app estão no nível do ADB shell. Além disso, o grupo `inet` pode ser removido, evitando que o comando `su` tenha acesso à rede.
+O Perfil root do SxKernelSU permite personalizar o UID, GID e grupos para o processo root ap贸s a execu莽茫o de `su`. Por exemplo, o Perfil root de um app root pode definir seu UID como `2000`, o que significa que, ao usar `su`, as permiss玫es reais do app est茫o no n铆vel do ADB shell. Al茅m disso, o grupo `inet` pode ser removido, evitando que o comando `su` tenha acesso 脿 rede.
 
-::: tip OBSERVAÇÃO
-O Perfil do Aplicativo controla apenas as permissões do processo root após usar `su` e não afeta as permissões do próprio app. Se um app solicitou permissão para acessar a rede, ele ainda poderá acessar a rede mesmo sem usar `su`. Remover o grupo `inet` de `su` apenas impede que `su` acesse a rede.
+::: tip OBSERVA脟脙O
+O Perfil do Aplicativo controla apenas as permiss玫es do processo root ap贸s usar `su` e n茫o afeta as permiss玫es do pr贸prio app. Se um app solicitou permiss茫o para acessar a rede, ele ainda poder谩 acessar a rede mesmo sem usar `su`. Remover o grupo `inet` de `su` apenas impede que `su` acesse a rede.
 :::
 
-O Perfil root é aplicado no kernel e não depende do comportamento voluntário de apps root, ao contrário da troca de usuários ou grupos por meio de `su`. A concessão da permissão `su` depende inteiramente do usuário e não do desenvolvedor.
+O Perfil root 茅 aplicado no kernel e n茫o depende do comportamento volunt谩rio de apps root, ao contr谩rio da troca de usu谩rios ou grupos por meio de `su`. A concess茫o da permiss茫o `su` depende inteiramente do usu谩rio e n茫o do desenvolvedor.
 
 ### Capacidades
 
-As capacidades são um mecanismo para separação de privilégios no Linux.
+As capacidades s茫o um mecanismo para separa莽茫o de privil茅gios no Linux.
 
-Para realizar verificações de permissão, as implementações tradicionais do `UNIX` distinguem duas categorias de processos: processos privilegiados (cujo ID de usuário efetivo é `0`, referido como superusuário ou root) e processos sem privilégios (cujo UID efetivo é diferente de zero). Os processos privilegiados ignoram todas as verificações de permissão do kernel, enquanto os processos não privilegiados estão sujeitos à verificação completa de permissão com base nas credenciais do processo (geralmente: UID efetivo, GID efetivo e lista de grupos suplementares).
+Para realizar verifica莽玫es de permiss茫o, as implementa莽玫es tradicionais do `UNIX` distinguem duas categorias de processos: processos privilegiados (cujo ID de usu谩rio efetivo 茅 `0`, referido como superusu谩rio ou root) e processos sem privil茅gios (cujo UID efetivo 茅 diferente de zero). Os processos privilegiados ignoram todas as verifica莽玫es de permiss茫o do kernel, enquanto os processos n茫o privilegiados est茫o sujeitos 脿 verifica莽茫o completa de permiss茫o com base nas credenciais do processo (geralmente: UID efetivo, GID efetivo e lista de grupos suplementares).
 
-A partir do Linux 2.2, o Linux divide os privilégios tradicionalmente associados ao superusuário em unidades distintas, conhecidas como capacidades, que podem ser ativadas e desativadas de forma independente.
+A partir do Linux 2.2, o Linux divide os privil茅gios tradicionalmente associados ao superusu谩rio em unidades distintas, conhecidas como capacidades, que podem ser ativadas e desativadas de forma independente.
 
-Cada capacidade representa um ou mais privilégios. Por exemplo, `CAP_DAC_READ_SEARCH` representa a capacidade de ignorar verificações de permissão para leitura de arquivos, bem como permissões de leitura e execução de diretório. Se um usuário com um UID efetivo `0` (usuário root) não tiver a capacidade `CAP_DAC_READ_SEARCH` ou superiores, isso significa que mesmo sendo root, ele não pode ler arquivos à vontade.
+Cada capacidade representa um ou mais privil茅gios. Por exemplo, `CAP_DAC_READ_SEARCH` representa a capacidade de ignorar verifica莽玫es de permiss茫o para leitura de arquivos, bem como permiss玫es de leitura e execu莽茫o de diret贸rio. Se um usu谩rio com um UID efetivo `0` (usu谩rio root) n茫o tiver a capacidade `CAP_DAC_READ_SEARCH` ou superiores, isso significa que mesmo sendo root, ele n茫o pode ler arquivos 脿 vontade.
 
-O Perfil root do SxKernelSU permite a personalização das capacidades do processo root após a execução de `su`, concedendo assim "privilégios root" de forma parcial. Ao contrário do UID e GID mencionados acima, certos apps root exigem um UID de `0` após usar `su`. Nesses casos, limitar as capacidades deste usuário root com UID `0` pode restringir as operações que ele pode realizar.
+O Perfil root do SxKernelSU permite a personaliza莽茫o das capacidades do processo root ap贸s a execu莽茫o de `su`, concedendo assim "privil茅gios root" de forma parcial. Ao contr谩rio do UID e GID mencionados acima, certos apps root exigem um UID de `0` ap贸s usar `su`. Nesses casos, limitar as capacidades deste usu谩rio root com UID `0` pode restringir as opera莽玫es que ele pode realizar.
 
-::: tip FORTE RECOMENDAÇÃO
-A [documentação oficial](https://man7.org/linux/man-pages/man7/capabilities.7.html) da capacidade do Linux fornece explicações detalhadas das habilidades representadas por cada capacidade. Se você pretende customizar as capacidade, é altamente recomendável que você leia este documento primeiro.
+::: tip FORTE RECOMENDA脟脙O
+A [documenta莽茫o oficial](https://man7.org/linux/man-pages/man7/capabilities.7.html) da capacidade do Linux fornece explica莽玫es detalhadas das habilidades representadas por cada capacidade. Se voc锚 pretende customizar as capacidade, 茅 altamente recomend谩vel que voc锚 leia este documento primeiro.
 :::
 
 ### SELinux
 
-SELinux é um poderoso mecanismo do Controle de Acesso Obrigatório (MAC). Ele opera com base no princípio de **negação padrão**. Qualquer ação não explicitamente permitida é negada.
+SELinux 茅 um poderoso mecanismo do Controle de Acesso Obrigat贸rio (MAC). Ele opera com base no princ铆pio de **nega莽茫o padr茫o**. Qualquer a莽茫o n茫o explicitamente permitida 茅 negada.
 
 O SELinux pode ser executado em dois modos globais:
 
-1. Modo permissivo (Permissive): Os eventos de negação são registrados, mas não aplicados.
-2. Modo impondo (Enforcing): Os eventos de negação são registrados e aplicados.
+1. Modo permissivo (Permissive): Os eventos de nega莽茫o s茫o registrados, mas n茫o aplicados.
+2. Modo impondo (Enforcing): Os eventos de nega莽茫o s茫o registrados e aplicados.
 
 ::: warning AVISO
-Os sistemas Android modernos dependem fortemente do SELinux para garantir a segurança geral do sistema. É altamente recomendável não usar nenhum sistema personalizado executado em "Modo permissivo", pois ele não oferece vantagens significativas em relação a um sistema completamente aberto.
+Os sistemas Android modernos dependem fortemente do SELinux para garantir a seguran莽a geral do sistema. 脡 altamente recomend谩vel n茫o usar nenhum sistema personalizado executado em "Modo permissivo", pois ele n茫o oferece vantagens significativas em rela莽茫o a um sistema completamente aberto.
 :::
 
-Explicar o conceito completo do SELinux é complexo e está além do objetivo deste documento. Recomenda-se primeiro entender seu funcionamento através dos seguintes recursos:
+Explicar o conceito completo do SELinux 茅 complexo e est谩 al茅m do objetivo deste documento. Recomenda-se primeiro entender seu funcionamento atrav茅s dos seguintes recursos:
 
-1. [Wikipédia](https://en.wikipedia.org/wiki/Security-Enhanced_Linux)
-2. [Red Hat: O que é SELinux?](https://www.redhat.com/pt-br/topics/linux/what-is-selinux)
+1. [Wikip茅dia](https://en.wikipedia.org/wiki/Security-Enhanced_Linux)
+2. [Red Hat: O que 茅 SELinux?](https://www.redhat.com/pt-br/topics/linux/what-is-selinux)
 3. [ArchLinux: SELinux](https://wiki.archlinux.org/title/SELinux)
 
-O Perfil root do SxKernelSU permite a personalização do contexto SELinux do processo root após a execução de `su`. Regras específicas de controle de acesso podem ser definidas para este contexto, possibilitando um controle refinado sobre os privilégios root.
+O Perfil root do SxKernelSU permite a personaliza莽茫o do contexto SELinux do processo root ap贸s a execu莽茫o de `su`. Regras espec铆ficas de controle de acesso podem ser definidas para este contexto, possibilitando um controle refinado sobre os privil茅gios root.
 
-Em cenários típicos, quando um app executa `su`, ele alterna o processo para um domínio SELinux com **acesso irrestrito**, como `u:r:ksu:s0`. Através do Perfil root, esse domínio pode ser mudado para um domínio personalizado, como `u:r:app1:s0`, e uma série de regras podem ser definidas para esse domínio:
+Em cen谩rios t铆picos, quando um app executa `su`, ele alterna o processo para um dom铆nio SELinux com **acesso irrestrito**, como `u:r:ksu:s0`. Atrav茅s do Perfil root, esse dom铆nio pode ser mudado para um dom铆nio personalizado, como `u:r:app1:s0`, e uma s茅rie de regras podem ser definidas para esse dom铆nio:
 
 ```sh
 type app1
@@ -85,37 +85,37 @@ typeattribute app1 mlstrustedsubject
 allow app1 * * *
 ```
 
-Observe que a regra `allow app1 * * *` é usada apenas para fins de demonstração. Na prática, esta regra não deve ser usada extensivamente, pois não difere muito do Modo permissivo.
+Observe que a regra `allow app1 * * *` 茅 usada apenas para fins de demonstra莽茫o. Na pr谩tica, esta regra n茫o deve ser usada extensivamente, pois n茫o difere muito do Modo permissivo.
 
-### Escalação
+### Escala莽茫o
 
-Se a configuração do Perfil root não estiver definida corretamente, poderá ocorrer um cenário de escalação. As restrições impostas pelo Perfil root poderão falhar involuntariamente.
+Se a configura莽茫o do Perfil root n茫o estiver definida corretamente, poder谩 ocorrer um cen谩rio de escala莽茫o. As restri莽玫es impostas pelo Perfil root poder茫o falhar involuntariamente.
 
-Por exemplo, se você conceder permissão root a um usuário ADB shell (que é um caso comum) e, em seguida, conceder permissão root a um app normal, mas configurar seu Perfil root com o UID 2000 (o UID do usuário ADB shell), o app pode obter acesso root completo ao executar o comando `su` duas vezes:
+Por exemplo, se voc锚 conceder permiss茫o root a um usu谩rio ADB shell (que 茅 um caso comum) e, em seguida, conceder permiss茫o root a um app normal, mas configurar seu Perfil root com o UID 2000 (o UID do usu谩rio ADB shell), o app pode obter acesso root completo ao executar o comando `su` duas vezes:
 
-1. A primeira execução de `su` será sujeita ao Perfil do Aplicativo, e mudará para o UID `2000` (ADB shell) em vez de `0` (root).
-2. A segunda execução de `su`, como o UID é `2000` e você concedeu acesso root ao UID `2000` (ADB shell) na configuração, o app obterá privilégios root completo.
+1. A primeira execu莽茫o de `su` ser谩 sujeita ao Perfil do Aplicativo, e mudar谩 para o UID `2000` (ADB shell) em vez de `0` (root).
+2. A segunda execu莽茫o de `su`, como o UID 茅 `2000` e voc锚 concedeu acesso root ao UID `2000` (ADB shell) na configura莽茫o, o app obter谩 privil茅gios root completo.
 
 :::tip dica
-Você pode habilitar a flag `NO_NEW_PRIVS` no seu `App Profile` personalizado.
+Voc锚 pode habilitar a flag `NO_NEW_PRIVS` no seu `App Profile` personalizado.
 
-Isso impede que o processo escape e eleve seus privilégios novamente usando o comando `su`.
+Isso impede que o processo escape e eleve seus privil茅gios novamente usando o comando `su`.
 
-No entanto, essa flag **apenas** impede que o SxKernelSU eleve os privilégios do processo; ele ainda pode escapar usando outros mecanismos do Linux.
-Portanto, tenha muito cuidado com suas configurações de permissão.
+No entanto, essa flag **apenas** impede que o SxKernelSU eleve os privil茅gios do processo; ele ainda pode escapar usando outros mecanismos do Linux.
+Portanto, tenha muito cuidado com suas configura莽玫es de permiss茫o.
 :::
 
-## Perfil não root
+## Perfil n茫o root
 
-### Desmontar módulos
+### Desmontar m贸dulos
 
-O SxKernelSU fornece um mecanismo sem sistema para modificar partições do sistema, obtido através da montagem do OverlayFS. No entanto, alguns apps podem ser sensíveis a esse comportamento. Nesse caso, podemos descarregar módulos montados nesses apps configurando a opção "Desmontar módulos".
+O SxKernelSU fornece um mecanismo sem sistema para modificar parti莽玫es do sistema, obtido atrav茅s da montagem do OverlayFS. No entanto, alguns apps podem ser sens铆veis a esse comportamento. Nesse caso, podemos descarregar m贸dulos montados nesses apps configurando a op莽茫o "Desmontar m贸dulos".
 
-Além disso, a interface de configurações do gerenciador do SxKernelSU oferece a opção "Desmontar módulos por padrão". Por padrão, essa opção está **ativada**, o que significa que o SxKernelSU ou alguns módulos descarregarão módulos para este app, a menos que configurações adicionais sejam aplicadas. Se você não preferir esta configuração ou se ela afetar determinados apps, você terá as seguintes opções:
+Al茅m disso, a interface de configura莽玫es do gerenciador do SxKernelSU oferece a op莽茫o "Desmontar m贸dulos por padr茫o". Por padr茫o, essa op莽茫o est谩 **ativada**, o que significa que o SxKernelSU ou alguns m贸dulos descarregar茫o m贸dulos para este app, a menos que configura莽玫es adicionais sejam aplicadas. Se voc锚 n茫o preferir esta configura莽茫o ou se ela afetar determinados apps, voc锚 ter谩 as seguintes op莽玫es:
 
-1. Manter a opção "Desmontar módulos por padrão" ativada e desative individualmente a opção "Desmontar módulos" no Perfil do Aplicativo para apps que exigem o carregamento do módulo (agindo como uma "lista de permissões").
-2. Desativar a opção "Desmontar módulos por padrão" e ativar individualmente a opção "Desmontar módulos" no Perfil do Aplicativo para apps que exigem o descarregamento do módulo (agindo como uma "lista negra").
+1. Manter a op莽茫o "Desmontar m贸dulos por padr茫o" ativada e desative individualmente a op莽茫o "Desmontar m贸dulos" no Perfil do Aplicativo para apps que exigem o carregamento do m贸dulo (agindo como uma "lista de permiss玫es").
+2. Desativar a op莽茫o "Desmontar m贸dulos por padr茫o" e ativar individualmente a op莽茫o "Desmontar m贸dulos" no Perfil do Aplicativo para apps que exigem o descarregamento do m贸dulo (agindo como uma "lista negra").
 
-::: info INFORMAÇÕES
-Em dispositivos que utilizam a versão do kernel 5.10 ou superior, o kernel realiza qualquer ação adicional do descarregamento de módulos. No entanto, para dispositivos que executam versões do kernel abaixo de 5.10, essa opção é apenas uma opção de configuração e o próprio SxKernelSU não executa nenhuma ação. Se você quiser usar a opção "Desmontar módulos" em versões do kernel anteriores a 5.10, é necessário portar a função `path_umount` em `fs/namespace.c`. Você pode obter mais informações no final da página [Integração para dispositivos não-GKI](https://github.com/linchuanlu56-dot/SxKernelSU/pt_BR/guide/how-to-integrate-for-non-gki.html). Alguns módulos, como ZygiskNext, também podem usar essa opção para determinar se o descarregamento do módulo é necessário.
+::: info INFORMA脟脮ES
+Em dispositivos que utilizam a vers茫o do kernel 5.10 ou superior, o kernel realiza qualquer a莽茫o adicional do descarregamento de m贸dulos. No entanto, para dispositivos que executam vers玫es do kernel abaixo de 5.10, essa op莽茫o 茅 apenas uma op莽茫o de configura莽茫o e o pr贸prio SxKernelSU n茫o executa nenhuma a莽茫o. Se voc锚 quiser usar a op莽茫o "Desmontar m贸dulos" em vers玫es do kernel anteriores a 5.10, 茅 necess谩rio portar a fun莽茫o `path_umount` em `fs/namespace.c`. Voc锚 pode obter mais informa莽玫es no final da p谩gina [Integra莽茫o para dispositivos n茫o-GKI](https://sxkernelsu1.netlify.app/pt_BR/guide/how-to-integrate-for-non-gki.html). Alguns m贸dulos, como ZygiskNext, tamb茅m podem usar essa op莽茫o para determinar se o descarregamento do m贸dulo 茅 necess谩rio.
 :::

@@ -1,4 +1,4 @@
-import { defineConfig, SiteConfig } from 'vitepress'
+﻿import { defineConfig, SiteConfig } from 'vitepress'
 import locales from './locales'
 import { readdir, writeFile } from 'fs/promises'
 import { resolve } from 'path'
@@ -14,7 +14,7 @@ export default defineConfig( {
         }],
     ],
     sitemap: {
-        hostname: 'https://github.com/linchuanlu56-dot/SxKernelSU'
+        hostname: 'https://sxkernelsu1.netlify.app'
     },
     buildEnd: async (config: SiteConfig) => {
         const templateDir = resolve(config.outDir, 'templates');

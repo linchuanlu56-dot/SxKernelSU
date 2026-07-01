@@ -1,0 +1,14 @@
+#ifndef __SKS_UAPI_FEATURE_H
+#define __SKS_UAPI_FEATURE_H
+
+enum sksu_feature_id {
+    SKS_FEATURE_SU_COMPAT = 0,
+    SKS_FEATURE_KERNEL_UMOUNT = 1,
+    SKS_FEATURE_SULOG = 2,
+    SKS_FEATURE_ADB_ROOT = 3,
+    SKS_FEATURE_SELINUX_HIDE = 4,
+
+    SKS_FEATURE_MAX
+};
+
+#endif

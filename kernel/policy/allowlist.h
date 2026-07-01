@@ -1,5 +1,5 @@
-#ifndef __KSU_H_ALLOWLIST
-#define __KSU_H_ALLOWLIST
+#ifndef __SKS_H_ALLOWLIST
+#define __SKS_H_ALLOWLIST
 
 #include <linux/types.h>
 #include <linux/uidgid.h>
@@ -12,37 +12,37 @@
 #define FIRST_ISOLATED_UID 99000
 #define LAST_ISOLATED_UID 99999
 
-void ksu_allowlist_init(void);
+void sksu_allowlist_init(void);
 
-void ksu_allowlist_exit(void);
+void sksu_allowlist_exit(void);
 
-void ksu_load_allow_list(void);
+void sksu_load_allow_list(void);
 
-void ksu_show_allow_list(void);
+void sksu_show_allow_list(void);
 
 // Check if the uid is in allow list
-bool __ksu_is_allow_uid(uid_t uid);
-#define ksu_is_allow_uid(uid) unlikely(__ksu_is_allow_uid(uid))
+bool __sksu_is_allow_uid(uid_t uid);
+#define sksu_is_allow_uid(uid) unlikely(__sksu_is_allow_uid(uid))
 
 // Check if the uid is in allow list, or current is ksu domain root
-bool __ksu_is_allow_uid_for_current(uid_t uid);
-#define ksu_is_allow_uid_for_current(uid) unlikely(__ksu_is_allow_uid_for_current(uid))
+bool __sksu_is_allow_uid_for_current(uid_t uid);
+#define sksu_is_allow_uid_for_current(uid) unlikely(__sksu_is_allow_uid_for_current(uid))
 
-bool ksu_get_allow_list(int *array, u16 length, u16 *out_length, u16 *out_total, bool allow);
+bool sksu_get_allow_list(int *array, u16 length, u16 *out_length, u16 *out_total, bool allow);
 
-void ksu_prune_allowlist(bool (*is_uid_exist)(uid_t, char *, void *), void *data);
-void ksu_persistent_allow_list();
+void sksu_prune_allowlist(bool (*is_uid_exist)(uid_t, char *, void *), void *data);
+void sksu_persistent_allow_list();
 
 // should be called with rcu read lock
-struct app_profile *ksu_get_app_profile(uid_t uid);
-// only used to put the app_profile returned by ksu_get_app_profile
-void ksu_put_app_profile(struct app_profile *);
-int ksu_set_app_profile(struct app_profile *);
+struct app_profile *sksu_get_app_profile(uid_t uid);
+// only used to put the app_profile returned by sksu_get_app_profile
+void sksu_put_app_profile(struct app_profile *);
+int sksu_set_app_profile(struct app_profile *);
 
-bool ksu_uid_should_umount(uid_t uid);
-struct root_profile *ksu_get_root_profile(uid_t uid);
-// only used to put the root_profile returned by ksu_get_root_profile
-void ksu_put_root_profile(struct root_profile *);
+bool sksu_uid_should_umount(uid_t uid);
+struct root_profile *sksu_get_root_profile(uid_t uid);
+// only used to put the root_profile returned by sksu_get_root_profile
+void sksu_put_root_profile(struct root_profile *);
 
 static inline bool is_appuid(uid_t uid)
 {

@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: 開始瞭解
-      link: /zh_TW/guide/what-is-kernelsu
+      link: /zh_TW/guide/what-is-sxkernelsu
     - theme: alt
       text: 在 GitHub 中檢視
-      link: https://github.com/linchuanlu56-dot/SxKernelSU
+      link: https://github.com/tiann/SxKernelSU
 
 features:
   - title: 以核心為基礎

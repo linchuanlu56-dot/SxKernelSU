@@ -18,14 +18,14 @@ SxKernelSU menyediakan sistem konfigurasi bawaan yang memungkinkan modul menyimp
 
 ## Busybox
 
-SxKernelSU dikirimkan dengan fitur biner BusyBox yang lengkap (termasuk dukungan penuh SELinux). Eksekusi terletak di `/data/adb/ksu/bin/busybox`. BusyBox SxKernelSU mendukung "Mode Shell Standalone Shell" yang dapat dialihkan waktu proses. Apa yang dimaksud dengan mode mandiri ini adalah bahwa ketika dijalankan di shell `ash` dari BusyBox, setiap perintah akan langsung menggunakan applet di dalam BusyBox, terlepas dari apa yang ditetapkan sebagai `PATH`. Misalnya, perintah seperti `ls`, `rm`, `chmod` **TIDAK** akan menggunakan apa yang ada di `PATH` (dalam kasus Android secara default akan menjadi `/system/bin/ls`, ` /system/bin/rm`, dan `/system/bin/chmod` masing-masing), tetapi akan langsung memanggil applet BusyBox internal. Ini memastikan bahwa skrip selalu berjalan di lingkungan yang dapat diprediksi dan selalu memiliki rangkaian perintah lengkap, apa pun versi Android yang menjalankannya. Untuk memaksa perintah _not_ menggunakan BusyBox, Anda harus memanggil yang dapat dieksekusi dengan path lengkap.
+SxKernelSU dikirimkan dengan fitur biner BusyBox yang lengkap (termasuk dukungan penuh SELinux). Eksekusi terletak di `/data/adb/sks/bin/busybox`. BusyBox SxKernelSU mendukung "Mode Shell Standalone Shell" yang dapat dialihkan waktu proses. Apa yang dimasksud dengan mode mandiri ini adalah bahwa ketika dijalankan di shell `ash` dari BusyBox, setiap perintah akan langsung menggunakan applet di dalam BusyBox, terlepas dari apa yang ditetapkan sebagai `PATH`. Misalnya, perintah seperti `ls`, `rm`, `chmod` **TIDAK** akan menggunakan apa yang ada di `PATH` (dalam kasus Android secara default akan menjadi `/system/bin/ls`, ` /system/bin/rm`, dan `/system/bin/chmod` masing-masing), tetapi akan langsung memanggil applet BusyBox internal. Ini memastikan bahwa skrip selalu berjalan di lingkungan yang dapat diprediksi dan selalu memiliki rangkaian perintah lengkap, apa pun versi Android yang menjalankannya. Untuk memaksa perintah _not_ menggunakan BusyBox, Anda harus memanggil yang dapat dieksekusi dengan path lengkap.
 
 Setiap skrip shell tunggal yang berjalan dalam konteks SxKernelSU akan dieksekusi di shell `ash` BusyBox dengan mode mandiri diaktifkan. Untuk apa yang relevan dengan pengembang pihak ke-3, ini termasuk semua skrip boot dan skrip instalasi modul.
 
 Bagi yang ingin menggunakan fitur “Standalone Mode” ini di luar SxKernelSU, ada 2 cara untuk mengaktifkannya:
 
-1. Tetapkan variabel lingkungan `ASH_STANDALONE` ke `1`<br>Contoh: `ASH_STANDALONE=1 /data/adb/ksu/bin/busybox sh <script>`
-2. Beralih dengan opsi baris perintah:<br>`/data/adb/ksu/bin/busybox sh -o mandiri <script>`
+1. Tetapkan variabel lingkungan `ASH_STANDALONE` ke `1`<br>Contoh: `ASH_STANDALONE=1 /data/adb/sks/bin/busybox sh <script>`
+2. Beralih dengan opsi baris perintah:<br>`/data/adb/sks/bin/busybox sh -o mandiri <script>`
 
 Untuk memastikan semua shell `sh` selanjutnya dijalankan juga dalam mode mandiri, opsi 1 adalah metode yang lebih disukai (dan inilah yang digunakan secara internal oleh SxKernelSU dan manajer SxKernelSU) karena variabel lingkungan diwariskan ke proses anak.
 
@@ -69,9 +69,6 @@ Modul SxKernelSU adalah folder yang ditempatkan di `/data/adb/modules` dengan st
 |   ├── uninstall.sh        <--- This script will be executed when SxKernelSU removes your module
 │   ├── system.prop         <--- Properties in this file will be loaded as system properties by resetprop
 │   ├── sepolicy.rule       <--- Additional custom sepolicy rules
-│   ├── initrc/             <--- File .rc di direktori ini akan disuntikkan ke init.rc saat boot
-│   │   ├── myservice.rc
-│   │   └── ...
 │   │
 │   │      *** Auto Generated, DO NOT MANUALLY CREATE OR MODIFY ***
 │   │
@@ -186,80 +183,6 @@ File ini mengikuti format yang sama dengan `build.prop`. Setiap baris terdiri da
 
 Jika modul Anda memerlukan beberapa tambalan sepolicy tambahan, harap tambahkan aturan tersebut ke dalam file ini. Setiap baris dalam file ini akan diperlakukan sebagai pernyataan kebijakan.
 
-### Injeksi initrc {#initrc-injection}
-
-SxKernelSU menyediakan mekanisme untuk menyuntikkan arahan Android Init RC kustom ke dalam `init.rc` sistem. Hal ini memungkinkan modul untuk mendaftarkan layanan Android kustom, mengatur pemicu properti, atau melakukan tindakan bahasa Init lainnya tanpa memodifikasi partisi sistem.
-
-Selama boot, modul kernel SxKernelSU mencegat panggilan sistem `read()` dan `fstat()`. Saat proses init Android membaca `/system/etc/init/hw/init.rc`, SxKernelSU secara transparan menambahkan konten RC kustom ke bagian akhir file. Proses init menguraikan arahan yang disuntikkan ini sama seperti konten init.rc asli.
-
-Di sisi userspace, ksud menggabungkan semua file `.rc` dari modul yang diaktifkan menjadi satu file `modules.rc`, yang disimpan di partisi `/metadata`. File ini secara otomatis dibuat ulang setiap kali status modul berubah (diinstal, diaktifkan, dinonaktifkan, dihapus, dll.).
-
-#### File initrc modul
-
-Buat subdirektori `initrc/` di direktori modul Anda dan letakkan file `.rc` Anda di sana:
-
-```txt
-/data/adb/modules/<MODID>/
-├── initrc/
-│   ├── myservice.rc
-│   └── another.rc
-└── ...
-```
-
-::: tip
-- File harus memiliki ekstensi `.rc`.
-- Selama modul diaktifkan, semua file `.rc` di direktori `initrc/` akan disertakan (izin eksekusi tidak diperlukan).
-- File diproses dalam **urutan abjad nama file** di dalam direktori, dan modul diproses dalam **urutan abjad ID modul**.
-:::
-
-#### File initrc umum
-
-Selain file RC tingkat modul, Anda dapat menempatkan file `.rc` di direktori global:
-
-```txt
-/data/adb/initrc.d/
-├── myservice.rc
-└── another.rc
-```
-
-::: warning File initrc umum memerlukan izin eksekusi
-Tidak seperti direktori `initrc/` modul, file di `/data/adb/initrc.d/` **harus memiliki izin eksekusi** untuk disertakan. File `.rc` yang tidak dapat dieksekusi akan dilewati secara diam-diam.
-:::
-
-File `initrc.d/` umum diproses sebelum file RC modul apa pun.
-
-#### Contoh
-
-Berikut adalah contoh file `.rc` yang mendaftarkan layanan Android kustom:
-
-```rc
-service myservice /data/adb/modules/mymodule/bin/myservice
-    user root
-    group root
-    disabled
-    seclabel u:r:ksu:s0
-
-on property:sys.boot_completed=1
-    start myservice
-```
-
-Jika file ini ditempatkan di `/data/adb/modules/mymodule/initrc/myservice.rc`, itu akan mendaftarkan layanan bernama `myservice` saat boot dan memulainya ketika `sys.boot_completed=1` tercapai.
-
-#### Penyegaran Manual
-
-Anda dapat memicu pembuatan ulang `modules.rc` secara manual dengan perintah berikut (perubahan berlaku pada boot berikutnya):
-
-```sh
-ksud initrc refresh
-```
-
-::: tip
-- Injeksi initrc terjadi sangat awal dalam proses boot (saat init membaca init.rc), **sebelum** post-fs-data dan skrip modul apa pun dieksekusi.
-- Konten RC yang disuntikkan diperlakukan oleh init sebagai bagian dari init.rc asli, mendukung semua sintaks bahasa Android Init (definisi layanan, pemicu, pengaturan properti, dll.).
-- Injeksi initrc **tidak tersedia** dalam **mode late-load**, karena hook panggilan sistem tidak diinstal dalam mode tersebut.
-- Injeksi RC modul dapat dinonaktifkan dengan meneruskan parameter `--no-custom-rc` saat menambal gambar dengan ksud.
-:::
-
 ## Pemasangan module
 
 Penginstal modul SxKernelSU adalah modul SxKernelSU yang dikemas dalam file zip yang dapat di-flash di aplikasi pengelola SxKernelSU. Pemasang modul SxKernelSU yang paling sederhana hanyalah modul SxKernelSU yang dikemas sebagai file zip.
@@ -289,9 +212,9 @@ Skrip `customize.sh` berjalan di shell BusyBox `ash` SxKernelSU dengan "Mode Man
 #### Variable
 
 - `KSU` (bool): variabel untuk menandai bahwa skrip berjalan di lingkungan SxKernelSU, dan nilai variabel ini akan selalu benar. Anda dapat menggunakannya untuk membedakan antara SxKernelSU dan Magisk.
-- `KSU_VER` (string): string versi dari SxKernelSU yang diinstal saat ini (mis. `v0.4.0`)
-- `KSU_VER_CODE` (int): kode versi SxKernelSU yang terpasang saat ini di ruang pengguna (mis. `10672`)
-- `KSU_KERNEL_VER_CODE` (int): kode versi SxKernelSU yang terpasang saat ini di ruang kernel (mis. `10672`)
+- `SKS_VER` (string): string versi dari SxKernelSU yang diinstal saat ini (mis. `v0.4.0`)
+- `SKS_VER_CODE` (int): kode versi SxKernelSU yang terpasang saat ini di ruang pengguna (mis. `10672`)
+- `SKS_KERNEL_VER_CODE` (int): kode versi SxKernelSU yang terpasang saat ini di ruang kernel (mis. `10672`)
 - `BOOTMODE` (bool): selalu `true` di SxKernelSU
 - `MODPATH` (jalur): jalur tempat file modul Anda harus diinstal
 - `TMPDIR` (jalur): tempat di mana Anda dapat menyimpan file untuk sementara
@@ -299,9 +222,6 @@ Skrip `customize.sh` berjalan di shell BusyBox `ash` SxKernelSU dengan "Mode Man
 - `ARCH` (string): arsitektur CPU perangkat. Nilainya adalah `arm`, `arm64`, `x86`, atau `x64`
 - `IS64BIT` (bool): `true` jika `$ARCH` adalah `arm64` atau `x64`
 - `API` (int): level API (versi Android) perangkat (mis. `23` untuk Android 6.0)
-- `KSU_UAPI_VER` (int): versi UAPI ruang pengguna SxKernelSU (ksud) (mis. `2`). Versi ini bertambah ketika ada perubahan yang merusak kompatibilitas pada driver kernel, dan dapat digunakan oleh modul untuk memeriksa kompatibilitas.
-- `KSU_RUNTIME_MODE` (string): mode runtime SxKernelSU saat ini. Nilai yang mungkin adalah `built-in` (mode GKI, dikompilasi ke dalam kernel), `lkm` (dimuat sebagai modul kernel saat boot), atau `late-load` (dimuat sebagai modul kernel setelah boot).
-- `KSU_LATE_LOAD` (int?): jika SxKernelSU dimuat secara terlambat setelah boot, variabel ini diatur ke `1`; jika tidak, variabel ini tidak diatur.
 
 ::: peringatan
 Di SxKernelSU, MAGISK_VER_CODE selalu 25200 dan MAGISK_VER selalu v25.2. Tolong jangan gunakan kedua variabel ini untuk menentukan apakah itu berjalan di SxKernelSU atau tidak.
@@ -367,9 +287,9 @@ Selain alur boot standar yang dijelaskan di atas, SxKernelSU mendukung **mode la
 
 ### Kapan late-load terjadi?
 
-Late-load dipicu dengan menjalankan perintah `ksud late-load`. Perintah ini:
+Late-load dipicu dengan menjalankan perintah `sksud late-load`. Perintah ini:
 
-1. Mendeteksi versi KMI saat ini dan memuat `kernelsu.ko` yang sesuai dari aset tertanam.
+1. Mendeteksi versi KMI saat ini dan memuat `sxkernelsu.ko` yang sesuai dari aset tertanam.
 2. Melakukan inisialisasi modul (aturan SELinux, daftar izin, fitur, dll.) yang biasanya terjadi saat boot.
 
 Karena sistem sudah sepenuhnya berjalan, mekanisme tertentu saat boot tidak tersedia atau tidak diperlukan.
@@ -379,7 +299,7 @@ Karena sistem sudah sepenuhnya berjalan, mekanisme tertentu saat boot tidak ters
 | Perilaku | Boot standar | Mode late-load |
 |----------|:---:|:---:|
 | Modul kernel dimuat oleh init (PID 1) | Ya | Tidak (dimuat setelah boot) |
-| Hook kprobe ksud (execve/read/fstat/input) | Ya | Dilewati |
+| Hook kprobe sksud (execve/read/fstat/input) | Ya | Dilewati |
 | Deteksi mode aman (tombol volume) | Ya | Selalu dinonaktifkan |
 | Pengambilan log boot (logcat/dmesg) | Ya | Dilewati |
 | Pemeriksaan koeksistensi Magisk | Ya | Dilewati |
@@ -391,7 +311,7 @@ Karena sistem sudah sepenuhnya berjalan, mekanisme tertentu saat boot tidak ters
 | Skrip `post-mount.sh` / `post-mount.d/` | Ya | Ya |
 | Skrip `service.sh` / `service.d/` | Ya | Ya |
 | Skrip `boot-completed.sh` / `boot-completed.d/` | Ya | Ya |
-| Variabel lingkungan `KSU_LATE_LOAD` | Tidak diatur | Diatur ke `1` |
+| Variabel lingkungan `SKS_LATE_LOAD` | Tidak diatur | Diatur ke `1` |
 | Flag info kernel `0x4` | Tidak diatur | Diatur |
 
 ### Urutan eksekusi skrip
@@ -399,8 +319,8 @@ Karena sistem sudah sepenuhnya berjalan, mekanisme tertentu saat boot tidak ters
 Dalam mode late-load, urutan eksekusi skrip adalah:
 
 ```txt
-ksud late-load:
-  1. Muat kernelsu.ko (jika belum dimuat)
+sksud late-load:
+  1. Muat sxkernelsu.ko (jika belum dimuat)
   2. Ekstrak biner, tangani pembaruan modul, muat aturan SELinux, inisialisasi fitur
   3. Jalankan skrip late-load.d/ dan skrip late-load modul (blocking)
   4. Muat system.prop (resetprop -n)
@@ -418,10 +338,10 @@ Selain itu, skrip umum dapat ditempatkan di `/data/adb/late-load.d/` untuk dijal
 
 ### Mendeteksi mode late-load dalam skrip
 
-Modul dapat mendeteksi mode late-load dengan memeriksa variabel lingkungan `KSU_LATE_LOAD`:
+Modul dapat mendeteksi mode late-load dengan memeriksa variabel lingkungan `SKS_LATE_LOAD`:
 
 ```sh
-if [ "$KSU_LATE_LOAD" = "1" ]; then
+if [ "$SKS_LATE_LOAD" = "1" ]; then
     # Berjalan dalam mode late-load
     echo "Late-load mode detected"
 fi

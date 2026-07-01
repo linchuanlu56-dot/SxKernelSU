@@ -26,19 +26,19 @@ Nếu trang của bạn có CSS hoặc JavaScript thì cũng cần đặt chúng
 
 Nếu chỉ là trang hiển thị, nó sẽ hoạt động giống một trang web bình thường. Tuy nhiên điều quan trọng nhất là SxKernelSU cung cấp một loạt API hệ thống cho phép bạn triển khai các chức năng riêng của module.
 
-SxKernelSU có một thư viện JavaScript được phát hành trên [npm](https://www.npmjs.com/package/kernelsu) để bạn dùng trong mã JavaScript của trang.
+SxKernelSU có một thư viện JavaScript được phát hành trên [npm](https://www.npmjs.com/package/sxkernelsu) để bạn dùng trong mã JavaScript của trang.
 
 Ví dụ, bạn có thể thực thi một lệnh shell để lấy cấu hình hoặc thay đổi một thuộc tính:
 
 ```JavaScript
-import { exec } from 'kernelsu';
+import { exec } from 'sxkernelsu';
 
 const { errno, stdout } = exec("getprop ro.product.model");
 ```
 
 Bạn cũng có thể chuyển trang sang chế độ toàn màn hình hoặc hiển thị thông báo toast.
 
-[Tài liệu API](https://www.npmjs.com/package/kernelsu)
+[Tài liệu API](https://www.npmjs.com/package/sxkernelsu)
 
 Nếu API hiện tại chưa đáp ứng nhu cầu hoặc khó sử dụng, hãy gửi đề xuất cho chúng tôi [tại đây](https://github.com/tiann/SxKernelSU/issues)!
 

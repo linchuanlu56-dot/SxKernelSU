@@ -110,17 +110,17 @@ Abra o gerenciador, clique no ícone de instalação no canto superior direito e
 
 ### Use a linha de comando
 
-Se não quiser usar o gerenciador, você também pode usar a linha de comando para instalar o LKM. A ferramenta `ksud` fornecida pelo SxKernelSU pode ajudá-lo a corrigir rapidamente o firmware oficial e depois fazer o flash.
+Se não quiser usar o gerenciador, você também pode usar a linha de comando para instalar o LKM. A ferramenta `sksud` fornecida pelo SxKernelSU pode ajudá-lo a corrigir rapidamente o firmware oficial e depois fazer o flash.
 
 Esta ferramenta oferece suporte ao macOS, Linux e Windows. Você pode baixar a versão correspondente em [GitHub Release](https://github.com/tiann/SxKernelSU/releases).
 
-Uso: `ksud boot-patch` você pode verificar a ajuda da linha de comando para opções específicas.
+Uso: `sksud boot-patch` você pode verificar a ajuda da linha de comando para opções específicas.
 
 ```sh
-oriole:/ # ksud boot-patch -h
+oriole:/ # sksud boot-patch -h
 Patch boot ou imagens init_boot para aplicar o SxKernelSU
 
-Uso: ksud boot-patch [OPTIONS]
+Uso: sksud boot-patch [OPTIONS]
 
 Opções:
   -b, --boot <BOOT>              Caminho da imagem boot. Se não especificado, tentará encontrar a imagem boot automaticamente
@@ -137,13 +137,13 @@ Opções:
 
 Algumas opções que precisam ser explicadas:
 
-1. A opção `--magiskboot` pode especificar o caminho do magiskboot. Se não for especificado, o ksud irá procurá-lo nas variáveis ​​de ambiente. Se você não souber como obter o magiskboot, você pode verificar [aqui](#patch-boot-image).
+1. A opção `--magiskboot` pode especificar o caminho do magiskboot. Se não for especificado, o sksud irá procurá-lo nas variáveis ​​de ambiente. Se você não souber como obter o magiskboot, você pode verificar [aqui](#patch-boot-image).
 2. A opção `--kmi` pode especificar a versão do `KMI`. Se o nome do kernel do seu dispositivo não seguir a especificação KMI, você poderá especificá-lo através desta opção.
 
 O uso mais comum é:
 
 ```sh
-ksud boot-patch -b <boot.img> --kmi android13-5.10
+sksud boot-patch -b <boot.img> --kmi android13-5.10
 ```
 
 ## Instalação no modo GKI

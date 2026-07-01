@@ -46,7 +46,7 @@ CONFIG_KPROBE_EVENTS=y
 
 :::tip 如何验证是否是 kprobe 的问题？
 
-注释掉 `SxKernelSU/kernel/ksu.c` 中 `ksu_sucompat_init()` 和 `ksu_ksud_init()`，如果正常开机，那么就是 kprobe 的问题；或者你可以手动尝试使用 kprobe 功能，如果不正常，手机会直接重启。
+注释掉 `SxKernelSU/kernel/ksu.c` 中 `sksu_sucompat_init()` 和 `sksu_sksud_init()`，如果正常开机，那么就是 kprobe 的问题；或者你可以手动尝试使用 kprobe 功能，如果不正常，手机会直接重启。
 :::
 
 ## 手动修改内核源码 {#modify-kernel-source-code}
@@ -59,11 +59,11 @@ CONFIG_KPROBE_EVENTS=y
 curl -LSs "https://raw.githubusercontent.com/tiann/SxKernelSU/main/kernel/setup.sh" | bash -s v0.9.5
 ```
 
-请注意，某些设备的 defconfig 文件可能在`arch/arm64/configs/设备代号_defconfig`或位于`arch/arm64/configs/vendor/设备代号_defconfig`。在您的 defconfig 文件中，将`CONFIG_KSU`设置为`y`以启用 SxKernelSU，或设置为`n`以禁用。比如在某个 defconfig 中：
+请注意，某些设备的 defconfig 文件可能在`arch/arm64/configs/设备代号_defconfig`或位于`arch/arm64/configs/vendor/设备代号_defconfig`。在您的 defconfig 文件中，将`CONFIG_SKS`设置为`y`以启用 SxKernelSU，或设置为`n`以禁用。比如在某个 defconfig 中：
 `arch/arm64/configs/...` 
 ```sh
 +# SxKernelSU
-+CONFIG_KSU=y
++CONFIG_SKS=y
 ```
 
 然后，将 SxKernelSU 调用添加到内核源代码中，这里有几个补丁可以参考：
@@ -79,11 +79,11 @@ index ac59664eaecf..bdd585e1d2cc 100644
  	return retval;
  }
 
-+#ifdef CONFIG_KSU
-+extern bool ksu_execveat_hook __read_mostly;
-+extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
++#ifdef CONFIG_SKS
++extern bool sksu_execveat_hook __read_mostly;
++extern int sksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
 +			void *envp, int *flags);
-+extern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
++extern int sksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
 +				 void *argv, void *envp, int *flags);
 +#endif
  static int do_execveat_common(int fd, struct filename *filename,
@@ -91,11 +91,11 @@ index ac59664eaecf..bdd585e1d2cc 100644
  			      struct user_arg_ptr envp,
  			      int flags)
  {
-+   #ifdef CONFIG_KSU
-+	if (unlikely(ksu_execveat_hook))
-+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
++   #ifdef CONFIG_SKS
++	if (unlikely(sksu_execveat_hook))
++		sksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
 +	else
-+		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
++		sksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
 +   #endif
  	return __do_execve_file(fd, filename, argv, envp, flags, NULL);
  }
@@ -109,8 +109,8 @@ index 05036d819197..965b84d486b8 100644
  	return ksys_fallocate(fd, mode, offset, len);
  }
 
-+#ifdef CONFIG_KSU
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++#ifdef CONFIG_SKS
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			 int *flags);
 +#endif
  /*
@@ -127,8 +127,8 @@ index 05036d819197..965b84d486b8 100644
  	struct vfsmount *mnt;
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
-+   #ifdef CONFIG_KSU
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++   #ifdef CONFIG_SKS
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 +   #endif
  
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
@@ -143,17 +143,17 @@ index 650fc7e0f3a6..55be193913b6 100644
  }
  EXPORT_SYMBOL(kernel_read);
 
-+#ifdef CONFIG_KSU
-+extern bool ksu_vfs_read_hook __read_mostly;
-+extern int ksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
++#ifdef CONFIG_SKS
++extern bool sksu_vfs_read_hook __read_mostly;
++extern int sksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
 +			size_t *count_ptr, loff_t **pos);
 +#endif
  ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
  {
  	ssize_t ret;
-+   #ifdef CONFIG_KSU 
-+	if (unlikely(ksu_vfs_read_hook))
-+		ksu_handle_vfs_read(&file, &buf, &count, &pos);
++   #ifdef CONFIG_SKS 
++	if (unlikely(sksu_vfs_read_hook))
++		sksu_handle_vfs_read(&file, &buf, &count, &pos);
 +   #endif
 +
  	if (!(file->f_mode & FMODE_READ))
@@ -169,8 +169,8 @@ index 376543199b5a..82adcef03ecc 100644
  }
  EXPORT_SYMBOL(vfs_statx_fd);
 
-+#ifdef CONFIG_KSU
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++#ifdef CONFIG_SKS
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +#endif
 +
  /**
@@ -180,8 +180,8 @@ index 376543199b5a..82adcef03ecc 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_AUTOMOUNT;
 
-+   #ifdef CONFIG_KSU
-+	ksu_handle_stat(&dfd, &filename, &flags);
++   #ifdef CONFIG_SKS
++	sksu_handle_stat(&dfd, &filename, &flags);
 +   #endif
  	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		       AT_EMPTY_PATH | KSTAT_QUERY_FLAGS)) != 0)
@@ -206,8 +206,8 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  }
  EXPORT_SYMBOL(vfs_fstat);
  
-+#ifdef CONFIG_KSU 
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++#ifdef CONFIG_SKS 
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +#endif
 +
  int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
@@ -216,8 +216,8 @@ index 068fdbcc9e26..5348b7bb9db2 100644
 @@ -94,6 +96,8 @@ int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
  	int error = -EINVAL;
  	unsigned int lookup_flags = 0;
-+   #ifdef CONFIG_KSU 
-+	ksu_handle_stat(&dfd, &filename, &flag);
++   #ifdef CONFIG_SKS 
++	sksu_handle_stat(&dfd, &filename, &flag);
 +   #endif
 +
  	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
@@ -236,8 +236,8 @@ index 2ff887661237..e758d7db7663 100644
  	return error;
  }
 
-+#ifdef CONFIG_KSU
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++#ifdef CONFIG_SKS
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			        int *flags);
 +#endif
 +
@@ -247,8 +247,8 @@ index 2ff887661237..e758d7db7663 100644
 @@ -370,6 +373,8 @@ SYSCALL_DEFINE3(faccessat, int, dfd, const char __user *, filename, int, mode)
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
-+   #ifdef CONFIG_KSU
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++   #ifdef CONFIG_SKS
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 +   #endif
 +
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
@@ -276,18 +276,18 @@ index 45306f9ef247..815091ebfca4 100755
  	return disposition;
  }
 
-+#ifdef CONFIG_KSU
-+extern bool ksu_input_hook __read_mostly;
-+extern int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
++#ifdef CONFIG_SKS
++extern bool sksu_input_hook __read_mostly;
++extern int sksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
 +#endif
 +
  static void input_handle_event(struct input_dev *dev,
  			       unsigned int type, unsigned int code, int value)
  {
 	int disposition = input_get_disposition(dev, type, code, &value);
-+   #ifdef CONFIG_KSU
-+	if (unlikely(ksu_input_hook))
-+		ksu_handle_input_handle_event(&type, &code, &value);
++   #ifdef CONFIG_SKS
++	if (unlikely(sksu_input_hook))
++		sksu_handle_input_handle_event(&type, &code, &value);
 +   #endif
  
  	if (disposition != INPUT_IGNORE_EVENT && type != EV_SYN)
@@ -307,7 +307,7 @@ index 32f6f1c68..d69d8eca2 100644
         return dentry;
  }
 
-+extern int ksu_handle_devpts(struct inode*);
++extern int sksu_handle_devpts(struct inode*);
 +
  /**
   * devpts_get_priv -- get private data for a slave
@@ -316,7 +316,7 @@ index 32f6f1c68..d69d8eca2 100644
   */
  void *devpts_get_priv(struct dentry *dentry)
  {
-+       ksu_handle_devpts(dentry->d_inode);
++       sksu_handle_devpts(dentry->d_inode);
         if (dentry->d_sb->s_magic != DEVPTS_SUPER_MAGIC)
                 return NULL;
         return dentry->d_fsdata;

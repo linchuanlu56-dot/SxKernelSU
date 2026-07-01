@@ -18,7 +18,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/linchuanlu56-dot/SxKernelSU' }
+      { icon: 'github', link: 'https://github.com/tiann/SxKernelSU' }
     ],
 
     footer: {
@@ -27,7 +27,7 @@ export default defineConfig({
     },
 
     editLink: {
-        pattern: 'https://github.com/linchuanlu56-dot/SxKernelSU/edit/main/website/docs/:path',
+        pattern: 'https://github.com/tiann/SxKernelSU/edit/main/website/docs/:path',
         text: '在 GitHub 中編輯本頁面'
     }
   }
@@ -35,7 +35,7 @@ export default defineConfig({
 
 function nav() {
   return [
-    { text: '指南', link: '/zh_TW/guide/what-is-kernelsu' },
+    { text: '指南', link: '/zh_TW/guide/what-is-sxkernelsu' },
   ]
 }
 
@@ -44,7 +44,7 @@ function sidebarGuide() {
     {
         text: 'Guide',
         items: [
-          { text: '什麼是 SxKernelSU？', link: '/zh_TW/guide/what-is-kernelsu' },
+          { text: '什麼是 SxKernelSU？', link: '/zh_TW/guide/what-is-sxkernelsu' },
           { text: 'SxKernelSU 與 Magisk 的差異', link: '/zh_TW/guide/difference-with-magisk' },
           { text: '安裝', link: '/zh_TW/guide/installation' },
           { text: '如何建置？', link: '/zh_TW/guide/how-to-build' },

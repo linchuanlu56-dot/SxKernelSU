@@ -18,7 +18,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/linchuanlu56-dot/SxKernelSU' }
+      { icon: 'github', link: 'https://github.com/tiann/SxKernelSU' }
     ],
 
     footer: {
@@ -27,7 +27,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/linchuanlu56-dot/SxKernelSU/edit/main/website/docs/:path',
+      pattern: 'https://github.com/tiann/SxKernelSU/edit/main/website/docs/:path',
       text: 'GitHub でこのページを編集'
     }
   }
@@ -35,7 +35,7 @@ export default defineConfig({
 
 function nav() {
   return [
-    { text: 'ガイド', link: '/ja_JP/guide/what-is-kernelsu' },
+    { text: 'ガイド', link: '/ja_JP/guide/what-is-sxkernelsu' },
   ]
 }
 
@@ -44,7 +44,7 @@ function sidebarGuide() {
     {
       text: 'ガイド',
       items: [
-        { text: 'SxKernelSU とは?', link: '/ja_JP/guide/what-is-kernelsu' },
+        { text: 'SxKernelSU とは?', link: '/ja_JP/guide/what-is-sxkernelsu' },
         { text: 'インストール', link: '/ja_JP/guide/installation' },
         { text: 'ビルドするには?', link: '/ja_JP/guide/how-to-build' },
         { text: '非 GKI デバイスでの実装', link: '/ja_JP/guide/how-to-integrate-for-non-gki' },

@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: はじめる
-      link: /ja_JP/guide/what-is-kernelsu
+      link: /ja_JP/guide/what-is-sxkernelsu
     - theme: alt
       text: GitHub で表示
-      link: https://github.com/linchuanlu56-dot/SxKernelSU
+      link: https://github.com/tiann/SxKernelSU
 
 features:
   - title: カーネルベース

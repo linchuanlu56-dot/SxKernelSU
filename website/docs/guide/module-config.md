@@ -1,6 +1,6 @@
 # Module Configuration
 
-SxKernelSU provides a built-in configuration system that allows modules to store persistent or temporary key-value settings. Configurations are stored in a binary format at `/data/adb/ksu/module_configs/<module_id>/` with the following characteristics:
+SxKernelSU provides a built-in configuration system that allows modules to store persistent or temporary key-value settings. Configurations are stored in a binary format at `/data/adb/sks/module_configs/<module_id>/` with the following characteristics:
 
 ## Configuration Types
 
@@ -11,44 +11,44 @@ When reading configurations, temporary values take priority over persistent valu
 
 ## Using Configuration in Module Scripts
 
-All module scripts (`post-fs-data.sh`, `service.sh`, `boot-completed.sh`, etc.) run with the `KSU_MODULE` environment variable set to the module ID. You can use the `ksud module config` commands to manage your module's configuration:
+All module scripts (`post-fs-data.sh`, `service.sh`, `boot-completed.sh`, etc.) run with the `SKS_MODULE` environment variable set to the module ID. You can use the `sksud module config` commands to manage your module's configuration:
 
 ```bash
 # Get a configuration value
-value=$(ksud module config get my_setting)
+value=$(sksud module config get my_setting)
 
 # Set a persistent configuration value
-ksud module config set my_setting "some value"
+sksud module config set my_setting "some value"
 
 # Set a temporary configuration value (cleared on reboot)
-ksud module config set --temp runtime_state "active"
+sksud module config set --temp runtime_state "active"
 
 # Set value from stdin (useful for multiline or complex data)
-ksud module config set my_key <<EOF
+sksud module config set my_key <<EOF
 multiline
 text value
 EOF
 
 # Or pipe from command
-echo "value" | ksud module config set my_key
+echo "value" | sksud module config set my_key
 
 # Explicit stdin flag
-cat file.json | ksud module config set json_data --stdin
+cat file.json | sksud module config set json_data --stdin
 
 # List all configuration entries (merged persist + temp)
-ksud module config list
+sksud module config list
 
 # Delete a configuration entry
-ksud module config delete my_setting
+sksud module config delete my_setting
 
 # Delete a temporary configuration entry
-ksud module config delete --temp runtime_state
+sksud module config delete --temp runtime_state
 
 # Clear all persistent configurations
-ksud module config clear
+sksud module config clear
 
 # Clear all temporary configurations
-ksud module config clear --temp
+sksud module config clear --temp
 ```
 
 ## Validation Limits
@@ -85,7 +85,7 @@ The configuration system is ideal for:
 - Use persistent configs for user preferences that should survive reboots
 - Use temporary configs for runtime state or feature toggles that should reset on boot
 - Validate configuration values in your scripts before using them
-- Use the `ksud module config list` command to debug configuration issues
+- Use the `sksud module config list` command to debug configuration issues
 :::
 
 ## Advanced Features
@@ -98,7 +98,7 @@ You can dynamically override the `description` field from `module.prop` by setti
 
 ```bash
 # Override module description
-ksud module config set override.description "Custom description shown in the manager"
+sksud module config set override.description "Custom description shown in the manager"
 ```
 
 When the module list is retrieved, if the `override.description` config exists, it will replace the original description from `module.prop`. This is useful for:
@@ -116,13 +116,13 @@ Modules can declare which SxKernelSU features they manage using the `manage.<fea
 
 ```bash
 # Declare that this module manages SU compatibility and enables it
-ksud module config set manage.su_compat true
+sksud module config set manage.su_compat true
 
 # Declare that this module manages kernel unmount and disables it
-ksud module config set manage.kernel_umount false
+sksud module config set manage.kernel_umount false
 
 # Remove feature management (module no longer controls this feature)
-ksud module config delete manage.su_compat
+sksud module config delete manage.su_compat
 ```
 
 **How it works:**

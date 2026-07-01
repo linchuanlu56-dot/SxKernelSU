@@ -1,18 +1,18 @@
-#ifndef __KSU_H_MANAGER_OBSERVER
-#define __KSU_H_MANAGER_OBSERVER
+#ifndef __SKS_H_MANAGER_OBSERVER
+#define __SKS_H_MANAGER_OBSERVER
 
-#ifdef CONFIG_KSU_DISABLE_MANAGER
-static inline int ksu_observer_init(void)
+#ifdef CONFIG_SKS_DISABLE_MANAGER
+static inline int sksu_observer_init(void)
 {
     return 0;
 }
 
-static inline void ksu_observer_exit(void)
+static inline void sksu_observer_exit(void)
 {
 }
 #else
-int ksu_observer_init(void);
-void ksu_observer_exit(void);
+int sksu_observer_init(void);
+void sksu_observer_exit(void);
 #endif
 
-#endif // __KSU_H_MANAGER_OBSERVER
+#endif // __SKS_H_MANAGER_OBSERVER

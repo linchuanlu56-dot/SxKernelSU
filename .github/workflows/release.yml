@@ -17,16 +17,16 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v8
 
-      - name: Rename ksud
+      - name: Rename sksud
         run: |
-          mkdir -p ksud
-          for dir in ./ksud-*; do
+          mkdir -p sksud
+          for dir in ./sksud-*; do
               if [ -d "$dir" ]; then
                  echo "----- Rename $dir -----"
-                 ksud_platform_name=$(basename "$dir")
-                 find "$dir" -type f -name "ksud" -path "*/release/*" | while read -r ksud_file; do
-                   if [ -f "$ksud_file" ]; then
-                     mv "$ksud_file" "ksud/$ksud_platform_name"
+                 sksud_platform_name=$(basename "$dir")
+                 find "$dir" -type f -name "sksud" -path "*/release/*" | while read -r sksud_file; do
+                   if [ -f "$sksud_file" ]; then
+                     mv "$sksud_file" "sksud/$sksud_platform_name"
                    fi
                  done
               fi
@@ -36,10 +36,10 @@ jobs:
         run: ls -R
 
       - name: release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             manager/*.apk
-            android*-lkm/*_kernelsu.ko
-            ksud/ksud-*
-            ksuinit/**
+            android*-lkm/*_sxkernelsu.ko
+            sksud/sksud-*
+            sksuinit/**

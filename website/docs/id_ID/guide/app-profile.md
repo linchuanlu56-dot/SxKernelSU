@@ -1,10 +1,10 @@
-# App Profile
+﻿# App Profile
 
 App Profile adalah mekanisme yang disediakan SxKernelSU untuk menyesuaikan konfigurasi beragam aplikasi.
 
 Untuk aplikasi yang diberi izin root (misalnya dapat memakai `su`), App Profile juga dapat disebut Root Profile. Ia memungkinkan kita menyesuaikan `uid`, `gid`, `groups`, `capabilities`, dan aturan `SELinux` dari perintah `su`, sehingga hak istimewa pengguna root dapat dibatasi. Contohnya, hanya memberikan izin jaringan kepada aplikasi firewall sambil menolak izin akses berkas, atau memberikan izin shell alih-alih akses root penuh untuk aplikasi pembeku: **menjaga kekuatan agar tetap terkungkung dalam prinsip least privilege.**
 
-Untuk aplikasi biasa tanpa izin root, App Profile dapat mengendalikan bagaimana kernel dan sistem modul bersikap terhadap aplikasi tersebut. Misalnya, App Profile bisa menentukan apakah perubahan yang disebabkan oleh modul harus tetap terlihat. Kernel dan sistem modul kemudian dapat membuat keputusan berdasarkan konfigurasi ini, seperti melakukan operasi serupa “menyembunyikan”.
+Untuk aplikasi biasa tanpa izin root, App Profile dapat mengendalikan bagaimana kernel dan sistem modul bersikap terhadap aplikasi tersebut. Misalnya, App Profile bisa menentukan apakah perubahan yang disebabkan oleh modul harus tetap terlihat. Kernel dan sistem modul kemudian dapat membuat keputusan berdasarkan konfigurasi ini, seperti melakukan operasi serupa 鈥渕enyembunyikan鈥?
 
 :::tip tip
 Anda dapat mengaktifkan flag `NO_NEW_PRIVS` di `App Profile` kustom Anda.
@@ -28,7 +28,7 @@ Pengguna dengan UID 0 disebut pengguna root, dan grup dengan GID 0 disebut grup 
 Dalam sistem Android, tiap aplikasi bertindak sebagai pengguna terpisah (kecuali pada kasus shared UID) dengan UID unik. Misalnya `0` adalah root, `1000` adalah `system`, `2000` adalah shell ADB, dan UID dari `10000` hingga `19999` mewakili aplikasi biasa.
 
 ::: info
-UID yang dimaksud di sini berbeda dengan konsep multi-user atau work profile di Android. Work profile sebenarnya diimplementasikan dengan mempartisi rentang UID. Contohnya, 10000-19999 adalah pengguna utama, sementara 110000-119999 adalah work profile. Setiap aplikasi biasa di dalamnya tetap mempunyai UID unik.
+UID yang dimasksud di sini berbeda dengan konsep multi-user atau work profile di Android. Work profile sebenarnya diimplementasikan dengan mempartisi rentang UID. Contohnya, 10000-19999 adalah pengguna utama, sementara 110000-119999 adalah work profile. Setiap aplikasi biasa di dalamnya tetap mempunyai UID unik.
 :::
 
 Setiap aplikasi dapat memiliki beberapa grup, dengan GID sebagai grup utama yang biasanya sama dengan UID. Grup lain disebut grup tambahan (supplementary groups). Sejumlah izin dikendalikan oleh keanggotaan grup, misalnya izin akses jaringan atau Bluetooth.
@@ -60,7 +60,7 @@ Sejak Linux 2.2, hak istimewa yang biasanya dimiliki superuser dipecah menjadi u
 
 Setiap capability mewakili satu atau lebih hak. Misalnya, `CAP_DAC_READ_SEARCH` mewakili kemampuan melewati pemeriksaan izin untuk membaca berkas serta izin baca dan eksekusi direktori. Jika seorang pengguna dengan effective UID `0` (root) tidak memiliki capability `CAP_DAC_READ_SEARCH` atau capability di atasnya, maka meskipun ia root ia tidak bisa sembarang membaca berkas.
 
-Root Profile SxKernelSU memungkinkan kita menyesuaikan capability proses root setelah menjalankan `su`, sehingga yang diberikan hanyalah “hak root parsial”. Berbeda dengan UID dan GID di atas, beberapa aplikasi root memang membutuhkan UID `0` setelah memakai `su`. Pada kasus seperti ini, membatasi capability pengguna root dengan UID `0` dapat membatasi operasi yang boleh dilakukan.
+Root Profile SxKernelSU memungkinkan kita menyesuaikan capability proses root setelah menjalankan `su`, sehingga yang diberikan hanyalah 鈥渉ak root parsial鈥? Berbeda dengan UID dan GID di atas, beberapa aplikasi root memang membutuhkan UID `0` setelah memakai `su`. Pada kasus seperti ini, membatasi capability pengguna root dengan UID `0` dapat membatasi operasi yang boleh dilakukan.
 
 ::: tip SANGAT DISARANKAN
 Dokumentasi resmi capability Linux [dapat dibaca di sini](https://man7.org/linux/man-pages/man7/capabilities.7.html) dan menjelaskan detail hak yang diwakili tiap capability. Jika Anda ingin menyesuaikan capability, sangat disarankan membaca dokumen ini terlebih dahulu.
@@ -76,7 +76,7 @@ SELinux memiliki dua mode global:
 2. Mode Enforcing: penolakan dicatat dan ditegakkan.
 
 ::: warning
-Android modern sangat bergantung pada SELinux untuk menjaga keamanan sistem secara keseluruhan. Sangat disarankan untuk tidak memakai sistem kustom yang berjalan dalam mode “Permissive”, karena hampir tidak menawarkan keuntungan dibanding sistem yang sepenuhnya terbuka.
+Android modern sangat bergantung pada SELinux untuk menjaga keamanan sistem secara keseluruhan. Sangat disarankan untuk tidak memakai sistem kustom yang berjalan dalam mode 鈥淧ermissive鈥? karena hampir tidak menawarkan keuntungan dibanding sistem yang sepenuhnya terbuka.
 :::
 
 Menjelaskan SELinux secara tuntas sangatlah kompleks dan berada di luar cakupan dokumen ini. Disarankan mempelajari cara kerjanya melalui sumber berikut:
@@ -117,13 +117,13 @@ Jika Anda benar-benar perlu memberikan izin root kepada ADB (misalnya sebagai pe
 
 ### Umount modules
 
-SxKernelSU menyediakan mekanisme systemless untuk memodifikasi partisi sistem dengan memasang OverlayFS. Namun beberapa aplikasi peka terhadap perilaku ini. Dalam kasus tersebut, kita dapat membongkar (umount) modul yang dimuat di aplikasi tertentu dengan mengaktifkan opsi “Umount modules”.
+SxKernelSU menyediakan mekanisme systemless untuk memodifikasi partisi sistem dengan memasang OverlayFS. Namun beberapa aplikasi peka terhadap perilaku ini. Dalam kasus tersebut, kita dapat membongkar (umount) modul yang dimuat di aplikasi tertentu dengan mengaktifkan opsi 鈥淯mount modules鈥?
 
-Selain itu, antarmuka pengaturan SxKernelSU Manager menyediakan opsi “Umount modules by default”. Secara bawaan opsi ini **aktif**, artinya SxKernelSU atau modul tertentu akan membongkar modul untuk aplikasi ini kecuali ada pengaturan tambahan. Jika Anda tidak menginginkan perilaku ini atau jika aplikasi tertentu terpengaruh, ada dua pendekatan:
+Selain itu, antarmuka pengaturan SxKernelSU Manager menyediakan opsi 鈥淯mount modules by default鈥? Secara bawaan opsi ini **aktif**, artinya SxKernelSU atau modul tertentu akan membongkar modul untuk aplikasi ini kecuali ada pengaturan tambahan. Jika Anda tidak menginginkan perilaku ini atau jika aplikasi tertentu terpengaruh, ada dua pendekatan:
 
-1. Biarkan “Umount modules by default” tetap aktif dan nonaktifkan opsi “Umount modules” di App Profile untuk aplikasi yang memang perlu memuat modul (berperan sebagai daftar putih).
-2. Nonaktifkan “Umount modules by default” lalu aktifkan opsi “Umount modules” di App Profile hanya untuk aplikasi yang harus dibongkar modulnya (berperan sebagai daftar hitam).
+1. Biarkan 鈥淯mount modules by default鈥?tetap aktif dan nonaktifkan opsi 鈥淯mount modules鈥?di App Profile untuk aplikasi yang memang perlu memuat modul (berperan sebagai daftar putih).
+2. Nonaktifkan 鈥淯mount modules by default鈥?lalu aktifkan opsi 鈥淯mount modules鈥?di App Profile hanya untuk aplikasi yang harus dibongkar modulnya (berperan sebagai daftar hitam).
 
 ::: info
-Pada perangkat dengan kernel versi 5.10 ke atas, kernel akan membongkar modul tanpa tindakan tambahan. Namun di perangkat dengan kernel di bawah 5.10, opsi ini hanya berupa konfigurasi dan SxKernelSU sendiri tidak mengambil tindakan apa pun. Jika ingin memakai opsi “Umount modules” pada kernel sebelum 5.10 Anda harus backport fungsi `path_umount` di `fs/namespace.c`. Anda bisa menemukan info lebih lanjut di bagian akhir halaman [Integrate for non-GKI devices](https://github.com/linchuanlu56-dot/SxKernelSU/guide/how-to-integrate-for-non-gki.html#how-to-backport-path_umount). Beberapa modul seperti Zygisksu juga memakai opsi ini untuk menentukan apakah modul perlu dibongkar.
+Pada perangkat dengan kernel versi 5.10 ke atas, kernel akan membongkar modul tanpa tindakan tambahan. Namun di perangkat dengan kernel di bawah 5.10, opsi ini hanya berupa konfigurasi dan SxKernelSU sendiri tidak mengambil tindakan apa pun. Jika ingin memakai opsi 鈥淯mount modules鈥?pada kernel sebelum 5.10 Anda harus backport fungsi `path_umount` di `fs/namespace.c`. Anda bisa menemukan info lebih lanjut di bagian akhir halaman [Integrate for non-GKI devices](https://sxkernelsu1.netlify.app/guide/how-to-integrate-for-non-gki.html#how-to-backport-path_umount). Beberapa modul seperti Zygisksu juga memakai opsi ini untuk menentukan apakah modul perlu dibongkar.
 :::

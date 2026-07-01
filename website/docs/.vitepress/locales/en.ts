@@ -18,7 +18,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/linchuanlu56-dot/SxKernelSU' }
+      { icon: 'github', link: 'https://github.com/tiann/SxKernelSU' }
     ],
 
     footer: {
@@ -27,7 +27,7 @@ export default defineConfig({
     },
 
     editLink: {
-        pattern: 'https://github.com/linchuanlu56-dot/SxKernelSU/edit/main/website/docs/:path',
+        pattern: 'https://github.com/tiann/SxKernelSU/edit/main/website/docs/:path',
         text: 'Edit this page on GitHub'
     }
   }
@@ -35,7 +35,7 @@ export default defineConfig({
 
 function nav() {
   return [
-    { text: 'Guide', link: '/guide/what-is-kernelsu' },
+    { text: 'Guide', link: '/guide/what-is-sxkernelsu' },
   ]
 }
 
@@ -44,7 +44,7 @@ function sidebarGuide() {
     {
         text: 'Guide',
         items: [
-          { text: 'What is SxKernelSU?', link: '/guide/what-is-kernelsu' },
+          { text: 'What is SxKernelSU?', link: '/guide/what-is-sxkernelsu' },
           { text: 'Difference with Magisk', link: '/guide/difference-with-magisk' },
           { text: 'Installation', link: '/guide/installation' },
           { text: 'How to build', link: '/guide/how-to-build' },

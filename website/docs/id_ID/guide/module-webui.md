@@ -26,19 +26,19 @@ Jika halaman Anda memiliki CSS atau JavaScript, letakkan juga di direktori ini.
 
 Jika hanya berupa halaman tampilan, ia akan berfungsi layaknya halaman web biasa. Namun yang paling penting, SxKernelSU menyediakan serangkaian API sistem sehingga modul bisa mewujudkan fungsi khususnya.
 
-SxKernelSU menyediakan pustaka JavaScript yang dirilis di [npm](https://www.npmjs.com/package/kernelsu) dan bisa dipakai pada kode JavaScript halaman Anda.
+SxKernelSU menyediakan pustaka JavaScript yang dirilis di [npm](https://www.npmjs.com/package/sxkernelsu) dan bisa dipakai pada kode JavaScript halaman Anda.
 
 Sebagai contoh, Anda bisa menjalankan perintah shell untuk memperoleh konfigurasi tertentu atau mengubah suatu properti:
 
 ```JavaScript
-import { exec } from 'kernelsu';
+import { exec } from 'sxkernelsu';
 
 const { errno, stdout } = exec("getprop ro.product.model");
 ```
 
 Anda juga dapat membuat halaman menjadi layar penuh atau menampilkan toast.
 
-[Dokumentasi API](https://www.npmjs.com/package/kernelsu)
+[Dokumentasi API](https://www.npmjs.com/package/sxkernelsu)
 
 Jika API yang ada belum memenuhi kebutuhan atau kurang nyaman digunakan, silakan beri kami masukan [di sini](https://github.com/tiann/SxKernelSU/issues)!
 

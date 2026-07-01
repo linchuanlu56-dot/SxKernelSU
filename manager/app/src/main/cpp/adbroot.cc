@@ -76,8 +76,8 @@ int execle(const char *pathname, const char *arg, ...) {
 
     // start dump envp
     std::vector<const char *> env_list;
-    bool ksurc_exists = (access("/data/adb/ksu/.ksurc", F_OK) == 0);
-    const char *ksu_env_str = "ENV=/data/adb/ksu/.ksurc";
+    bool ksurc_exists = (access("/data/adb/sks/.ksurc", F_OK) == 0);
+    const char *sksu_env_str = "ENV=/data/adb/sks/.ksurc";
 
     if (old_envp != nullptr) {
         for (size_t i = 0; old_envp[i] != nullptr; ++i) {
@@ -92,7 +92,7 @@ int execle(const char *pathname, const char *arg, ...) {
 
     if (ksurc_exists) {
         // push our ENV in here!!!
-        env_list.push_back(ksu_env_str);
+        env_list.push_back(sksu_env_str);
     }
     env_list.push_back(nullptr);
 
@@ -115,9 +115,9 @@ void Init() {
     unsetenv("LD_LIBRARY_PATH");
     std::string path = getenv("PATH") ?: "";
     if (!path.empty()) {
-        path += ":/data/adb/ksu/bin";
+        path += ":/data/adb/sks/bin";
     } else {
-        path += "/data/adb/ksu/bin";
+        path += "/data/adb/sks/bin";
     }
     setenv("PATH", path.c_str(), 1);
 }

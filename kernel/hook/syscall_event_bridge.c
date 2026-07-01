@@ -13,13 +13,13 @@
 #include "feature/sucompat.h"
 #include "hook/setuid_hook.h"
 #include "policy/app_profile.h"
-#include "runtime/ksud.h"
+#include "runtime/sksud.h"
 #include "sulog/event.h"
 #include "hook/syscall_hook.h"
 #include "hook/syscall_event_bridge.h"
 #include "feature/adb_root.h"
 
-static int ksu_handle_init_mark_tracker(const char __user **filename_user)
+static int sksu_handle_init_mark_tracker(const char __user **filename_user)
 {
     char path[64];
     unsigned long addr;
@@ -36,79 +36,79 @@ static int ksu_handle_init_mark_tracker(const char __user **filename_user)
         return 0;
 
     path[sizeof(path) - 1] = '\0';
-    if (unlikely(strcmp(path, KSUD_PATH) == 0)) {
-        pr_info("hook_manager: escape to root for init executing ksud: %d\n", current->pid);
+    if (unlikely(strcmp(path, SKSUD_PATH) == 0)) {
+        pr_info("hook_manager: escape to root for init executing sksud: %d\n", current->pid);
         escape_to_root_for_init();
     } else if (likely(strstr(path, "/app_process") == NULL && strstr(path, "/adbd") == NULL)) {
         pr_info("hook_manager: unmark %d exec %s\n", current->pid, path);
-        ksu_clear_task_tracepoint_flag_if_needed(current);
+        sksu_clear_task_tracepoint_flag_if_needed(current);
     }
 
     return 0;
 }
 
-long __nocfi ksu_hook_newfstatat(int orig_nr, const struct pt_regs *regs)
+long __nocfi sksu_hook_newfstatat(int orig_nr, const struct pt_regs *regs)
 {
-    if (!ksu_su_compat_enabled)
-        return ksu_syscall_table[orig_nr](regs);
+    if (!sksu_su_compat_enabled)
+        return sksu_syscall_table[orig_nr](regs);
 
-    return ksu_handle_stat_sucompat(orig_nr, (struct pt_regs *)regs);
+    return sksu_handle_stat_sucompat(orig_nr, (struct pt_regs *)regs);
 }
 
-long __nocfi ksu_hook_faccessat(int orig_nr, const struct pt_regs *regs)
+long __nocfi sksu_hook_faccessat(int orig_nr, const struct pt_regs *regs)
 {
-    if (!ksu_su_compat_enabled)
-        return ksu_syscall_table[orig_nr](regs);
+    if (!sksu_su_compat_enabled)
+        return sksu_syscall_table[orig_nr](regs);
 
-    return ksu_handle_faccessat_sucompat(orig_nr, (struct pt_regs *)regs);
+    return sksu_handle_faccessat_sucompat(orig_nr, (struct pt_regs *)regs);
 }
 
-DEFINE_STATIC_KEY_TRUE(ksud_execve_key);
+DEFINE_STATIC_KEY_TRUE(sksud_execve_key);
 
-void ksu_stop_ksud_execve_hook()
+void sksu_stop_sksud_execve_hook()
 {
-    static_branch_disable(&ksud_execve_key);
+    static_branch_disable(&sksud_execve_key);
 }
 
-long __nocfi ksu_hook_execve(int orig_nr, const struct pt_regs *regs)
+long __nocfi sksu_hook_execve(int orig_nr, const struct pt_regs *regs)
 {
     const char __user **filename_user = (const char __user **)&PT_REGS_PARM1(regs);
     const char __user *const __user *argv_user = (const char __user *const __user *)PT_REGS_PARM2(regs);
     bool current_is_init = is_init(current_cred());
-    struct ksu_sulog_pending_event *pending_root_execve = NULL;
+    struct sksu_sulog_pending_event *pending_root_execve = NULL;
     long ret;
 
-    if (static_branch_unlikely(&ksud_execve_key))
-        ksu_execve_hook_ksud(regs);
+    if (static_branch_unlikely(&sksud_execve_key))
+        sksu_execve_hook_sksud(regs);
 
     if (current_euid().val == 0)
-        pending_root_execve = ksu_sulog_capture_root_execve(*filename_user, argv_user, GFP_KERNEL);
+        pending_root_execve = sksu_sulog_capture_root_execve(*filename_user, argv_user, GFP_KERNEL);
 
     if (current->pid != 1 && current_is_init) {
-        ksu_handle_init_mark_tracker(filename_user);
-        ret = ksu_adb_root_handle_execve((struct pt_regs *)regs);
+        sksu_handle_init_mark_tracker(filename_user);
+        ret = sksu_adb_root_handle_execve((struct pt_regs *)regs);
         if (ret) {
             pr_err("adb root failed: %ld\n", ret);
         }
-    } else if (ksu_su_compat_enabled) {
-        ret = ksu_handle_execve_sucompat(filename_user, orig_nr, (struct pt_regs *)regs);
-        ksu_sulog_emit_pending(pending_root_execve, ret, GFP_KERNEL);
+    } else if (sksu_su_compat_enabled) {
+        ret = sksu_handle_execve_sucompat(filename_user, orig_nr, (struct pt_regs *)regs);
+        sksu_sulog_emit_pending(pending_root_execve, ret, GFP_KERNEL);
         return ret;
     }
 
-    ret = ksu_syscall_table[orig_nr](regs);
-    ksu_sulog_emit_pending(pending_root_execve, ret, GFP_KERNEL);
+    ret = sksu_syscall_table[orig_nr](regs);
+    sksu_sulog_emit_pending(pending_root_execve, ret, GFP_KERNEL);
     return ret;
 }
 
-long __nocfi ksu_hook_setresuid(int orig_nr, const struct pt_regs *regs)
+long __nocfi sksu_hook_setresuid(int orig_nr, const struct pt_regs *regs)
 {
     uid_t old_uid = current_uid().val;
-    long ret = ksu_syscall_table[orig_nr](regs);
+    long ret = sksu_syscall_table[orig_nr](regs);
 
     if (ret < 0)
         return ret;
 
-    ksu_handle_setresuid(old_uid, current_uid().val);
+    sksu_handle_setresuid(old_uid, current_uid().val);
     return ret;
 }

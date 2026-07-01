@@ -44,8 +44,8 @@
     {
         "maintainer": "th1nhhdk",
         "maintainer_link": "https://github.com/th1nhhdk",
-        "kernel_name": "android_kernel_sony_sm8250-kernelsu",
-        "kernel_link": "https://github.com/th1nhhdk/android_kernel_sony_sm8250-kernelsu",
+        "kernel_name": "android_kernel_sony_sm8250-sxkernelsu",
+        "kernel_link": "https://github.com/th1nhhdk/android_kernel_sony_sm8250-sxkernelsu",
         "devices": "Sony Xperia 1 II | Sony Xperia 5 II"
     },
     {
@@ -233,8 +233,8 @@
     {
         "maintainer": "easterNday",
         "maintainer_link": "https://github.com/DogDayAndroid",
-        "kernel_name": "KSU_Thyme_BuildBot",
-        "kernel_link": "https://github.com/DogDayAndroid/KSU_Thyme_BuildBot",
+        "kernel_name": "SKS_Thyme_BuildBot",
+        "kernel_link": "https://github.com/DogDayAndroid/SKS_Thyme_BuildBot",
         "devices": "Xiaomi 10S"
     },
     {
@@ -318,7 +318,7 @@
         "maintainer": "Nipin NA (Joker-V2)",
         "maintainer_link": "https://github.com/Joker-V2",
         "kernel_name": "Xcalibur kernel (violet)",
-        "kernel_link": "https://github.com/Joker-V2/kernel_xiaomi_violet/tree/kernelsu",
+        "kernel_link": "https://github.com/Joker-V2/kernel_xiaomi_violet/tree/sxkernelsu",
         "devices": "Xiaomi Redmi Note 7 Pro (violet)"
     },
     {
@@ -353,7 +353,7 @@
         "maintainer": "likkai",
         "maintainer_link": "https://github.com/likkai",
         "kernel_name": "Quicksilver Kernel",
-        "kernel_link": "https://github.com/likkai/ksu_kernel_xiaomi_lisa",
+        "kernel_link": "https://github.com/likkai/sksu_kernel_xiaomi_lisa",
         "devices": "Xiaomi 11 Lite 5G NE (lisa)"
     },
     {
@@ -576,13 +576,13 @@
     {
         "maintainer": "iceBear67",
         "maintainer_link": "https://github.com/iceBear67",
-        "kernel_name": "android_kernel_exynos9810_kernelsu",
-        "kernel_link": "https://github.com/iceBear67/android_kernel_exynos9810_kernelsu",
+        "kernel_name": "android_kernel_exynos9810_sxkernelsu",
+        "kernel_link": "https://github.com/iceBear67/android_kernel_exynos9810_sxkernelsu",
         "devices": "Galaxy Note 9(N960N/F)"
     },
     {
         "maintainer": "BlackMesa123",
-        "maintainer_link": "https://xdaforums.com/t/kernel-a546b-e-kernelsu-v0-7-5-for-galaxy-a54-5g.4607539/",
+        "maintainer_link": "https://xdaforums.com/t/kernel-a546b-e-sxkernelsu-v0-7-5-for-galaxy-a54-5g.4607539/",
         "kernel_name": "android_kernel_samsung_s5e8835",
         "kernel_link": "https://github.com/BlackMesa123/android_kernel_samsung_s5e8835",
         "devices": "Samsung Galaxy A54 5G (a54x)"

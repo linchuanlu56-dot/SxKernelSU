@@ -18,7 +18,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/linchuanlu56-dot/SxKernelSU' }
+      { icon: 'github', link: 'https://github.com/tiann/SxKernelSU' }
     ],
 
     footer: {
@@ -27,7 +27,7 @@ export default defineConfig({
     },
 
     editLink: {
-        pattern: 'https://github.com/linchuanlu56-dot/SxKernelSU/edit/main/website/docs/:path',
+        pattern: 'https://github.com/tiann/SxKernelSU/edit/main/website/docs/:path',
         text: 'Edit Halaman ini di GitHub'
     }
   }
@@ -35,7 +35,7 @@ export default defineConfig({
 
 function nav() {
   return [
-    { text: 'Petunjuk', link: '/id_ID/guide/what-is-kernelsu' },
+    { text: 'Petunjuk', link: '/id_ID/guide/what-is-sxkernelsu' },
   ]
 }
 
@@ -44,7 +44,7 @@ function sidebarGuide() {
     {
         text: 'Petunjuk',
         items: [
-          { text: 'Apa itu SxKernelSU?', link: '/id_ID/guide/what-is-kernelsu' },
+          { text: 'Apa itu SxKernelSU?', link: '/id_ID/guide/what-is-sxkernelsu' },
           { text: 'Instalasi', link: '/id_ID/guide/installation' },
           { text: 'Bagaimana cara buildnya?', link: '/id_ID/guide/how-to-build' },
           { text: 'Integrasi untuk perangkat non-GKI', link: '/id_ID/guide/how-to-integrate-for-non-gki'},

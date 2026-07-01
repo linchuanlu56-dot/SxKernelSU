@@ -22,5 +22,5 @@
 - Модули SxKernelSU не могут быть установлены в режиме Recovery.
 - Модули SxKernelSU не имеют встроенной поддержки Zygisk (но вы можете использовать модули Zygisk через [ZygiskNext](https://github.com/Dr-TSNG/ZygiskNext).
 - Метод замены или удаления файлов в модулях SxKernelSU полностью отличается от Magisk. SxKernelSU не поддерживает метод `.replace`. Вместо этого необходимо создать одноименный файл с помощью команды `mknod filename c 0 0` для удаления соответствующего файла.
-- Каталоги для BusyBox отличаются. Встроенный BusyBox в SxKernelSU находится в каталоге `/data/adb/ksu/bin/busybox`, а в Magisk - в каталоге `/data/adb/magisk/busybox`. **Обратите внимание, что это внутреннее поведение SxKernelSU и в будущем оно может измениться!**
+- Каталоги для BusyBox отличаются. Встроенный BusyBox в SxKernelSU находится в каталоге `/data/adb/sks/bin/busybox`, а в Magisk - в каталоге `/data/adb/magisk/busybox`. **Обратите внимание, что это внутреннее поведение SxKernelSU и в будущем оно может измениться!**
 - SxKernelSU не поддерживает файлы `.replace`; однако SxKernelSU поддерживает переменные `REMOVE` и `REPLACE` для удаления или замены файлов и папок.

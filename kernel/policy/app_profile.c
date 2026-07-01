@@ -24,7 +24,7 @@ static struct group_info root_groups = { .usage = ATOMIC_INIT(2) };
 
 void setup_groups(struct root_profile *profile, struct cred *cred)
 {
-    if (profile->groups_count > KSU_MAX_GROUPS) {
+    if (profile->groups_count > SKS_MAX_GROUPS) {
         pr_warn("Failed to setgroups, too large group: %d!\n", profile->uid);
         return;
     }
@@ -122,12 +122,12 @@ int escape_with_root_profile(void)
         goto out_abort_creds;
     }
 
-    if (test_thread_flag(TIF_KSU_DISABLE_ESCAPE_WITH_ROOT)) {
-        pr_warn("TIF_KSU_DISABLE_ESCAPE_WITH_ROOT found, don't escape!\n");
+    if (test_thread_flag(TIF_SKS_DISABLE_ESCAPE_WITH_ROOT)) {
+        pr_warn("TIF_SKS_DISABLE_ESCAPE_WITH_ROOT found, don't escape!\n");
         goto out_abort_creds;
     }
 
-    profile = ksu_get_root_profile(cred->uid.val);
+    profile = sksu_get_root_profile(cred->uid.val);
 
     cred->uid.val = profile->uid;
     cred->suid.val = profile->uid;
@@ -182,21 +182,21 @@ int escape_with_root_profile(void)
 
     disable_seccomp();
 
-    if (profile->flags & FLAG_KSU_NO_NEW_PRIVS) {
-        set_thread_flag(TIF_KSU_DISABLE_ESCAPE_WITH_ROOT);
+    if (profile->flags & FLAG_SKS_NO_NEW_PRIVS) {
+        set_thread_flag(TIF_SKS_DISABLE_ESCAPE_WITH_ROOT);
     }
 
     for_each_thread (p, t) {
-        ksu_set_task_tracepoint_flag(t);
+        sksu_set_task_tracepoint_flag(t);
     }
 
     setup_mount_ns(profile->namespaces);
-    ksu_put_root_profile(profile);
+    sksu_put_root_profile(profile);
     return 0;
 
 out_abort_creds:
     if (profile)
-        ksu_put_root_profile(profile);
+        sksu_put_root_profile(profile);
     abort_creds(cred);
     return ret;
 }
@@ -209,6 +209,6 @@ void escape_to_root_for_init(void)
         return;
     }
 
-    setup_selinux(KERNEL_SU_CONTEXT, cred);
+    setup_selinux(SXKERNEL_SU_CONTEXT, cred);
     commit_creds(cred);
 }

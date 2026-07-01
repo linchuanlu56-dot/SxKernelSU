@@ -22,5 +22,5 @@ Berikut beberapa perbedaannya:
 - Modul SxKernelSU tidak dapat diinstal dalam mode Pemulihan.
 - Modul SxKernelSU tidak memiliki dukungan bawaan untuk Zygisk (tetapi Anda dapat menggunakan modul Zygisk melalui [ZygiskNext](https://github.com/Dr-TSNG/ZygiskNext).
 - Metode untuk mengganti atau menghapus file dalam modul SxKernelSU sama sekali berbeda dari Magisk. SxKernelSU tidak mendukung metode `.replace`. Sebagai gantinya, Anda perlu membuat file dengan nama yang sama dengan `mknod filename c 0 0` untuk menghapus file terkait.
-- Direktori untuk BusyBox berbeda. BusyBox bawaan di SxKernelSU terletak di `/data/adb/ksu/bin/busybox`, sedangkan di Magisk terletak di `/data/adb/magisk/busybox`. **Perhatikan bahwa ini adalah perilaku internal SxKernelSU dan dapat berubah di masa mendatang!**
+- Direktori untuk BusyBox berbeda. BusyBox bawaan di SxKernelSU terletak di `/data/adb/sks/bin/busybox`, sedangkan di Magisk terletak di `/data/adb/magisk/busybox`. **Perhatikan bahwa ini adalah perilaku internal SxKernelSU dan dapat berubah di masa mendatang!**
 - SxKernelSU tidak mendukung file `.replace`; namun, SxKernelSU mendukung variabel `REMOVE` dan `REPLACE` untuk menghapus atau mengganti file dan folder.

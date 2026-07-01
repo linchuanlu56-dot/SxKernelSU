@@ -1,9 +1,9 @@
-# Library for KernelSU's module WebUI
+# Library for SxKernelSU's module WebUI
 
 ## Install
 
 ```sh
-yarn add kernelsu
+yarn add sxkernelsu
 ```
 
 ## API
@@ -18,7 +18,7 @@ Spawns a **root** shell and runs a command within that shell, returning a Promis
   - `env` - Environment key-value pairs.
 
 ```javascript
-import { exec } from 'kernelsu';
+import { exec } from 'sxkernelsu';
 
 const { errno, stdout, stderr } = await exec('ls -l', { cwd: '/tmp' });
 if (errno === 0) {
@@ -42,7 +42,7 @@ Returns a `ChildProcess` instance. Instances of `ChildProcess` represent spawned
 Example of running `ls -lh /data`, capturing `stdout`, `stderr`, and the exit code:
 
 ```javascript
-import { spawn } from 'kernelsu';
+import { spawn } from 'sxkernelsu';
 
 const ls = spawn('ls', ['-lh', '/data']);
 
@@ -97,7 +97,7 @@ A `Readable Stream` that represents the child process's `stderr`.
 Request the WebView enter/exit full screen.
 
 ```javascript
-import { fullScreen } from 'kernelsu';
+import { fullScreen } from 'sxkernelsu';
 fullScreen(true);
 ```
 
@@ -107,11 +107,11 @@ Request the WebView to set padding to 0 or safeDrawing insets
 
 - tips: this is disabled by default but if you request resource from `internal/insets.css`, this will be enabled automatically.
 - To get insets value and enable this automatically, you can
-  - add `@import "https://mui.kernelsu.org/internal/insets.css";` in css OR
+  - add `@import "https://mui.sxkernelsu.org/internal/insets.css";` in css OR
   - add `<link rel="stylesheet" type="text/css" href="/internal/insets.css" />` in html.
 
 ```javascript
-import { enableEdgeToEdge } from 'kernelsu';
+import { enableEdgeToEdge } from 'sxkernelsu';
 enableEdgeToEdge(true);
 ```
 
@@ -120,7 +120,7 @@ enableEdgeToEdge(true);
 Show a toast message.
 
 ```javascript
-import { toast } from 'kernelsu';
+import { toast } from 'sxkernelsu';
 toast('Hello, world!');
 ```
 
@@ -129,7 +129,7 @@ toast('Hello, world!');
 Get module info.
 
 ```javascript
-import { moduleInfo } from 'kernelsu';
+import { moduleInfo } from 'sxkernelsu';
 // print moduleId in console
 console.log(moduleInfo());
 ```
@@ -143,7 +143,7 @@ Returns an array of package names.
 - `type` `<string>` The type of packages to list: "user", "system", or "all".
 
 ```javascript
-import { listPackages } from 'kernelsu';
+import { listPackages } from 'sxkernelsu';
 // list user packages
 const packages = listPackages("user");
 ```
@@ -163,7 +163,7 @@ Returns an array of `PackagesInfo` objects.
 - `packages` `<string[]>` The list of package names.
 
 ```javascript
-import { getPackagesInfo } from 'kernelsu';
+import { getPackagesInfo } from 'sxkernelsu';
 const packages = getPackagesInfo(['com.android.settings', 'com.android.shell']);
 ```
 
@@ -183,6 +183,6 @@ An object contains:
 Exit the current WebUI activity.
 
 ```javascript
-import { exit } from 'kernelsu';
+import { exit } from 'sxkernelsu';
 exit();
 ```

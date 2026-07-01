@@ -26,10 +26,10 @@
     <string name="reboot">Riavvia</string>
     <string name="settings">Impostazioni</string>
     <string name="reboot_userspace">Riavvio rapido</string>
-    <string name="reboot_recovery">Riavvia in modalità Recovery</string>
-    <string name="reboot_bootloader">Riavvia in modalità Bootloader</string>
-    <string name="reboot_download">Riavvia in modalità Download</string>
-    <string name="reboot_edl">Riavvia in modalità EDL</string>
+    <string name="reboot_recovery">Riavvia in modalit脿 Recovery</string>
+    <string name="reboot_bootloader">Riavvia in modalit脿 Bootloader</string>
+    <string name="reboot_download">Riavvia in modalit脿 Download</string>
+    <string name="reboot_edl">Riavvia in modalit脿 EDL</string>
     <string name="about">Informazioni</string>
     <string name="module_uninstall_confirm">Sei sicuro di voler disinstallare il modulo %s?</string>
     <string name="module_uninstall_success">%s disinstallato</string>
@@ -38,14 +38,14 @@
     <string name="module_author">Autore</string>
     <string name="show_system_apps">Mostra app di sistema</string>
     <string name="send_log">Invia log</string>
-    <string name="safe_mode">Modalità provvisoria</string>
+    <string name="safe_mode">Modalit脿 provvisoria</string>
     <string name="reboot_to_apply">Riavvia per applicare la modifica</string>
-    <string name="module_magisk_conflict">I moduli sono disabilitati perché in conflitto con Magisk!</string>
-    <string name="home_learn_kernelsu">Scopri SxKernelSU</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
-    <string name="home_click_to_learn_kernelsu">Scopri come installare SxKernelSU e utilizzare i moduli</string>
+    <string name="module_magisk_conflict">I moduli sono disabilitati perch茅 in conflitto con Magisk!</string>
+    <string name="home_learn_sxkernelsu">Scopri SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Scopri come installare SxKernelSU e utilizzare i moduli</string>
     <string name="home_support_title">Supportaci</string>
-    <string name="home_support_content">SxKernelSU è, e sempre sarà, gratuito e open source. Puoi comunque mostrarci il tuo apprezzamento facendo una donazione.</string>
+    <string name="home_support_content">SxKernelSU 猫, e sempre sar脿, gratuito e open source. Puoi comunque mostrarci il tuo apprezzamento facendo una donazione.</string>
     <string name="about_source_code"><![CDATA[Visualizza il codice sorgente su %1$s<br/>Unisciti al nostro canale %2$s]]></string>
     <string name="profile_name">Nome profilo</string>
     <string name="profile_namespace">Spazio dei nomi del mount</string>
@@ -61,7 +61,7 @@
     <string name="failed_to_update_app_profile">Aggiornamento App Profile per %s fallito</string>
     <string name="module_update">Aggiorna</string>
     <string name="launch_app">Apri</string>
-    <string name="profile_capabilities">Capacità</string>
+    <string name="profile_capabilities">Capacit脿</string>
     <string name="settings_umount_modules_default">Scollega moduli da default</string>
     <string name="profile_selinux_rules">Regole</string>
     <string name="module_downloading">Sto scaricando il modulo: %s</string>
@@ -72,8 +72,8 @@
     <string name="failed_to_update_sepolicy">Aggiornamento regole SELinux per %s fallito</string>
     <string name="profile_umount_modules_summary">Attivando questa opzione permetterai a SxKernelSU di ripristinare ogni file modificato dai moduli per questa app.</string>
     <string name="profile_selinux_domain">Dominio</string>
-    <string name="settings_umount_modules_default_summary">Il valore predefinito per \"Scollega moduli\" in App Profile. Se attivato, rimuoverà tutte le modifiche al sistema da parte dei moduli per le applicazioni che non hanno un profilo impostato.</string>
-    <string name="require_kernel_version">La versione attualmente installata di SxKernelSU (%1$d) è troppo vecchia ed il gestore non può funzionare correttamente. Si prega di aggiornare alla versione %2$d o successiva!</string>
+    <string name="settings_umount_modules_default_summary">Il valore predefinito per \"Scollega moduli\" in App Profile. Se attivato, rimuover脿 tutte le modifiche al sistema da parte dei moduli per le applicazioni che non hanno un profilo impostato.</string>
+    <string name="require_kernel_version">La versione attualmente installata di SxKernelSU (%1$d) 猫 troppo vecchia ed il gestore non pu貌 funzionare correttamente. Si prega di aggiornare alla versione %2$d o successiva!</string>
     <string name="module_changelog">Registro aggiornamenti</string>
     <string name="app_profile_template_create">Crea modello</string>
     <string name="app_profile_template_edit">Modifica modello</string>
@@ -81,7 +81,7 @@
     <string name="app_profile_template_id_invalid">Identificativo modello non valido</string>
     <string name="app_profile_template_name">Nome</string>
     <string name="app_profile_template_view">Visualizza modello</string>
-    <string name="app_profile_template_id_exist">L\'identificatore del modello è già in uso!</string>
+    <string name="app_profile_template_id_exist">L\'identificatore del modello 猫 gi脿 in uso!</string>
     <string name="app_profile_import_export">Importa/Esporta</string>
     <string name="app_profile_import_from_clipboard">Importa dagli appunti</string>
     <string name="app_profile_export_to_clipboard">Esporta negli appunti</string>
@@ -97,17 +97,17 @@
     <string name="app_profile_template_save_failed">Impossibile salvare il modello</string>
     <string name="open">Apri</string>
     <string name="settings_check_update">Controlla aggiornamenti</string>
-    <string name="settings_check_update_summary">Controlla automaticamente la disponibilità di aggiornamenti all\'apertura dell\'applicazione</string>
+    <string name="settings_check_update_summary">Controlla automaticamente la disponibilit脿 di aggiornamenti all\'apertura dell\'applicazione</string>
     <string name="enable_web_debugging">Abilita il debug di WebView</string>
-    <string name="enable_web_debugging_summary">Può essere usato per svolgere il debug di WebUI, è consigliato attivarlo solo quando necessario.</string>
-    <string name="select_file_tip">È consigliato usare immagine della partizione %1$s</string>
+    <string name="enable_web_debugging_summary">Pu貌 essere usato per svolgere il debug di WebUI, 猫 consigliato attivarlo solo quando necessario.</string>
+    <string name="select_file_tip">脠 consigliato usare immagine della partizione %1$s</string>
     <string name="select_kmi">Scegli il KMI</string>
     <string name="install_next">Avanti</string>
     <string name="direct_install">Installazione diretta (Raccomandata)</string>
     <string name="select_file">Scegli un file</string>
     <string name="install_inactive_slot">Installa nello slot inattivo (dopo OTA)</string>
-    <string name="install_inactive_slot_warning">Il tuo dispositivo sarà **FORZATO** ad avviarsi nello slot inattivo dopo il riavvio!
-\nUsa questa opzione solo quando l\'applicazione dell\'aggiornamento OTA è terminata.
+    <string name="install_inactive_slot_warning">Il tuo dispositivo sar脿 **FORZATO** ad avviarsi nello slot inattivo dopo il riavvio!
+\nUsa questa opzione solo quando l\'applicazione dell\'aggiornamento OTA 猫 terminata.
 \nProcedere?</string>
     <string name="settings_uninstall">Disinstalla</string>
     <string name="settings_uninstall_temporary">Disinstalla temporaneamente</string>
@@ -119,7 +119,7 @@
     <string name="flash_success">Installazione completata</string>
     <string name="flash_failed">Installazione fallita</string>
     <string name="selected_lkm">LKM selezionato: %s</string>
-    <string name="settings_restore_stock_image_message">Ripristina l\'immagine di fabbrica del produttore (se il backup è presente), solitamente usato prima di applicare l\'OTA; se devi disinstallare SxKernelSU, utilizza invece \"Disinstalla permanentemente\".</string>
+    <string name="settings_restore_stock_image_message">Ripristina l\'immagine di fabbrica del produttore (se il backup 猫 presente), solitamente usato prima di applicare l\'OTA; se devi disinstallare SxKernelSU, utilizza invece \"Disinstalla permanentemente\".</string>
     <string name="save_log">Salva Registri</string>
     <string name="settings_sucompat">Reindirizza binario su</string>
     <string name="settings_sucompat_summary">Consente alle app con autorizzazione Superuser nel profilo app di ottenere una shell superuser eseguendo /system/bin/su; efficace solo per i nuovi processi.</string>

@@ -27,7 +27,7 @@ Secara default, Anda akan menggunakan alat ADB dan fastboot dalam tutorial ini, 
 
 ### KMI
 
-Kernel Module Interface (KMI), versi kernel dengan KMI yang sama **kompatibel**, inilah yang dimaksud dengan "general" dalam GKI; sebaliknya, jika KMI berbeda, maka kernel ini tidak kompatibel satu sama lain, dan mem-flash image kernel dengan KMI yang berbeda dari perangkat Anda dapat menyebabkan bootloop.
+Kernel Module Interface (KMI), versi kernel dengan KMI yang sama **kompatibel**, inilah yang dimasksud dengan "general" dalam GKI; sebaliknya, jika KMI berbeda, maka kernel ini tidak kompatibel satu sama lain, dan mem-flash image kernel dengan KMI yang berbeda dari perangkat Anda dapat menyebabkan bootloop.
 
 Secara khusus, untuk perangkat GKI, format versi kernel harus sebagai berikut:
 
@@ -110,17 +110,17 @@ Buka manajer, klik ikon instalasi di sudut kanan atas, dan beberapa opsi akan mu
 
 ### Gunakan baris perintah
 
-Jika Anda tidak ingin menggunakan manajer, Anda juga dapat menggunakan baris perintah untuk menginstal LKM. Alat `ksud` yang disediakan oleh SxKernelSU dapat membantu Anda mem-patch firmware resmi dengan cepat lalu mem-flash-nya.
+Jika Anda tidak ingin menggunakan manajer, Anda juga dapat menggunakan baris perintah untuk menginstal LKM. Alat `sksud` yang disediakan oleh SxKernelSU dapat membantu Anda mem-patch firmware resmi dengan cepat lalu mem-flash-nya.
 
 Alat ini mendukung macOS, Linux, dan Windows. Anda dapat mengunduh versi yang sesuai dari [GitHub Release](https://github.com/tiann/SxKernelSU/releases).
 
-Penggunaan: `ksud boot-patch` Anda dapat memeriksa bantuan baris perintah untuk opsi spesifik.
+Penggunaan: `sksud boot-patch` Anda dapat memeriksa bantuan baris perintah untuk opsi spesifik.
 
 ```sh
-oriole:/ # ksud boot-patch -h
+oriole:/ # sksud boot-patch -h
 Patch boot or init_boot images to apply SxKernelSU
 
-Usage: ksud boot-patch [OPTIONS]
+Usage: sksud boot-patch [OPTIONS]
 
 Options:
   -b, --boot <BOOT>              Boot image path. If not specified, it will try to find the boot image automatically
@@ -137,13 +137,13 @@ Options:
 
 Beberapa opsi yang perlu dijelaskan:
 
-1. Opsi `--magiskboot` dapat menentukan path magiskboot. Jika tidak ditentukan, ksud akan mencarinya di variabel lingkungan. Jika Anda tidak tahu cara mendapatkan magiskboot, Anda dapat memeriksa [di sini](#patch-boot-image).
+1. Opsi `--magiskboot` dapat menentukan path magiskboot. Jika tidak ditentukan, sksud akan mencarinya di variabel lingkungan. Jika Anda tidak tahu cara mendapatkan magiskboot, Anda dapat memeriksa [di sini](#patch-boot-image).
 2. Opsi `--kmi` dapat menentukan versi `KMI`. Jika nama kernel perangkat Anda tidak mengikuti spesifikasi KMI, Anda dapat menentukannya menggunakan opsi ini.
 
 Penggunaan paling umum adalah:
 
 ```sh
-ksud boot-patch -b <boot.img> --kmi android13-5.10
+sksud boot-patch -b <boot.img> --kmi android13-5.10
 ```
 
 ## Instalasi mode GKI

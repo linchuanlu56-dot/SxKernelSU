@@ -155,7 +155,7 @@ androidComponents {
 
 base {
     archivesName.set(
-        "KernelSU_${managerVersionName}_${managerVersionCode}"
+        "SxKernelSU_${managerVersionName}_${managerVersionCode}"
     )
 }
 

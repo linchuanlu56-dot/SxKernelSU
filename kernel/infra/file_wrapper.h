@@ -1,10 +1,10 @@
-#ifndef KSU_FILE_WRAPPER_H
-#define KSU_FILE_WRAPPER_H
+#ifndef SKS_FILE_WRAPPER_H
+#define SKS_FILE_WRAPPER_H
 
 #include <linux/file.h>
 #include <linux/fs.h>
 
-int ksu_install_file_wrapper(int fd);
-void ksu_file_wrapper_init(void);
+int sksu_install_file_wrapper(int fd);
+void sksu_file_wrapper_init(void);
 
-#endif // KSU_FILE_WRAPPER_H
+#endif // SKS_FILE_WRAPPER_H

@@ -1,60 +1,45 @@
-[English](README.md) | [Español](README_ES.md) | [简体中文](README_CN.md) | **繁體中文** | [日本語](README_JP.md) | [한국어](README_KR.md) | [Polski](README_PL.md) | [Português (Brasil)](README_PT-BR.md) | [Türkçe](README_TR.md) | [Русский](README_RU.md) | [Tiếng Việt](README_VI.md) | [Indonesia](README_ID.md) | [עברית](README_IW.md) | [हिंदी](README_IN.md) | [Italiano](README_IT.md)
+﻿[English](README.md) | [Espa帽ol](README_ES.md) | [绠€浣撲腑鏂嘳(README_CN.md) | **绻侀珨涓枃** | [鏃ユ湰瑾瀅(README_JP.md) | [頃滉淡鞏碷(README_KR.md) | [Polski](README_PL.md) | [Portugu锚s (Brasil)](README_PT-BR.md) | [T眉rk莽e](README_TR.md) | [袪褍褋褋泻懈泄](README_RU.md) | [Ti岷縩g Vi峄噒](README_VI.md) | [Indonesia](README_ID.md) | [注讘专讬转](README_IW.md) | [啶灌た啶傕う啷€](README_IN.md) | [Italiano](README_IT.md)
 
 # SxKernelSU
 
-<img src="icon.jpg" style="width: 96px;" alt="標誌">
+<img src="https://sxkernelsu1.netlify.app/logo.png" style="width: 96px;" alt="妯欒獙">
 
-一套基於 Android 裝置核心的 Root 解決方案。
+涓€濂楀熀鏂?Android 瑁濈疆鏍稿績鐨?Root 瑙ｆ焙鏂规銆?
+[![鏈€鏂扮増鏈琞(https://img.shields.io/github/v/release/tiann/SxKernelSU?label=%e7%99%bc%e8%a1%8c%e7%89%88%e6%9c%ac&logo=github)](https://github.com/tiann/SxKernelSU/releases/latest)
+[![Weblate](https://img.shields.io/badge/%e6%9c%ac%e5%9c%9f%e5%8c%96%e7%bf%bb%e8%ad%af-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/sxkernelsu)
+[![闋婚亾](https://img.shields.io/badge/%e8%bf%bd%e8%b9%a4-Telegram-blue.svg?logo=telegram)](https://t.me/SxKernelSU)
+[![鎺堟瑠姊濇锛氥€奊PL v2銆媇(https://img.shields.io/badge/%e6%8e%88%e6%ac%8a%e6%a2%9d%e6%ac%be-%E3%80%8AGPL%20v2%E3%80%8B-orange.svg?logo=gnu)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![GitHub 鎺堟瑠姊濇](https://img.shields.io/github/license/tiann/SxKernelSU?logo=gnu)](/LICENSE)
 
-[![最新版本](https://img.shields.io/github/v/release/linchuanlu56-dot/SxKernelSU?label=%e7%99%bc%e8%a1%8c%e7%89%88%e6%9c%ac&logo=github)](https://github.com/linchuanlu56-dot/SxKernelSU/releases/latest)
-[![Weblate](https://img.shields.io/badge/%e6%9c%ac%e5%9c%9f%e5%8c%96%e7%bf%bb%e8%ad%af-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/kernelsu)
-[![頻道](https://img.shields.io/badge/%e8%bf%bd%e8%b9%a4-Telegram-blue.svg?logo=telegram)](https://t.me/SxKernelSU)
-[![授權條款：《GPL v2》](https://img.shields.io/badge/%e6%8e%88%e6%ac%8a%e6%a2%9d%e6%ac%be-%E3%80%8AGPL%20v2%E3%80%8B-orange.svg?logo=gnu)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub 授權條款](https://img.shields.io/github/license/linchuanlu56-dot/SxKernelSU?logo=gnu)](/LICENSE)
+## 鐗硅壊鍔熻兘
 
-## 特色功能
+1. 浠ユ牳蹇冨収 `su` 绠＄悊 Root 瀛樺彇銆?2. 浠?[metamodules](https://sxkernelsu1.netlify.app/zh_TW/guide/metamodule.html) 閬嬩綔妯＄祫绯荤当锛氬彲鎻掓嫈鐨勭劇绯荤当淇敼鍩虹鏋舵銆?3. [App Profile](https://sxkernelsu1.netlify.app/zh_TW/guide/app-profile.html)锛氫娇 Root 鎺屾彙鐨勭敓娈哄ぇ娆婂彈鍒舵柤姝ゃ€?
+## 鐩稿浜嬫厠
 
-1. 以核心內 `su` 管理 Root 存取。
-2. 以 [metamodules](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/guide/metamodule.html) 運作模組系統：可插拔的無系統修改基礎架構。
-3. [App Profile](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/guide/app-profile.html)：使 Root 掌握的生殺大權受制於此。
-
-## 相容事態
-
-理論上採以 Android GKI 2.0 的裝置（核心版本 5.10+），皆受 SxKernelSU 支援；採以老舊核心版本（4.14+）的裝置在手動建置核心後，亦受支援。
-
-另可在 WSA、ChromeOS 一類的容器式 Android 中運作。
-
-目前支援 `arm64-v8a` 和 `x86_64` 架構。
-
+鐞嗚珫涓婃帯浠?Android GKI 2.0 鐨勮缃紙鏍稿績鐗堟湰 5.10+锛夛紝鐨嗗彈 SxKernelSU 鏀彺锛涙帯浠ヨ€佽垔鏍稿績鐗堟湰锛?.14+锛夌殑瑁濈疆鍦ㄦ墜鍕曞缓缃牳蹇冨緦锛屼害鍙楁敮鎻淬€?
+鍙﹀彲鍦?WSA銆丆hromeOS 涓€椤炵殑瀹瑰櫒寮?Android 涓亱浣溿€?
+鐩墠鏀彺 `arm64-v8a` 鍜?`x86_64` 鏋舵銆?
 > [!CAUTION]
-> 最近的核心版本引入了一項破壞性更改，導致 SxKernelSU 在 `x86_64` 上執行失敗，甚至可能引發核心恐慌 (kernel panic)！請查看網站獲取更多資訊！
+> 鏈€杩戠殑鏍稿績鐗堟湰寮曞叆浜嗕竴闋呯牬澹炴€ф洿鏀癸紝灏庤嚧 SxKernelSU 鍦?`x86_64` 涓婂煼琛屽け鏁楋紝鐢氳嚦鍙兘寮曠櫦鏍稿績鎭愭厡 (kernel panic)锛佽珛鏌ョ湅缍茬珯鐛插彇鏇村璩囪▕锛?
+## 浣跨敤鎵嬪唺
 
-## 使用手冊
+- [瀹夎鏁欏](https://sxkernelsu1.netlify.app/zh_TW/guide/installation.html)
+- [濡備綍寤虹疆 SxKernelSU锛焆(https://sxkernelsu1.netlify.app/zh_TW/guide/how-to-build.html)
+- [瀹樻柟缍茬珯](https://sxkernelsu1.netlify.app/zh_TW/)
 
-- [安裝教學](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/guide/installation.html)
-- [如何建置 SxKernelSU？](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/guide/how-to-build.html)
-- [官方網站](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/)
+## 澶氳獮缈昏
 
-## 多語翻譯
+娆茶鍗斿姪 SxKernelSU 閭佸悜澶氳獮鍖栵紝鎶戞垨鏀归€茬炕璀搧璩紝璜嬪墠寰€ [Weblate](https://hosted.weblate.org/engage/sxkernelsu/) 閫茶缈昏銆傜偤閬垮厤鑸?Weblate 涓婄殑缈昏鐧肩敓琛濈獊锛岀従宸蹭笉鍐嶅彈鐞嗙炕璀浉闂滅殑绠＄悊宸ュ叿 PR銆?
+## 缍滃悎瑷庤珫
 
-欲要協助 SxKernelSU 邁向多語化，抑或改進翻譯品質，請前往 [Weblate](https://hosted.weblate.org/engage/kernelsu/) 進行翻譯。為避免與 Weblate 上的翻譯發生衝突，現已不再受理翻譯相關的管理工具 PR。
+- Telegram锛歔@SxKernelSU](https://t.me/SxKernelSU)
 
-## 綜合討論
+## 瀹夊叏鏀跨瓥
 
-- Telegram：[@SxKernelSU](https://t.me/SxKernelSU)
+娆茶寰楃煡銆佸洖鍫?SxKernelSU 鐨勫畨鍏ㄦ€ф紡娲烇紝璜嬪弮闁?[SECURITY.md](/SECURITY.md)銆?
+## 鎺堟瑠姊濇
 
-## 安全政策
+- 浣嶆柤 `kernel` 璩囨枡澶剧殑妾旀浠銆奊PL-2.0-only銆媇(https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)瑕忕瘎銆?- 闈炰綅鏂?`kernel` 璩囨枡澶剧殑鍏朵粬妾旀浠銆奊PL-3.0-or-later銆媇(https://www.gnu.org/licenses/gpl-3.0.html)瑕忕瘎銆?
+## 鑷磋瑵鍚嶅柈
 
-欲要得知、回報 SxKernelSU 的安全性漏洞，請參閱 [SECURITY.md](/SECURITY.md)。
-
-## 授權條款
-
-- 位於 `kernel` 資料夾的檔案以[《GPL-2.0-only》](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)規範。
-- 非位於 `kernel` 資料夾的其他檔案以[《GPL-3.0-or-later》](https://www.gnu.org/licenses/gpl-3.0.html)規範。
-
-## 致謝名單
-
-- [kernel-assisted-superuser](https://git.zx2c4.com/kernel-assisted-superuser/about/)：SxKernelSU 的靈感來源。
-- [Magisk](https://github.com/topjohnwu/Magisk)：強而有力的 Root 工具。
-- [genuine](https://github.com/brevent/genuine/)：用於確效 Apk v2 簽章。
-- [Diamorphine](https://github.com/m0nad/Diamorphine): 用於增進 Rootkit 技巧。
+- [kernel-assisted-superuser](https://git.zx2c4.com/kernel-assisted-superuser/about/)锛歋xKernelSU 鐨勯潏鎰熶締婧愩€?- [Magisk](https://github.com/topjohnwu/Magisk)锛氬挤鑰屾湁鍔涚殑 Root 宸ュ叿銆?- [genuine](https://github.com/brevent/genuine/)锛氱敤鏂肩⒑鏁?Apk v2 绨界珷銆?- [Diamorphine](https://github.com/m0nad/Diamorphine): 鐢ㄦ柤澧為€?Rootkit 鎶€宸с€?

@@ -1,14 +1,14 @@
-{
+﻿{
   "name": "SxKernelSU_website",
   "version": "1.0.0",
-  "description": "SxKernelSU official website: https://github.com/linchuanlu56-dot/SxKernelSU",
+  "description": "SxKernelSU official website: https://sxkernelsu1.netlify.app",
   "main": "index.js",
-  "repository": "https://github.com/linchuanlu56-dot/SxKernelSU",
+  "repository": "https://sxkernelsu1.netlify.app",
   "author": "weishu",
   "license": "MIT",
   "devDependencies": {
     "vitepress": "^1.6.4",
-    "vue": "^3.5.39"
+    "vue": "^3.5.30"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs",

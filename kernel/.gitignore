@@ -21,6 +21,6 @@ CLAUDE.md
 .ddk-version
 .vscode/settings.json
 check_symbol
-ksu_uapi.h
+sksu_uapi.h
 .clangd
 out

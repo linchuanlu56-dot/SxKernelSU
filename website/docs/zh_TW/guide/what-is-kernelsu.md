@@ -1,4 +1,4 @@
-# 什麼是 SxKernelSU？ {#what-is-kernelsu}
+# 什麼是 SxKernelSU？ {#what-is-sxkernelsu}
 
 SxKernelSU 是 Android GKI 裝置的 Root 解決方案，它以核心模式運作，並直接在核心空間中為使用者空間應用程式授予 Root 權限。
 

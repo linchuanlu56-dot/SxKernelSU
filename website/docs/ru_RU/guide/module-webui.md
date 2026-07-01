@@ -26,19 +26,19 @@
 
 Если это только страница отображения, она работает как обычный веб-сайт. Но самое главное — SxKernelSU предоставляет набор системных API, позволяющих реализовать модуль‑специфичные функции.
 
-SxKernelSU предлагает JavaScript-библиотеку, опубликованную в [npm](https://www.npmjs.com/package/kernelsu), которую можно использовать в коде страницы.
+SxKernelSU предлагает JavaScript-библиотеку, опубликованную в [npm](https://www.npmjs.com/package/sxkernelsu), которую можно использовать в коде страницы.
 
 Например, можно выполнить shell-команду, чтобы получить конфигурацию или изменить свойство:
 
 ```JavaScript
-import { exec } from 'kernelsu';
+import { exec } from 'sxkernelsu';
 
 const { errno, stdout } = exec("getprop ro.product.model");
 ```
 
 Также можно переключить страницу в полноэкранный режим или показать toast.
 
-[Документация по API](https://www.npmjs.com/package/kernelsu)
+[Документация по API](https://www.npmjs.com/package/sxkernelsu)
 
 Если существующего API недостаточно или им неудобно пользоваться, оставьте нам предложение [здесь](https://github.com/tiann/SxKernelSU/issues)!
 

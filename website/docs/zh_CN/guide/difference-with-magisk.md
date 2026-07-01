@@ -23,7 +23,7 @@
 2. SxKernelSU 的模块没有内置的 Zygisk 支持（但你可以通过 [ZygiskNext](https://github.com/Dr-TSNG/ZygiskNext) 来使用 Zygisk 模块）。
 3. **模块挂载架构**：SxKernelSU 使用 [metamodule 系统](metamodule.md)，将挂载委托给可插拔的 metamodule（例如 `meta-overlayfs`），而 Magisk 将挂载内置在其核心中。SxKernelSU 需要安装 metamodule 才能启用模块挂载。
 4. SxKernelSU 模块替换或者删除文件与 Magisk 完全不同。SxKernelSU 不支持 `.replace` 方式，相反，你需要通过 `mknod filename c 0 0` 创建同名文件夹来删除对应文件。
-5. BusyBox 的目录不同；SxKernelSU 内置的 BusyBox 在 `/data/adb/ksu/bin/busybox` 而 Magisk 在 `/data/adb/magisk/busybox`；**注意此为 SxKernelSU 内部行为，未来可能会更改！**
+5. BusyBox 的目录不同；SxKernelSU 内置的 BusyBox 在 `/data/adb/sks/bin/busybox` 而 Magisk 在 `/data/adb/magisk/busybox`；**注意此为 SxKernelSU 内部行为，未来可能会更改！**
 6. SxKernelSU 不支持 `.replace` 文件；但 SxKernelSU 支持 `REPLACE` 和 `REMOVE` 变量。
 7. SxKernelSU 新增了一种脚本 `boot-completed.sh`，以便在 Android 系统启动后运行某些任务。
 8. SxKernelSU 新增了一种脚本 `post-mount.sh`，以便在模块挂载完成后运行某些任务。

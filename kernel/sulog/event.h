@@ -1,24 +1,24 @@
-#ifndef __KSU_H_SULOG_EVENT
-#define __KSU_H_SULOG_EVENT
+#ifndef __SKS_H_SULOG_EVENT
+#define __SKS_H_SULOG_EVENT
 
 #include <linux/compiler_types.h>
 #include <linux/gfp.h>
 #include <linux/types.h>
 #include "uapi/sulog.h" // IWYU pragma: keep
 
-struct ksu_event_queue;
-struct ksu_sulog_pending_event;
+struct sksu_event_queue;
+struct sksu_sulog_pending_event;
 
-int ksu_sulog_events_init(void);
-void ksu_sulog_events_exit(void);
+int sksu_sulog_events_init(void);
+void sksu_sulog_events_exit(void);
 
-struct ksu_sulog_pending_event *ksu_sulog_capture_root_execve(const char __user *filename_user,
+struct sksu_sulog_pending_event *sksu_sulog_capture_root_execve(const char __user *filename_user,
                                                               const char __user *const __user *argv_user, gfp_t gfp);
-struct ksu_sulog_pending_event *ksu_sulog_capture_sucompat(const char __user *filename_user,
+struct sksu_sulog_pending_event *sksu_sulog_capture_sucompat(const char __user *filename_user,
                                                            const char __user *const __user *argv_user, gfp_t gfp);
-void ksu_sulog_emit_pending(struct ksu_sulog_pending_event *pending, int retval, gfp_t gfp);
-int ksu_sulog_emit_grant_root(int retval, __u32 uid, __u32 euid, gfp_t gfp);
+void sksu_sulog_emit_pending(struct sksu_sulog_pending_event *pending, int retval, gfp_t gfp);
+int sksu_sulog_emit_grant_root(int retval, __u32 uid, __u32 euid, gfp_t gfp);
 
-struct ksu_event_queue *ksu_sulog_get_queue(void);
+struct sksu_event_queue *sksu_sulog_get_queue(void);
 
 #endif

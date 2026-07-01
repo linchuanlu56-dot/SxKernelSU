@@ -5,22 +5,23 @@
 # Sets the minimum version of CMake required to build the native library.
 cmake_minimum_required(VERSION 3.18.1)
 
-project("kernelsu")
+project("sxkernelsu")
 
 find_package(cxx REQUIRED CONFIG)
 link_libraries(cxx::cxx)
 
-add_library(kernelsu
+add_library(sxkernelsu
         SHARED
         jni.cc
-        ksu.cc
+        sks.cc
         )
 
-target_include_directories(kernelsu PRIVATE .)
+# uapi headers are committed to ./uapi/ for `#include "uapi/..."` support
+target_include_directories(sxkernelsu PRIVATE .)
 
 find_library(log-lib log)
 
-target_link_libraries(kernelsu ${log-lib})
+target_link_libraries(sxkernelsu ${log-lib})
 
 add_library(adbroot SHARED adbroot.cc)
 target_link_libraries(adbroot ${log-lib})

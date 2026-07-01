@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: Начало работы
-      link: /ru_RU/guide/what-is-kernelsu
+      link: /ru_RU/guide/what-is-sxkernelsu
     - theme: alt
       text: Посмотр на GitHub
-      link: https://github.com/linchuanlu56-dot/SxKernelSU
+      link: https://github.com/tiann/SxKernelSU
 
 features:
   - title: Основанный на ядре

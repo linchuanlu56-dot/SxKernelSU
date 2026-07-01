@@ -83,9 +83,9 @@
     <string name="safe_mode_module_disabled">Module installation is disabled in safe mode</string>
     <string name="reboot_to_apply">Reboot to take effect</string>
     <string name="module_magisk_conflict">Modules are unavailable due to a conflict with Magisk!</string>
-    <string name="home_learn_kernelsu">Learn SxKernelSU</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
-    <string name="home_click_to_learn_kernelsu">Learn how to install SxKernelSU and use modules.</string>
+    <string name="home_learn_sxkernelsu">Learn SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Learn how to install SxKernelSU and use modules.</string>
     <string name="home_support_title">Support Us</string>
     <string name="home_support_content">SxKernelSU is, and always will be, free, and open source. However, you can show us that you care by making a donation.</string>
     <string name="home_gki_warning">Starting from v3.0.0, the GKI work mode will be used only in testing environments. We do not recommend it for daily use, and image files will no longer be provided.</string>
@@ -198,10 +198,10 @@
     <string name="settings_mode_enable_by_default">Enable (Default)</string>
     <string name="settings_mode_disable_until_reboot">Disable until Reboot</string>
     <string name="settings_mode_disable_always">Always disable</string>
-    <string name="processing">Processing…</string>
+    <string name="processing">Processing鈥?/string>
     <string name="refresh_pulling">Pull down to refresh</string>
     <string name="refresh_release">Release to refresh</string>
-    <string name="refresh_refresh">Refreshing…</string>
+    <string name="refresh_refresh">Refreshing鈥?/string>
     <string name="refresh_complete">Refreshed successfully</string>
     <string name="undo">Undo</string>
     <string name="module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
@@ -289,6 +289,4 @@
     <string name="sort_by_update_time">Update time</string>
     <string name="sort_reverse">Reverse</string>
     <string name="profile_flags_desc_no_new_privs">Prevent further privilege escalation via SxKernelSU from within the context of this root profile.</string>
-    <string name="module_shortcut_copy_scheme">Copy URL scheme</string>
-    <string name="module_shortcut_scheme_copied">URL scheme copied</string>
 </resources>

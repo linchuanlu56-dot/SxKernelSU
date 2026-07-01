@@ -1,4 +1,4 @@
-# 如何建置 SxKernelSU? {#how-to-build-kernelsu}
+# 如何建置 SxKernelSU? {#how-to-build-sxkernelsu}
 
 ::: warning
 該文件僅供存檔參考，不再維護更新。
@@ -53,7 +53,7 @@ rm common/android/abi_gki_protected_exports_*
 ```
 :::
 
-## 與 SxKernelSU 一起建置核心 {#build-kernel-with-kernelsu}
+## 與 SxKernelSU 一起建置核心 {#build-kernel-with-sxkernelsu}
 
 如果您可以成功建置核心，那麼建置 SxKernelSU 就會非常輕鬆，依自己的需求在核心原始碼根目錄中執行以下任一命令：
 

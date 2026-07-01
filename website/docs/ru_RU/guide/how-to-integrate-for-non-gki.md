@@ -42,7 +42,7 @@ CONFIG_KPROBE_EVENTS=y
 
 :::tip Как проверить, не сломан ли kprobe？
 
-закомментируйте `ksu_sucompat_init()` и `ksu_ksud_init()` в файле `SxKernelSU/kernel/ksu.c`, если устройство загружается нормально, то может быть нарушена работа kprobe.
+закомментируйте `sksu_sucompat_init()` и `sksu_sksud_init()` в файле `SxKernelSU/kernel/ksu.c`, если устройство загружается нормально, то может быть нарушена работа kprobe.
 :::
 
 ## Ручная модификация исходного кода ядра {#modify-kernel-source-code}
@@ -80,20 +80,20 @@ index ac59664eaecf..bdd585e1d2cc 100644
  	return retval;
  }
  
-+extern bool ksu_execveat_hook __read_mostly;
-+extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
++extern bool sksu_execveat_hook __read_mostly;
++extern int sksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
 +			void *envp, int *flags);
-+extern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
++extern int sksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
 +				 void *argv, void *envp, int *flags);
  static int do_execveat_common(int fd, struct filename *filename,
  			      struct user_arg_ptr argv,
  			      struct user_arg_ptr envp,
  			      int flags)
  {
-+	if (unlikely(ksu_execveat_hook))
-+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
++	if (unlikely(sksu_execveat_hook))
++		sksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
 +	else
-+		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
++		sksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
  	return __do_execve_file(fd, filename, argv, envp, flags, NULL);
  }
 ```
@@ -106,7 +106,7 @@ index 05036d819197..965b84d486b8 100644
  	return ksys_fallocate(fd, mode, offset, len);
  }
  
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			 int *flags);
  /*
   * access() needs to use the real uid/gid, not the effective uid/gid.
@@ -123,7 +123,7 @@ index 05036d819197..965b84d486b8 100644
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
  
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
  
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
  		return -EINVAL;
@@ -137,15 +137,15 @@ index 650fc7e0f3a6..55be193913b6 100644
  }
  EXPORT_SYMBOL(kernel_read);
  
-+extern bool ksu_vfs_read_hook __read_mostly;
-+extern int ksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
++extern bool sksu_vfs_read_hook __read_mostly;
++extern int sksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
 +			size_t *count_ptr, loff_t **pos);
  ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
  {
  	ssize_t ret;
  
-+	if (unlikely(ksu_vfs_read_hook))
-+		ksu_handle_vfs_read(&file, &buf, &count, &pos);
++	if (unlikely(sksu_vfs_read_hook))
++		sksu_handle_vfs_read(&file, &buf, &count, &pos);
 +
  	if (!(file->f_mode & FMODE_READ))
  		return -EBADF;
@@ -160,7 +160,7 @@ index 376543199b5a..82adcef03ecc 100644
  }
  EXPORT_SYMBOL(vfs_statx_fd);
  
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +
  /**
   * vfs_statx - Get basic and extra attributes by filename
@@ -169,7 +169,7 @@ index 376543199b5a..82adcef03ecc 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_AUTOMOUNT;
  
-+	ksu_handle_stat(&dfd, &filename, &flags);
++	sksu_handle_stat(&dfd, &filename, &flags);
  	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		       AT_EMPTY_PATH | KSTAT_QUERY_FLAGS)) != 0)
  		return -EINVAL;
@@ -193,7 +193,7 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  }
  EXPORT_SYMBOL(vfs_fstat);
  
-+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++extern int sksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 +
  int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
  		int flag)
@@ -202,7 +202,7 @@ index 068fdbcc9e26..5348b7bb9db2 100644
  	int error = -EINVAL;
  	unsigned int lookup_flags = 0;
  
-+	ksu_handle_stat(&dfd, &filename, &flag);
++	sksu_handle_stat(&dfd, &filename, &flag);
 +
  	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
  		      AT_EMPTY_PATH)) != 0)
@@ -220,7 +220,7 @@ index 2ff887661237..e758d7db7663 100644
  	return error;
  }
  
-+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++extern int sksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 +			        int *flags);
 +
  /*
@@ -230,7 +230,7 @@ index 2ff887661237..e758d7db7663 100644
  	int res;
  	unsigned int lookup_flags = LOOKUP_FOLLOW;
  
-+	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++	sksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 +
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
  		return -EINVAL;
@@ -251,16 +251,16 @@ index 45306f9ef247..815091ebfca4 100755
  	return disposition;
  }
  
-+extern bool ksu_input_hook __read_mostly;
-+extern int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
++extern bool sksu_input_hook __read_mostly;
++extern int sksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
 +
  static void input_handle_event(struct input_dev *dev,
  			       unsigned int type, unsigned int code, int value)
  {
 	int disposition = input_get_disposition(dev, type, code, &value);
 +
-+	if (unlikely(ksu_input_hook))
-+		ksu_handle_input_handle_event(&type, &code, &value);
++	if (unlikely(sksu_input_hook))
++		sksu_handle_input_handle_event(&type, &code, &value);
  
  	if (disposition != INPUT_IGNORE_EVENT && type != EV_SYN)
  		add_input_randomness(type, code, value);
