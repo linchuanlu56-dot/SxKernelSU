@@ -2,7 +2,7 @@
 
 # SxKernelSU
 
-<img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="logo">
+<img src="icon.jpg" style="width: 96px;" alt="logo">
 
 一个 Android 上基于内核的 root 方案。
 

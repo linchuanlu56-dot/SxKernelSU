@@ -2,7 +2,7 @@
 
 # SxKernelSU
 
-<img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="logo">
+<img src="icon.jpg" style="width: 96px;" alt="logo">
 
 Una soluzione per il root basata sul kernel per i dispositivi Android. 
 

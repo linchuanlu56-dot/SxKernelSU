@@ -2,7 +2,7 @@
 
 # SxKernelSU
 
-<img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="logo">
+<img src="icon.jpg" style="width: 96px;" alt="logo">
 
 Android cihazlar için kernel tabanlı root çözümü.
 

@@ -2,7 +2,7 @@
 
 # SxKernelSU
 
-<img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="logo">
+<img src="icon.jpg" style="width: 96px;" alt="logo">
 
 Решение на основе ядра root для Android-устройств.
 

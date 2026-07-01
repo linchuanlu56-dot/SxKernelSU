@@ -2,7 +2,7 @@
 
 # SxKernelSU
 
-<img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="標誌">
+<img src="icon.jpg" style="width: 96px;" alt="標誌">
 
 一套基於 Android 裝置核心的 Root 解決方案。
 
