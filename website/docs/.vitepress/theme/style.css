@@ -1,0 +1,104 @@
+/* SxKernelSU Anime Theme for VitePress */
+:root {
+  --vp-c-brand-1: #FF6B9D;
+  --vp-c-brand-2: #C44AFF;
+  --vp-c-brand-3: #FF6B9D;
+  --vp-c-brand-soft: rgba(255, 107, 157, 0.14);
+
+  --vp-button-brand-bg: #FF6B9D;
+  --vp-button-brand-hover-bg: #E85A8A;
+
+  --vp-custom-block-tip-border: #C44AFF;
+  --vp-custom-block-tip-text: #C44AFF;
+  --vp-custom-block-tip-bg: rgba(196, 74, 255, 0.1);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, #FF6B9D, #C44AFF);
+  --vp-home-hero-image-background-image: linear-gradient(135deg, #FF6B9D 30%, #C44AFF 70%);
+  --vp-home-hero-image-filter: blur(72px);
+
+  --vp-c-text-1: #2c3e50;
+  --vp-c-text-2: #666;
+
+  --vp-sidebar-bg-color: #FFF5F9;
+}
+
+.dark {
+  --vp-c-bg: #1A0A2E;
+  --vp-c-bg-alt: #2D1B4E;
+  --vp-c-bg-elv: #2D1B4E;
+  --vp-c-text-1: #F0E6FF;
+  --vp-c-text-2: #C4B5E3;
+  --vp-c-text-3: #9B8AB5;
+  --vp-sidebar-bg-color: #1A0A2E;
+}
+
+/* Logo animation */
+.VPImage.logo {
+  transition: transform 0.3s ease;
+}
+.VPImage.logo:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* Gradient text for headings */
+h1, h2, h3 {
+  background: linear-gradient(135deg, #FF6B9D, #C44AFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card styling */
+.vp-doc .custom-block {
+  border-radius: 12px;
+  border-left: 4px solid var(--vp-c-brand-1);
+}
+
+/* Link styling */
+a {
+  color: #C44AFF;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #FF6B9D;
+}
+
+/* Code blocks */
+.vp-doc code {
+  color: #C44AFF;
+  background-color: rgba(196, 74, 255, 0.08);
+}
+
+/* Tables */
+.vp-doc table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Buttons */
+.VPButton.brand {
+  background: linear-gradient(135deg, #FF6B9D, #C44AFF);
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.VPButton.brand:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+}
+
+/* Nav bar */
+.VPNavBar {
+  border-bottom: 1px solid rgba(196, 74, 255, 0.1);
+}
+
+/* Sidebar */
+.VPSidebar {
+  border-right: 1px solid rgba(196, 74, 255, 0.1);
+}
+
+/* Hero section */
+.VPHero .name {
+  font-size: 48px;
+  line-height: 1.2;
+}
