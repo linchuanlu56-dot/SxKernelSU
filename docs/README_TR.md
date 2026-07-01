@@ -15,8 +15,8 @@ Android cihazlar için kernel tabanlı root çözümü.
 ## Özellikler
 
 1. Kernel-tabanlı `su` ve root erişimi yönetimi.
-2. [metamodules](https://kernelsu.org/guide/metamodule.html)'ye dayalı modül sistemi: Systemless modifikasyonlar için takılabilir altyapı.
-3. [Uygulama profili](https://kernelsu.org/guide/app-profile.html): Root gücünü bir kafese kapatın.
+2. [metamodules](https://linchuanlu56-dot.github.io/SxKernelSU/guide/metamodule.html)'ye dayalı modül sistemi: Systemless modifikasyonlar için takılabilir altyapı.
+3. [Uygulama profili](https://linchuanlu56-dot.github.io/SxKernelSU/guide/app-profile.html): Root gücünü bir kafese kapatın.
 
 ## Uyumluluk Durumu
 
@@ -31,9 +31,9 @@ Bununla birlikte; WSA, ChromeOS ve konteyner tabanlı Android'in tamamı destekl
 
 ## Kullanım
 
-- [Yükleme yönergeleri](https://kernelsu.org/guide/installation.html)
-- [Nasıl derlenir?](https://kernelsu.org/guide/how-to-build.html)
-- [Resmi WEB sitesi](https://kernelsu.org/)
+- [Yükleme yönergeleri](https://linchuanlu56-dot.github.io/SxKernelSU/guide/installation.html)
+- [Nasıl derlenir?](https://linchuanlu56-dot.github.io/SxKernelSU/guide/how-to-build.html)
+- [Resmi WEB sitesi](https://linchuanlu56-dot.github.io/SxKernelSU/)
 
 ## Çeviri
 

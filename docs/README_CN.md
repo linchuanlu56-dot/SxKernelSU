@@ -15,8 +15,8 @@
 ## 特性
 
 - 基于内核的 `su` 和权限管理。
-- 基于 [metamodules](https://kernelsu.org/zh_CN/guide/metamodule.html) 的模块系统：可插拔的模块架构。
-- [App Profile](https://kernelsu.org/zh_CN/guide/app-profile.html): 把 Root 权限关进笼子里。
+- 基于 [metamodules](https://linchuanlu56-dot.github.io/SxKernelSU/zh_CN/guide/metamodule.html) 的模块系统：可插拔的模块架构。
+- [App Profile](https://linchuanlu56-dot.github.io/SxKernelSU/zh_CN/guide/app-profile.html): 把 Root 权限关进笼子里。
 
 ## 兼容状态
 
@@ -31,9 +31,9 @@ WSA, ChromeOS 和运行在容器上的 Android 也可以与 SxKernelSU 一起工
 
 ## 使用方法
 
-- [安装教程](https://kernelsu.org/zh_CN/guide/installation.html)
-- [如何构建？](https://kernelsu.org/zh_CN/guide/how-to-build.html)
-- [官方网站](https://kernelsu.org/zh_CN/)
+- [安装教程](https://linchuanlu56-dot.github.io/SxKernelSU/zh_CN/guide/installation.html)
+- [如何构建？](https://linchuanlu56-dot.github.io/SxKernelSU/zh_CN/guide/how-to-build.html)
+- [官方网站](https://linchuanlu56-dot.github.io/SxKernelSU/zh_CN/)
 
 ## 参与翻译
 

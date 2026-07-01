@@ -15,8 +15,8 @@
 ## Особенности
 
 1. Управление `su` и root-доступом на основе ядра.
-2. Система модулей на основе [metamodules](https://kernelsu.org/ru_RU/guide/metamodule.html): Подключаемая инфраструктура для безсистемных модификаций.
-3. [Профиль приложений](https://kernelsu.org/ru_RU/guide/app-profile.html): Запри корневую силу в клетке.
+2. Система модулей на основе [metamodules](https://linchuanlu56-dot.github.io/SxKernelSU/ru_RU/guide/metamodule.html): Подключаемая инфраструктура для безсистемных модификаций.
+3. [Профиль приложений](https://linchuanlu56-dot.github.io/SxKernelSU/ru_RU/guide/app-profile.html): Запри корневую силу в клетке.
 
 ## Совместимость
 
@@ -31,9 +31,9 @@ WSA и Android на основе контейнеров также должны 
 
 ## Использование
 
-- [Установка](https://kernelsu.org/ru_RU/guide/installation.html)
-- [Как собрать?](https://kernelsu.org/ru_RU/guide/how-to-build.html)
-- [официальный сайт](https://kernelsu.org/ru_RU/)
+- [Установка](https://linchuanlu56-dot.github.io/SxKernelSU/ru_RU/guide/installation.html)
+- [Как собрать?](https://linchuanlu56-dot.github.io/SxKernelSU/ru_RU/guide/how-to-build.html)
+- [официальный сайт](https://linchuanlu56-dot.github.io/SxKernelSU/ru_RU/)
 
 ## Обсуждение
 

@@ -15,8 +15,8 @@ Solusi root berbasis Kernel untuk perangkat Android.
 ## Fitur
 
 1. Manajemen akses root dan `su` berbasis kernel.
-2. Sistem modul berdasarkan [metamodules](https://kernelsu.org/id_ID/guide/metamodule.html): Infrastruktur pluggable untuk modifikasi systemless.
-3. [Profil Aplikasi](https://kernelsu.org/guide/app-profile.html): Kunci daya root di dalam sangkar.
+2. Sistem modul berdasarkan [metamodules](https://linchuanlu56-dot.github.io/SxKernelSU/id_ID/guide/metamodule.html): Infrastruktur pluggable untuk modifikasi systemless.
+3. [Profil Aplikasi](https://linchuanlu56-dot.github.io/SxKernelSU/guide/app-profile.html): Kunci daya root di dalam sangkar.
 
 ## Status Kompatibilitas
 
@@ -31,9 +31,9 @@ Saat ini, arsitektur `arm64-v8a` dan `x86_64` didukung.
 
 ## Penggunaan
 
-- [Petunjuk Instalasi](https://kernelsu.org/id_ID/guide/installation.html)
-- [Bagaimana cara membuat?](https://kernelsu.org/id_ID/guide/how-to-build.html)
-- [Situs Web Resmi](https://kernelsu.org/id_ID/)
+- [Petunjuk Instalasi](https://linchuanlu56-dot.github.io/SxKernelSU/id_ID/guide/installation.html)
+- [Bagaimana cara membuat?](https://linchuanlu56-dot.github.io/SxKernelSU/id_ID/guide/how-to-build.html)
+- [Situs Web Resmi](https://linchuanlu56-dot.github.io/SxKernelSU/id_ID/)
 
 ## Terjemahan
 

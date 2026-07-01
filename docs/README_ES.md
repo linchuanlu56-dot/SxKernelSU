@@ -15,7 +15,7 @@ Una solución root basada en el kernel para dispositivos Android.
 ## Características
 
 1. Binario `su` basado en el kernel y gestión de acceso root.
-2. Sistema de módulos basado en [metamodules](https://kernelsu.org/guide/metamodule.html): Infraestructura conectable para modificaciones sin sistema.
+2. Sistema de módulos basado en [metamodules](https://linchuanlu56-dot.github.io/SxKernelSU/guide/metamodule.html): Infraestructura conectable para modificaciones sin sistema.
 
 ## Estado de compatibilidad
 
@@ -30,9 +30,9 @@ Actualmente, se soportan las arquitecturas `arm64-v8a` y `x86_64`.
 
 ## Uso
 
-- [¿Cómo instalarlo?](https://kernelsu.org/guide/installation.html)
-- [¿Cómo compilarlo?](https://kernelsu.org/guide/how-to-build.html)
-- [Site oficial](https://kernelsu.org/)
+- [¿Cómo instalarlo?](https://linchuanlu56-dot.github.io/SxKernelSU/guide/installation.html)
+- [¿Cómo compilarlo?](https://linchuanlu56-dot.github.io/SxKernelSU/guide/how-to-build.html)
+- [Site oficial](https://linchuanlu56-dot.github.io/SxKernelSU/)
 
 ## Traducción
 

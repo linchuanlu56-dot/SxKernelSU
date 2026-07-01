@@ -15,7 +15,7 @@ Rozwiązanie root oparte na jądrze dla urządzeń z systemem Android.
 ## Cechy
 
 1. Oparte na jądrze `su` i zarządzanie dostępem roota.
-2. System modułów oparty na [metamodules](https://kernelsu.org/guide/metamodule.html): Wtykowa infrastruktura dla modyfikacji systemless.
+2. System modułów oparty na [metamodules](https://linchuanlu56-dot.github.io/SxKernelSU/guide/metamodule.html): Wtykowa infrastruktura dla modyfikacji systemless.
 
 ## Kompatybilność
 
@@ -30,8 +30,8 @@ Obecnie obsługiwane są architektury `arm64-v8a` oraz `x86_64`.
 
 ## Użycie
 
-- [Instalacja](https://kernelsu.org/guide/installation.html)
-- [Jak skompilować?](https://kernelsu.org/guide/how-to-build.html)
+- [Instalacja](https://linchuanlu56-dot.github.io/SxKernelSU/guide/installation.html)
+- [Jak skompilować?](https://linchuanlu56-dot.github.io/SxKernelSU/guide/how-to-build.html)
 
 ## Tłumaczenie
 

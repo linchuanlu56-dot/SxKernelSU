@@ -15,8 +15,8 @@ Giải pháp root thông qua thay đổi trên Kernel hệ điều hành cho cá
 ## Tính năng
 
 1. Hỗ trợ gói thực thi `su` và quản lý quyền root.
-2. Hệ thống mô-đun thông qua [metamodules](https://kernelsu.org/vi_VN/guide/metamodule.html): Cơ sở hạ tầng có thể cắm cho các sửa đổi systemless.
-3. [App Profile](https://kernelsu.org/guide/app-profile.html): Hạn chế quyền root của ứng dụng.
+2. Hệ thống mô-đun thông qua [metamodules](https://linchuanlu56-dot.github.io/SxKernelSU/vi_VN/guide/metamodule.html): Cơ sở hạ tầng có thể cắm cho các sửa đổi systemless.
+3. [App Profile](https://linchuanlu56-dot.github.io/SxKernelSU/guide/app-profile.html): Hạn chế quyền root của ứng dụng.
 
 ## Tình trạng tương thích
 
@@ -31,9 +31,9 @@ Hiện tại, các kiến trúc `arm64-v8a` và `x86_64` được hỗ trợ.
 
 ## Sử dụng
 
-- [Hướng dẫn cài đặt](https://kernelsu.org/vi_VN/guide/installation.html)
-- [Cách để build?](https://kernelsu.org/vi_VN/guide/how-to-build.html)
-- [Website Chính Thức](https://kernelsu.org/vi_VN/)
+- [Hướng dẫn cài đặt](https://linchuanlu56-dot.github.io/SxKernelSU/vi_VN/guide/installation.html)
+- [Cách để build?](https://linchuanlu56-dot.github.io/SxKernelSU/vi_VN/guide/how-to-build.html)
+- [Website Chính Thức](https://linchuanlu56-dot.github.io/SxKernelSU/vi_VN/)
 
 ## Hỗ trợ dịch
 

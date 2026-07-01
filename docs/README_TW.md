@@ -15,8 +15,8 @@
 ## 特色功能
 
 1. 以核心內 `su` 管理 Root 存取。
-2. 以 [metamodules](https://kernelsu.org/zh_TW/guide/metamodule.html) 運作模組系統：可插拔的無系統修改基礎架構。
-3. [App Profile](https://kernelsu.org/zh_TW/guide/app-profile.html)：使 Root 掌握的生殺大權受制於此。
+2. 以 [metamodules](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/guide/metamodule.html) 運作模組系統：可插拔的無系統修改基礎架構。
+3. [App Profile](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/guide/app-profile.html)：使 Root 掌握的生殺大權受制於此。
 
 ## 相容事態
 
@@ -31,9 +31,9 @@
 
 ## 使用手冊
 
-- [安裝教學](https://kernelsu.org/zh_TW/guide/installation.html)
-- [如何建置 SxKernelSU？](https://kernelsu.org/zh_TW/guide/how-to-build.html)
-- [官方網站](https://kernelsu.org/zh_TW/)
+- [安裝教學](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/guide/installation.html)
+- [如何建置 SxKernelSU？](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/guide/how-to-build.html)
+- [官方網站](https://linchuanlu56-dot.github.io/SxKernelSU/zh_TW/)
 
 ## 多語翻譯
 
