@@ -18,16 +18,16 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/tiann/KernelSU' }
+      { icon: 'github', link: 'https://github.com/tiann/SxKernelSU' }
     ],
 
     footer: {
         message: 'Выпускается под лицензией GPL3.',
-        copyright: 'Авторские права © 2022-текущее Разработчики KernelSU.'
+        copyright: 'Авторские права © 2022-текущее Разработчики SxKernelSU.'
     },
 
     editLink: {
-        pattern: 'https://github.com/tiann/KernelSU/edit/main/website/docs/:path',
+        pattern: 'https://github.com/tiann/SxKernelSU/edit/main/website/docs/:path',
         text: 'Редактировать эту страницу на GitHub'
     }
   }
@@ -44,7 +44,7 @@ function sidebarGuide() {
     {
         text: 'Руководство',
         items: [
-          { text: 'Что такое KernelSU?', link: '/ru_RU/guide/what-is-kernelsu' },
+          { text: 'Что такое SxKernelSU?', link: '/ru_RU/guide/what-is-kernelsu' },
           { text: 'Установка', link: '/ru_RU/guide/installation' },
           { text: 'Как собрать?', link: '/ru_RU/guide/how-to-build' },
           { text: 'Реализация в устройствах, не относящихся к GKI', link: '/ru_RU/guide/how-to-integrate-for-non-gki'},

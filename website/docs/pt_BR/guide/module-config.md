@@ -1,6 +1,6 @@
 # Configuração de Módulo
 
-O KernelSU fornece um sistema de configuração integrado que permite que os módulos armazenem configurações de chave-valor persistentes ou temporárias. As configurações são armazenadas em formato binário em `/data/adb/ksu/module_configs/<module_id>/` com as seguintes características:
+O SxKernelSU fornece um sistema de configuração integrado que permite que os módulos armazenem configurações de chave-valor persistentes ou temporárias. As configurações são armazenadas em formato binário em `/data/adb/ksu/module_configs/<module_id>/` com as seguintes características:
 
 ## Tipos de Configuração
 
@@ -108,7 +108,7 @@ Ao recuperar a lista de módulos, se a configuração `override.description` exi
 
 ### Declarando Recursos Gerenciados
 
-Os módulos podem declarar quais recursos do KernelSU eles gerenciam usando o padrão de configuração `manage.<feature>`. Os recursos suportados correspondem ao enum interno `FeatureId` do KernelSU:
+Os módulos podem declarar quais recursos do SxKernelSU eles gerenciam usando o padrão de configuração `manage.<feature>`. Os recursos suportados correspondem ao enum interno `FeatureId` do SxKernelSU:
 
 **Recursos Suportados:**
 - `su_compat` - Modo de compatibilidade SU
@@ -131,10 +131,10 @@ ksud module config delete manage.su_compat
 - Para parar de gerenciar um recurso, exclua completamente a chave de configuração
 
 Os recursos gerenciados são expostos através da API de lista de módulos como um campo `managedFeatures` (string separada por vírgulas). Isso permite:
-- O gerenciador do KernelSU detectar quais módulos gerenciam quais recursos do KernelSU
+- O gerenciador do SxKernelSU detectar quais módulos gerenciam quais recursos do SxKernelSU
 - Prevenção de conflitos quando vários módulos tentam gerenciar o mesmo recurso
-- Melhor coordenação entre módulos e funcionalidade central do KernelSU
+- Melhor coordenação entre módulos e funcionalidade central do SxKernelSU
 
 ::: warning APENAS RECURSOS SUPORTADOS
-Use apenas os nomes de recursos predefinidos listados acima (`su_compat`, `kernel_umount`). Eles correspondem aos recursos internos reais do KernelSU. Usar outros nomes de recursos não causará erros, mas não terá nenhum propósito funcional.
+Use apenas os nomes de recursos predefinidos listados acima (`su_compat`, `kernel_umount`). Eles correspondem aos recursos internos reais do SxKernelSU. Usar outros nomes de recursos não causará erros, mas não terá nenhum propósito funcional.
 :::

@@ -18,16 +18,16 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/tiann/KernelSU' }
+      { icon: 'github', link: 'https://github.com/tiann/SxKernelSU' }
     ],
 
     footer: {
         message: '在 GPL3 许可证下发布。',
-        copyright: 'Copyright © 2022-现在 KernelSU 开发者。'
+        copyright: 'Copyright © 2022-现在 SxKernelSU 开发者。'
     },
 
     editLink: {
-        pattern: 'https://github.com/tiann/KernelSU/edit/main/website/docs/:path',
+        pattern: 'https://github.com/tiann/SxKernelSU/edit/main/website/docs/:path',
         text: '在 GitHub 中编辑本页'
     }
   }
@@ -44,11 +44,11 @@ function sidebarGuide() {
     {
         text: 'Guide',
         items: [
-          { text: '什么是 KernelSU？', link: '/zh_CN/guide/what-is-kernelsu' },
-          { text: 'KernelSU 模块与 Magisk 的差异', link: '/zh_CN/guide/difference-with-magisk' },
+          { text: '什么是 SxKernelSU？', link: '/zh_CN/guide/what-is-kernelsu' },
+          { text: 'SxKernelSU 模块与 Magisk 的差异', link: '/zh_CN/guide/difference-with-magisk' },
           { text: '安装', link: '/zh_CN/guide/installation' },
           { text: '如何构建？', link: '/zh_CN/guide/how-to-build' },
-          { text: '如何为非 GKI 设备集成 KernelSU', link: '/zh_CN/guide/how-to-integrate-for-non-gki'},
+          { text: '如何为非 GKI 设备集成 SxKernelSU', link: '/zh_CN/guide/how-to-integrate-for-non-gki'},
           { text: '非官方支持设备', link: '/zh_CN/guide/unofficially-support-devices.md' },
           { text: '模块开发指南', link: '/zh_CN/guide/module.md' },
           { text: '元模块', link: '/zh_CN/guide/metamodule.md' },

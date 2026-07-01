@@ -1,9 +1,9 @@
 {
-  "name": "KernelSU_website",
+  "name": "SxKernelSU_website",
   "version": "1.0.0",
-  "description": "KernelSU official website: https://kernelsu.org",
+  "description": "SxKernelSU official website: https://github.com/linchuanlu56-dot/SxKernelSU",
   "main": "index.js",
-  "repository": "https://kernelsu.org",
+  "repository": "https://github.com/linchuanlu56-dot/SxKernelSU",
   "author": "weishu",
   "license": "MIT",
   "devDependencies": {

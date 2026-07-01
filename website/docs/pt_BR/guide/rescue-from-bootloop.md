@@ -4,7 +4,7 @@ Ao atualizar um dispositivo, podem ocorrer situações em que o dispositivo fica
 
 ## Bloqueio por flashar partição boot
 
-No KernelSU, as seguintes situações podem causar bloqueio de inicialização ao flashar a partição boot:
+No SxKernelSU, as seguintes situações podem causar bloqueio de inicialização ao flashar a partição boot:
 
 1. Você flashou uma imagem boot no formato errado. Por exemplo, se o formato de boot do seu dispositivo for `gz`, mas você flashou uma imagem no formato `lz4`, o dispositivo não inicializá.
 2. Seu dispositivo precisa desativar a verificação AVB para inicializar corretamente, o que geralmente exige a limpeza de todos os dados do dispositivo.
@@ -18,7 +18,7 @@ A instalação de módulos pode ser uma das causas mais comuns de bloqueio do se
 
 ### Módulos normais
 
-Se você instalou um módulo que foi comprovadamente seguro, mas faz com que seu dispositivo não inicialize, então esta situação é facilmente recuperável no KernelSU sem qualquer preocupação. O KernelSU possui o Modo de Segurança integrado para recuperar seu dispositivo:
+Se você instalou um módulo que foi comprovadamente seguro, mas faz com que seu dispositivo não inicialize, então esta situação é facilmente recuperável no SxKernelSU sem qualquer preocupação. O SxKernelSU possui o Modo de Segurança integrado para recuperar seu dispositivo:
 
 #### Recupere pressionando o botão de diminuir volume {#volume-down}
 
@@ -26,15 +26,15 @@ Você pode tentar usar o **Modo de Segurança** para resgatar o dispositivo. Dep
 
 Existem duas maneiras de entrar no Modo de Segurança:
 
-1. O Modo de Segurança integrado de alguns sistemas: Alguns sistemas possuem um Modo de Segurança integrado que pode ser acessado pressionando longamente o botão de diminuir volume. Em outros sistemas (como o MIUI/HyperOS), o Modo de Segurança pode ser ativado a partir do Recovery. Ao entrar no Modo de Segurança do sistema, o KernelSU também entrará nesse modo e desativará automaticamente os módulos.
-2. O Modo de Segurança integrado do KernelSU: Nesse caso, o método é **pressionar a tecla de diminuir volume continuamente por mais de três vezes** após a primeira tela de inicialização. Observe que é pressionar-soltar, pressionar-soltar, pressionar-soltar, e não segurar.
+1. O Modo de Segurança integrado de alguns sistemas: Alguns sistemas possuem um Modo de Segurança integrado que pode ser acessado pressionando longamente o botão de diminuir volume. Em outros sistemas (como o MIUI/HyperOS), o Modo de Segurança pode ser ativado a partir do Recovery. Ao entrar no Modo de Segurança do sistema, o SxKernelSU também entrará nesse modo e desativará automaticamente os módulos.
+2. O Modo de Segurança integrado do SxKernelSU: Nesse caso, o método é **pressionar a tecla de diminuir volume continuamente por mais de três vezes** após a primeira tela de inicialização. Observe que é pressionar-soltar, pressionar-soltar, pressionar-soltar, e não segurar.
 
-Após entrar no Modo de Segurança, todos os módulos na página Módulos do gerenciador do KernelSU serão desativados. Porém, você ainda pode realizar a operação de "desinstalação" para desinstalar quaisquer módulos que possam estar causando problemas.
+Após entrar no Modo de Segurança, todos os módulos na página Módulos do gerenciador do SxKernelSU serão desativados. Porém, você ainda pode realizar a operação de "desinstalação" para desinstalar quaisquer módulos que possam estar causando problemas.
 
 O Modo de Segurança integrado é implementado no kernel, portanto não há possibilidade de perder eventos importantes devido à interceptação. No entanto, para kernels não-GKI, pode ser necessária uma integração manual do código. Para isso, consulte a documentação oficial para orientações.
 
 ::: warning
-O KernelSU registra o ouvinte da tecla de volume durante a inicialização do módulo do kernel (carregado quando o kernel executa o processo init no modo LKM) e cancela o registro no estágio `on_post_fs_data` (antes da animação de inicialização). Você precisa entender o momento e pressionar rapidamente a tecla de diminuir o volume três vezes após a primeira tela de inicialização. Se o dispositivo inicializar rápido ou a operação não for oportuna, o modo de segurança pode não ser ativado.
+O SxKernelSU registra o ouvinte da tecla de volume durante a inicialização do módulo do kernel (carregado quando o kernel executa o processo init no modo LKM) e cancela o registro no estágio `on_post_fs_data` (antes da animação de inicialização). Você precisa entender o momento e pressionar rapidamente a tecla de diminuir o volume três vezes após a primeira tela de inicialização. Se o dispositivo inicializar rápido ou a operação não for oportuna, o modo de segurança pode não ser ativado.
 
 Se o módulo gravar códigos não razoáveis no initrc que façam com que o dispositivo não consiga inicializar, esses códigos ainda serão executados mesmo no modo de segurança.
 :::
@@ -50,7 +50,7 @@ Se o dispositivo conseguir obter o shell root via ADB, você pode usar a linha d
 ::: tip
 Após montar as partições `metadata` e `data`, você pode executar o comando `/data/adb/ksud` no modo de Recuperação para gerenciar os módulos.
 
-Como os dispositivos GKI compartilham o `init`, o módulo do kernel do KernelSU ainda será carregado no modo de Recuperação, e você deve conseguir usar a maioria dos recursos do `ksud` (como definir recursos) normalmente.
+Como os dispositivos GKI compartilham o `init`, o módulo do kernel do SxKernelSU ainda será carregado no modo de Recuperação, e você deve conseguir usar a maioria dos recursos do `ksud` (como definir recursos) normalmente.
 :::
 
 ```
@@ -66,7 +66,7 @@ reboot
 
 Se você não conseguir entrar no sistema (nem mesmo o ADB puder ser conectado), precisará de uma Recuperação de terceiros (como o TWRP) no dispositivo.
 
-O carregamento do módulo do KernelSU depende do arquivo de injeção init.rc do lado do kernel e do processo ksud no espaço do usuário. Após excluir esses arquivos e reiniciar, o KernelSU não carregará nenhum módulo.
+O carregamento do módulo do SxKernelSU depende do arquivo de injeção init.rc do lado do kernel e do processo ksud no espaço do usuário. Após excluir esses arquivos e reiniciar, o SxKernelSU não carregará nenhum módulo.
 
 **Passos operacionais:**
 
@@ -91,7 +91,7 @@ O carregamento do módulo do KernelSU depende do arquivo de injeção init.rc do
    reboot
    ```
 
-O KernelSU pulará o carregamento de todos os módulos após a reinicialização. Após entrar no sistema, você pode reabrir o gerenciador KernelSU para lidar com os problemas dos módulos.
+O SxKernelSU pulará o carregamento de todos os módulos após a reinicialização. Após entrar no sistema, você pode reabrir o gerenciador SxKernelSU para lidar com os problemas dos módulos.
 
 ### Formatação de dados ou outros módulos maliciosos
 

@@ -18,16 +18,16 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/tiann/KernelSU' }
+      { icon: 'github', link: 'https://github.com/tiann/SxKernelSU' }
     ],
 
     footer: {
         message: 'Rilis Dibawah Lisensi GPL3.',
-        copyright: 'Copyright © 2022-Sekarang pengembang KernelSU.'
+        copyright: 'Copyright © 2022-Sekarang pengembang SxKernelSU.'
     },
 
     editLink: {
-        pattern: 'https://github.com/tiann/KernelSU/edit/main/website/docs/:path',
+        pattern: 'https://github.com/tiann/SxKernelSU/edit/main/website/docs/:path',
         text: 'Edit Halaman ini di GitHub'
     }
   }
@@ -44,7 +44,7 @@ function sidebarGuide() {
     {
         text: 'Petunjuk',
         items: [
-          { text: 'Apa itu KernelSU?', link: '/id_ID/guide/what-is-kernelsu' },
+          { text: 'Apa itu SxKernelSU?', link: '/id_ID/guide/what-is-kernelsu' },
           { text: 'Instalasi', link: '/id_ID/guide/installation' },
           { text: 'Bagaimana cara buildnya?', link: '/id_ID/guide/how-to-build' },
           { text: 'Integrasi untuk perangkat non-GKI', link: '/id_ID/guide/how-to-integrate-for-non-gki'},

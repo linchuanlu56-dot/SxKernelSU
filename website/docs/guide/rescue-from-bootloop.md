@@ -4,7 +4,7 @@ When updating a device, situations may arise where the device becomes "bricked".
 
 ## Brick by flashing boot partition
 
-In KernelSU, the following situations may cause boot brick when flashing the boot partition:
+In SxKernelSU, the following situations may cause boot brick when flashing the boot partition:
 
 1. You flashed a boot image in the wrong format. For example, if your device's boot format is `gz`, but you flashed an image in `lz4` format, the device won't boot.
 2. Your device needs to disable AVB verification to boot correctly, which usually requires wiping all data from the device.
@@ -18,7 +18,7 @@ The installation of modules can be one of the most common causes of bricking you
 
 ### Normal modules
 
-If you have flashed a module that has been proven to be safe but causes your device to fail to boot, then this situation is easily recoverable in KernelSU without any worries. KernelSU has built-in mechanisms to rescue your device, including the following:
+If you have flashed a module that has been proven to be safe but causes your device to fail to boot, then this situation is easily recoverable in SxKernelSU without any worries. SxKernelSU has built-in mechanisms to rescue your device, including the following:
 
 #### Rescue by pressing Volume down button {#volume-down}
 
@@ -26,15 +26,15 @@ You can try using **Safe Mode** to rescue your device. After entering Safe Mode,
 
 There are two ways to enter Safe Mode:
 
-1. The built-in Safe Mode of some systems: Some systems have a built-in Safe Mode that can be accessed by long-pressing the Volume down button. In other systems (such as MIUI/HyperOS), Safe Mode can be activated from the Recovery. When entering the system's Safe Mode, KernelSU will also enter this mode and automatically disable the modules.
-2. The built-in Safe Mode of KernelSU: In this case, the method is to **press the Volume down key continuously more than three times** after the first boot screen. Note that it is press-release, press-release, press-release, not hold.
+1. The built-in Safe Mode of some systems: Some systems have a built-in Safe Mode that can be accessed by long-pressing the Volume down button. In other systems (such as MIUI/HyperOS), Safe Mode can be activated from the Recovery. When entering the system's Safe Mode, SxKernelSU will also enter this mode and automatically disable the modules.
+2. The built-in Safe Mode of SxKernelSU: In this case, the method is to **press the Volume down key continuously more than three times** after the first boot screen. Note that it is press-release, press-release, press-release, not hold.
 
-After entering Safe Mode, all modules on the Module page in the KernelSU manager will be disabled. However, you can still perform the "uninstall" operation to remove any modules that may be causing issues.
+After entering Safe Mode, all modules on the Module page in the SxKernelSU manager will be disabled. However, you can still perform the "uninstall" operation to remove any modules that may be causing issues.
 
 The built-in Safe Mode is implemented in the kernel, so there is no possibility of missing important events due to interception. However, for non-GKI kernels, manual code integration may be required. For this, refer to the official documentation for guidance.
 
 ::: warning
-KernelSU registers volume key listener during kernel module initialization (loaded when the kernel executes the init process in LKM mode), and unregisters it at the `on_post_fs_data` stage (before the boot animation). You need to grasp the timing and quickly press the volume down key three times after the first boot screen. If the device boots fast or the operation is not timely, the safe mode may not be triggered.
+SxKernelSU registers volume key listener during kernel module initialization (loaded when the kernel executes the init process in LKM mode), and unregisters it at the `on_post_fs_data` stage (before the boot animation). You need to grasp the timing and quickly press the volume down key three times after the first boot screen. If the device boots fast or the operation is not timely, the safe mode may not be triggered.
 
 If the module writes unreasonable code in initrc causing the device to fail to boot, this code will still be executed even in safe mode.
 :::
@@ -50,7 +50,7 @@ If the device can get root shell via ADB, you can use the `ksud` command line di
 ::: tip
 After mounting `metadata` and `data` partitions, you can run `/data/adb/ksud` command under Recovery mode to manage modules.
 
-Since GKI devices share `init`, KernelSU kernel module will still be loaded under Recovery mode, you should be able to use most features of `ksud` (like setting features) normally.
+Since GKI devices share `init`, SxKernelSU kernel module will still be loaded under Recovery mode, you should be able to use most features of `ksud` (like setting features) normally.
 :::
 
 ```
@@ -66,7 +66,7 @@ reboot
 
 If you cannot enter the system (even ADB cannot be connected), you need a third-party Recovery (such as TWRP) on the device.
 
-The module loading of KernelSU depends on the init.rc injection file on the kernel side and the ksud process in user space. After deleting these files and rebooting, KernelSU will not load any modules.
+The module loading of SxKernelSU depends on the init.rc injection file on the kernel side and the ksud process in user space. After deleting these files and rebooting, SxKernelSU will not load any modules.
 
 **Operating steps:**
 
@@ -91,7 +91,7 @@ The module loading of KernelSU depends on the init.rc injection file on the kern
    reboot
    ```
 
-KernelSU will skip the loading of all modules after rebooting. After entering the system, you can reopen the KernelSU manager to deal with the module problems.
+SxKernelSU will skip the loading of all modules after rebooting. After entering the system, you can reopen the SxKernelSU manager to deal with the module problems.
 
 ### Format data or other malicious modules
 

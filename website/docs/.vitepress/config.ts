@@ -4,7 +4,7 @@ import { readdir, writeFile } from 'fs/promises'
 import { resolve } from 'path'
 
 export default defineConfig( {
-    title: 'KernelSU',
+    title: 'SxKernelSU',
     locales: locales.locales,
     head: [
         ['script', {
@@ -14,7 +14,7 @@ export default defineConfig( {
         }],
     ],
     sitemap: {
-        hostname: 'https://kernelsu.org'
+        hostname: 'https://github.com/linchuanlu56-dot/SxKernelSU'
     },
     buildEnd: async (config: SiteConfig) => {
         const templateDir = resolve(config.outDir, 'templates');
