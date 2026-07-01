@@ -1,5 +1,7 @@
 # Changelog
 
+[**English**](CHANGELOG.md) | [**简体中文**](CHANGELOG_CN.md)
+
 All notable changes to SxKernelSU will be documented in this file.
 
 ## [v2.0.0] — 2026-07-01 — Ghost Release

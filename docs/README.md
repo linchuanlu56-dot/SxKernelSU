@@ -23,7 +23,7 @@ A kernel-based root solution for Android devices — forked from KernelSU, super
 | **v1.4.0** 🔒 | Atomic module install/rollback, debugfs interface, Docker dev environment |
 | **v1.3.0** 🛡️ | BUG_ON→WARN_ON, init timeout, symbol resolver fallback, workqueue migration |
 
-📖 **[Full Changelog →](CHANGELOG.md)**
+📖 **[Full Changelog →](../CHANGELOG.md)** · [**简体中文**](../docs/CHANGELOG_CN.md)
 
 ---
 

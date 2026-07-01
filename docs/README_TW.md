@@ -1,16 +1,16 @@
 [English](README.md) | [Español](README_ES.md) | [简体中文](README_CN.md) | **繁體中文** | [日本語](README_JP.md) | [한국어](README_KR.md) | [Polski](README_PL.md) | [Português (Brasil)](README_PT-BR.md) | [Türkçe](README_TR.md) | [Русский](README_RU.md) | [Tiếng Việt](README_VI.md) | [Indonesia](README_ID.md) | [עברית](README_IW.md) | [हिंदी](README_IN.md) | [Italiano](README_IT.md)
 
-# SxSxKernelSU
+# SxKernelSU
 
 <img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="標誌">
 
 一套基於 Android 裝置核心的 Root 解決方案。
 
-[![最新版本](https://img.shields.io/github/v/release/tiann/SxKernelSU?label=%e7%99%bc%e8%a1%8c%e7%89%88%e6%9c%ac&logo=github)](https://github.com/tiann/SxKernelSU/releases/latest)
+[![最新版本](https://img.shields.io/github/v/release/linchuanlu56-dot/SxKernelSU?label=%e7%99%bc%e8%a1%8c%e7%89%88%e6%9c%ac&logo=github)](https://github.com/linchuanlu56-dot/SxKernelSU/releases/latest)
 [![Weblate](https://img.shields.io/badge/%e6%9c%ac%e5%9c%9f%e5%8c%96%e7%bf%bb%e8%ad%af-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/kernelsu)
 [![頻道](https://img.shields.io/badge/%e8%bf%bd%e8%b9%a4-Telegram-blue.svg?logo=telegram)](https://t.me/SxKernelSU)
 [![授權條款：《GPL v2》](https://img.shields.io/badge/%e6%8e%88%e6%ac%8a%e6%a2%9d%e6%ac%be-%E3%80%8AGPL%20v2%E3%80%8B-orange.svg?logo=gnu)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub 授權條款](https://img.shields.io/github/license/tiann/SxKernelSU?logo=gnu)](/LICENSE)
+[![GitHub 授權條款](https://img.shields.io/github/license/linchuanlu56-dot/SxKernelSU?logo=gnu)](/LICENSE)
 
 ## 特色功能
 
