@@ -1,0 +1,75 @@
+#!/bin/sh
+set -eu
+
+GKI_ROOT=$(pwd)
+
+display_usage() {
+    echo "Usage: $0 [--cleanup | <commit-or-tag>]"
+    echo "  --cleanup:              Cleans up previous modifications made by the script."
+    echo "  <commit-or-tag>:        Sets up or updates the SxKernelSU to specified tag or commit."
+    echo "  -h, --help:             Displays this usage information."
+    echo "  (no args):              Sets up or updates the SxKernelSU environment to the latest tagged version."
+}
+
+initialize_variables() {
+    if test -d "$GKI_ROOT/common/drivers"; then
+         DRIVER_DIR="$GKI_ROOT/common/drivers"
+    elif test -d "$GKI_ROOT/drivers"; then
+         DRIVER_DIR="$GKI_ROOT/drivers"
+    else
+         echo '[ERROR] "drivers/" directory not found.'
+         exit 127
+    fi
+
+    DRIVER_MAKEFILE=$DRIVER_DIR/Makefile
+    DRIVER_KCONFIG=$DRIVER_DIR/Kconfig
+}
+
+# Reverts modifications made by this script
+perform_cleanup() {
+    echo "[+] Cleaning up..."
+    [ -L "$DRIVER_DIR/sxkernelsu" ] && rm "$DRIVER_DIR/sxkernelsu" && echo "[-] Symlink removed."
+    grep -q "sxkernelsu" "$DRIVER_MAKEFILE" && sed -i '/sxkernelsu/d' "$DRIVER_MAKEFILE" && echo "[-] Makefile reverted."
+    grep -q "drivers/sxkernelsu/Kconfig" "$DRIVER_KCONFIG" && sed -i '/drivers\/sxkernelsu\/Kconfig/d' "$DRIVER_KCONFIG" && echo "[-] Kconfig reverted."
+    if [ -d "$GKI_ROOT/SxKernelSU" ]; then
+        rm -rf "$GKI_ROOT/SxKernelSU" && echo "[-] SxKernelSU directory deleted."
+    fi
+}
+
+# Sets up or update SxKernelSU environment
+setup_sxkernelsu() {
+    echo "[+] Setting up SxKernelSU..."
+    test -d "$GKI_ROOT/SxKernelSU" || git clone https://github.com/tiann/SxKernelSU && echo "[+] Repository cloned."
+    cd "$GKI_ROOT/SxKernelSU"
+    git stash && echo "[-] Stashed current changes."
+    if [ "$(git status | grep -Po 'v\d+(\.\d+)*' | head -n1)" ]; then
+        git checkout main && echo "[-] Switched to main branch."
+    fi
+    git pull && echo "[+] Repository updated."
+    if [ -z "${1-}" ]; then
+        git checkout "$(git describe --abbrev=0 --tags)" && echo "[-] Checked out latest tag."
+    else
+        git checkout "$1" && echo "[-] Checked out $1." || echo "[-] Checkout default branch"
+    fi
+    cd "$DRIVER_DIR"
+    ln -sf "$(realpath --relative-to="$DRIVER_DIR" "$GKI_ROOT/SxKernelSU/kernel")" "sxkernelsu" && echo "[+] Symlink created."
+
+    # Add entries in Makefile and Kconfig if not already existing
+    grep -q "sxkernelsu" "$DRIVER_MAKEFILE" || printf "\nobj-\$(CONFIG_SKS) += sxkernelsu/\n" >> "$DRIVER_MAKEFILE" && echo "[+] Modified Makefile."
+    grep -q "source \"drivers/sxkernelsu/Kconfig\"" "$DRIVER_KCONFIG" || sed -i "/endmenu/i\source \"drivers/sxkernelsu/Kconfig\"" "$DRIVER_KCONFIG" && echo "[+] Modified Kconfig."
+    echo '[+] Done.'
+}
+
+# Process command-line arguments
+if [ "$#" -eq 0 ]; then
+    initialize_variables
+    setup_sxkernelsu
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    display_usage
+elif [ "$1" = "--cleanup" ]; then
+    initialize_variables
+    perform_cleanup
+else
+    initialize_variables
+    setup_sxkernelsu "$@"
+fi

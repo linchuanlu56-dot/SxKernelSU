@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="profile_flags_desc_no_new_privs">Pinipigilan ang karagdagang pagtaas ng pribilehiyo sa pamamagitan ng KernelSU mula sa loob ng konteksto ng root profile na ito.</string>
+    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
+</resources>

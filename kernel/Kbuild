@@ -1,0 +1,155 @@
+sxkernelsu-objs := core/init.o
+
+sxkernelsu-objs += feature/kernel_umount.o
+sxkernelsu-objs += feature/sulog.o
+sxkernelsu-objs += feature/sucompat.o
+
+sxkernelsu-objs += hook/lsm_hook.o
+sxkernelsu-objs += hook/setuid_hook.o
+sxkernelsu-objs += hook/syscall_event_bridge.o
+sxkernelsu-objs += hook/syscall_hook_manager.o
+sxkernelsu-objs += hook/tp_marker.o
+ifeq ($(CONFIG_ARM64),y)
+sxkernelsu-objs += hook/arm64/patch_memory.o
+sxkernelsu-objs += hook/arm64/syscall_hook.o
+else ifeq ($(CONFIG_X86_64),y)
+sxkernelsu-objs += hook/x86_64/patch_memory.o
+sxkernelsu-objs += hook/x86_64/syscall_hook.o
+endif
+
+sxkernelsu-objs += infra/file_wrapper.o
+sxkernelsu-objs += infra/event_queue.o
+sxkernelsu-objs += infra/seccomp_cache.o
+sxkernelsu-objs += infra/su_mount_ns.o
+sxkernelsu-objs += infra/symbol_resolver.o
+
+ifneq ($(CONFIG_SKS_DISABLE_MANAGER),y)
+sxkernelsu-objs += manager/apk_sign.o
+sxkernelsu-objs += manager/pkg_observer.o
+sxkernelsu-objs += manager/throne_tracker.o
+endif
+
+sxkernelsu-objs += policy/allowlist.o
+sxkernelsu-objs += policy/app_profile.o
+sxkernelsu-objs += policy/feature.o
+
+sxkernelsu-objs += runtime/boot_event.o
+sxkernelsu-objs += runtime/sksud_integration.o
+
+sxkernelsu-objs += selinux/selinux.o
+sxkernelsu-objs += selinux/rules.o
+sxkernelsu-objs += selinux/sepolicy.o
+
+sxkernelsu-objs += sulog/event.o
+sxkernelsu-objs += sulog/fd.o
+
+sxkernelsu-objs += supercall/dispatch.o
+sxkernelsu-objs += supercall/perm.o
+sxkernelsu-objs += supercall/supercall.o
+
+sxkernelsu-objs += feature/adb_root.o
+
+sxkernelsu-objs += feature/selinux_hide.o
+
+ifdef KBUILD_EXTMOD
+ifeq ($(CONFIG_SKS_DISABLE_MANAGER),y)
+ccflags-y += -DCONFIG_SKS_DISABLE_MANAGER=1
+endif
+ifeq ($(CONFIG_SKS_DISABLE_POLICY),y)
+ccflags-y += -DCONFIG_SKS_DISABLE_POLICY=1
+endif
+ifeq ($(CONFIG_SKS_DEBUG),y)
+ccflags-y += -DCONFIG_SKS_DEBUG=1
+endif
+endif
+
+ccflags-y += -I$(srctree)/security/selinux -I$(srctree)/security/selinux/include
+ccflags-y += -I$(objtree)/security/selinux -include $(srctree)/include/uapi/asm-generic/errno.h
+
+ifeq ($(filter /%,$(src)),)
+SKS_KERNEL_DIR := $(srctree)/$(src)
+else
+SKS_KERNEL_DIR := $(src)
+endif
+
+# uapi/ headers are committed to include/uapi/ so that
+# `#include "uapi/..."` resolves against -I$(SKS_KERNEL_DIR)/include.
+ccflags-y += -I$(SKS_KERNEL_DIR) -I$(SKS_KERNEL_DIR)/include
+
+obj-$(CONFIG_SKS) += sxkernelsu.o
+
+MDIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
+# Workaround bazel
+# https://github.com/tiann/SxKernelSU/pull/316#issuecomment-1479043219
+GIT := $(shell PATH="$$PATH":/usr/bin:/usr/local/bin which git)
+ifneq ($(GIT),)
+# Check if this is a git repository
+# Try to detect Git repo intelligently
+GIT_ROOT := $(shell cd $(MDIR) && $(GIT) rev-parse --show-toplevel 2>/dev/null)
+ifneq ($(GIT_ROOT),)
+KERNEL_GIT_ROOT := $(shell cd $(srctree) && $(GIT) rev-parse --show-toplevel 2>/dev/null)
+ifneq ($(GIT_ROOT),$(KERNEL_GIT_ROOT))
+# Only set version if it's a different repo from kernel
+$(shell cd $(GIT_ROOT) && [ -f .git/shallow ] && $(GIT) fetch --unshallow 2>/dev/null || true)
+SKS_GIT_VERSION := $(shell cd $(GIT_ROOT) && $(GIT) rev-list --count HEAD 2>/dev/null)
+SKS_GIT_VERSION_VALID := 1
+$(info -- SxKernelSU: Git repo detected at $(GIT_ROOT))
+endif
+endif
+else
+$(warning -- SxKernelSU: Git not detected, make sure git is installed in your PATH!)
+endif
+
+
+# Calculate version if git version is available
+ifdef SKS_GIT_VERSION_VALID
+# sksu_version: major * 10000 + git version + 200 for historical reasons
+$(eval SKS_VERSION=$(shell expr 30000 + $(SKS_GIT_VERSION)))
+$(info -- SxKernelSU version: $(SKS_VERSION))
+ccflags-y += -DSKS_VERSION=$(SKS_VERSION)
+else
+# If there is no .git directory, use default version
+$(warning "SKS_GIT_VERSION not defined! It is better to make SxKernelSU a git repository!")
+ccflags-y += -DSKS_VERSION=16
+endif
+
+SKS_NEW_DCACHE_FLUSH := $(shell grep -q __flush_dcache_area $(srctree)/arch/arm64/include/asm/cacheflush.h ; echo $$?)
+$(info -- SKS_NEW_DCACHE_FLUSH: $(SKS_NEW_DCACHE_FLUSH))
+
+
+ifndef SKS_EXPECTED_SIZE
+SKS_EXPECTED_SIZE := 0x033b
+endif
+
+ifndef SKS_EXPECTED_HASH
+SKS_EXPECTED_HASH := c371061b19d8c7d7d6133c6a9bafe198fa944e50c1b31c9d8daa8d7f1fc2d2d6
+endif
+
+ifdef SKS_MANAGER_PACKAGE
+ccflags-y += -DSKS_MANAGER_PACKAGE=\"$(SKS_MANAGER_PACKAGE)\"
+$(info -- SxKernelSU Manager package name: $(SKS_MANAGER_PACKAGE))
+endif
+
+$(info -- SxKernelSU Manager signature size: $(SKS_EXPECTED_SIZE))
+$(info -- SxKernelSU Manager signature hash: $(SKS_EXPECTED_HASH))
+
+ccflags-y += -DEXPECTED_SIZE=$(SKS_EXPECTED_SIZE)
+ccflags-y += -DEXPECTED_HASH=\"$(SKS_EXPECTED_HASH)\"
+
+ifdef SKS_EXPECTED_SIZE2
+ifndef SKS_EXPECTED_HASH2
+$(error SKS_EXPECTED_HASH2 must be set when SKS_EXPECTED_SIZE2 is set)
+endif
+ccflags-y += -DEXPECTED_SIZE2=$(SKS_EXPECTED_SIZE2)
+ccflags-y += -DEXPECTED_HASH2=\"$(SKS_EXPECTED_HASH2)\"
+$(info -- SxKernelSU Manager signature size2: $(SKS_EXPECTED_SIZE2))
+$(info -- SxKernelSU Manager signature hash2: $(SKS_EXPECTED_HASH2))
+endif
+
+ccflags-y += -DSKS_NEW_DCACHE_FLUSH=$(SKS_NEW_DCACHE_FLUSH)
+
+ccflags-y += -Wno-strict-prototypes -Wno-int-conversion -Wno-gcc-compat -Wno-missing-prototypes
+ccflags-y += -Wno-declaration-after-statement -Wno-unused-function
+
+# Keep a new line here!! Because someone may append config
