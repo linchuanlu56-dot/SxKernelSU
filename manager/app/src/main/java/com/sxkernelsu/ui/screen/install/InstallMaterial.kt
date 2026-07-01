@@ -1,13 +1,18 @@
 package com.sxkernelsu.ui.screen.install
 
+import com.sxkernelsu.ui.theme.isInDarkTheme
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -75,7 +80,16 @@ internal fun InstallScreenMaterial(
         snackbarHost = { SnackBarHost(hostState = snackBarHost, modifier = Modifier.safeDrawingPadding()) },
         contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
     ) { innerPadding ->
-        Column(
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = if (isInDarkTheme()) R.drawable.bg_anime_dark else R.drawable.bg_anime_light),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alpha = 0.2f
+            )
+            com.sxkernelsu.ui.component.SparkleBackground(starCount = 16)
+            Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxHeight()
