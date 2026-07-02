@@ -19,7 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.sxkernelsu.R
-import com.sxkernelsu.magica.MagicaService
+import me.weishu.sxkernelsu.magica.MagicaService
 import com.sxkernelsu.ui.LocalMainPagerState
 import com.sxkernelsu.ui.LocalUiMode
 import com.sxkernelsu.ui.UiMode

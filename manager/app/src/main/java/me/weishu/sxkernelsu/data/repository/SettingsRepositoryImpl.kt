@@ -10,7 +10,7 @@ import com.materialkolor.dynamiccolor.ColorSpec
 import com.topjohnwu.superuser.ShellUtils
 import com.sxkernelsu.Natives
 import com.sxkernelsu.ksuApp
-import com.sxkernelsu.magica.BootCompletedReceiver
+import me.weishu.sxkernelsu.magica.BootCompletedReceiver
 import com.sxkernelsu.ui.UiMode
 import com.sxkernelsu.ui.util.execKsud
 import com.sxkernelsu.ui.util.getFeaturePersistValue
