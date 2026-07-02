@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import me.weishu.sxkernelsu.ui.util.SksCliKt;
+import com.sxkernelsu.ui.util.SksCliKt;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 
