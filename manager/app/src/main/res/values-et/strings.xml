@@ -16,7 +16,7 @@
     <string name="safe_mode">Turvarežiim</string>
     <string name="reboot_to_apply">Muudatuste rakendamiseks taaskäivita</string>
     <string name="home_learn_kernelsu">Õpi KernelSUd</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
+    <string name="home_learn_kernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-kernelsu.html</string>
     <string name="profile_default">Vaikimisi</string>
     <string name="profile_namespace">Haagi nimeruum</string>
     <string name="profile_umount_modules">Lahtihaagitud moodulid</string>
@@ -125,7 +125,7 @@ Liitu meie %2$si kanaliga</string>
     <string name="settings_kernel_umount">Kernel umount</string>
     <string name="settings_kernel_umount_summary">Kerneli tasemel lahtihaakimise käitumine, mida kontrollib KernelSU</string>
     <string name="profile_flags_desc_no_new_privs">Takistab õiguste edasist tõstmist KernelSU kaudu selle root-profiili kontekstis.</string>
-    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
-    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
-    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
+    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
 </resources>

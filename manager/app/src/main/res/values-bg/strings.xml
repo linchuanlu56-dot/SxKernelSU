@@ -47,7 +47,7 @@
     <string name="reboot_to_apply">Рестартирай за да приеме ефект</string>
     <string name="module_magisk_conflict">Модулите не са налични поради конфликт с Magisk!</string>
     <string name="home_learn_kernelsu">Научи KernelSU</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
+    <string name="home_learn_kernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-kernelsu.html</string>
     <string name="home_click_to_learn_kernelsu">Научи как да изтеглите KernelSU и да използвате модули.</string>
     <string name="home_support_title">Помогнете Ни</string>
     <string name="home_support_content">KernelSU си е, и винаги ще е безплатен, и с отворен код. Обаче, можете да ни покажете че се интересувате като ни направите дарение.</string>
@@ -172,7 +172,7 @@
     <string name="tab_releases">Версии</string>
     <string name="tab_info">Информация</string>
     <string name="profile_flags_desc_no_new_privs">Предотвратява по-нататъшно повишаване на привилегиите чрез KernelSU в контекста на този root профил.</string>
-    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
-    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
-    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
+    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
 </resources>

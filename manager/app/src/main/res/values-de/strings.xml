@@ -15,7 +15,7 @@
     <string name="module_author">Autor</string>
     <string name="about">Über KernelSU</string>
     <string name="module_magisk_conflict">Module sind aufgrund eines Konfliktes mit Magisk nicht verfügbar!</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
+    <string name="home_learn_kernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-kernelsu.html</string>
     <string name="home_click_to_learn_kernelsu">Erfahre, wie KernelSU installiert wird und wie Module verwendet werden.</string>
     <string name="home_support_title">Unterstütze uns</string>
     <string name="home_support_content">KernelSU ist und wird immer frei und quelloffen sein. Du kannst uns jedoch deine Unterstützung zeigen, indem du eine Spende tätigst.</string>
@@ -142,7 +142,7 @@
     <string name="install_upload_lkm_file">Nutze lokale LKM Datei</string>
     <string name="install_only_support_ko_file">Nur .ko Dateien unterstützt</string>
     <string name="profile_flags_desc_no_new_privs">Verhindert eine weitere Rechteausweitung über KernelSU innerhalb dieses Root-Profils.</string>
-    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
-    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
-    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
+    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
 </resources>

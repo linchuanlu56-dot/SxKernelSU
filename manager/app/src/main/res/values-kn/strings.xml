@@ -57,7 +57,7 @@
     <string name="module_empty">ಮಾಡ್ಯೂಲ್ ಅನ್ನು ಸ್ಥಾಪಿಸಲಾಗಿಲ್ಲ</string>
     <string name="home_kernel">ಕರ್ನಲ್</string>
     <string name="failed_to_update_app_profile">%s ಗಾಗಿ ಅಪ್ಲಿಕೇಶನ್ ಪ್ರೊಫೈಲ್ ಅನ್ನು ನವೀಕರಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
+    <string name="home_learn_kernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-kernelsu.html</string>
     <string name="about_source_code">%1$s ನಲ್ಲಿ ಮೂಲ ಕೋಡ್ ಅನ್ನು ವೀಕ್ಷಿಸಿ<br/>ನಮ್ಮ %2$s ಚಾನಲ್‌ಗೆ ಸೇರಿ</string>
     <string name="home_manager_version">ಮ್ಯಾನೇಜರ್ ವರ್ಷನ್</string>
     <string name="new_version_available">ಹೊಸ ಆವೃತ್ತಿ: %s ಲಭ್ಯವಿದೆ, ಅಪ್‌ಗ್ರೇಡ್ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ</string>
@@ -67,7 +67,7 @@
     <string name="settings_kernel_umount">ಕರ್ನಲ್ ಅನ್‌ಮೌಂಟ್</string>
     <string name="settings_kernel_umount_summary">KernelSU ನಿಂದ ನಿಯಂತ್ರಿಸಲ್ಪಡುವ ಕರ್ನಲ್-ಮಟ್ಟದ ಅನ್‌ಮೌಂಟ್ ನಡವಳಿಕೆ</string>
     <string name="profile_flags_desc_no_new_privs">ಈ ರೂಟ್ ಪ್ರೊಫೈಲ್‌ನ ಸಂದರ್ಭದೊಳಗೆ KernelSU ಮುಖಾಂತರ ಹೆಚ್ಚಿನ ಹಕ್ಕು ಏರಿಕೆಯನ್ನು ತಡೆಯುತ್ತದೆ.</string>
-    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
-    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
-    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
+    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
 </resources>

@@ -7,7 +7,7 @@ import android.os.IBinder
 import android.os.UserManager
 import android.util.Log
 import com.topjohnwu.superuser.ipc.RootService
-import me.weishu.sxkernelsu.ISksInterface
+import com.sxkernelsu.ISksInterface
 import rikka.parcelablelist.ParcelableListSlice
 
 /**

@@ -13,7 +13,7 @@ import com.topjohnwu.superuser.ipc.RootService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import me.weishu.sxkernelsu.ISksInterface
+import com.sxkernelsu.ISksInterface
 import com.sxkernelsu.Natives
 import com.sxkernelsu.data.model.AppInfo
 import com.sxkernelsu.ksuApp

@@ -28,7 +28,7 @@
     <string name="safe_mode">Sikker tilstand</string>
     <string name="reboot_to_apply">Genstart for at tage effekt</string>
     <string name="home_learn_kernelsu">Lær KernelSU</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
+    <string name="home_learn_kernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-kernelsu.html</string>
     <string name="home_click_to_learn_kernelsu">Lær hvordan man installerer KernelSU og moduler.</string>
     <string name="about_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
     <string name="profile_default">Standard</string>
@@ -139,7 +139,7 @@
     <string name="refresh_refresh">Opdaterer…</string>
     <string name="refresh_complete">Opdateret</string>
     <string name="profile_flags_desc_no_new_privs">Forhindrer yderligere priviligeringseskalering via KernelSU inden for konteksten af denne root-profil.</string>
-    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
-    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
-    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
+    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
 </resources>

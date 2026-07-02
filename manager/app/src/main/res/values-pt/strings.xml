@@ -69,7 +69,7 @@ Junte-se ao nosso canal %2$s</string>
     <string name="module_start_downloading">Iniciar o download: %s</string>
     <string name="module_downloading">Baixando módulo: %s</string>
     <string name="failed_to_update_sepolicy">Falha ao atualizar as regras do SELinux para: %s</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
+    <string name="home_learn_kernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-kernelsu.html</string>
     <string name="restart_app">Reiniciar</string>
     <string name="launch_app">Lançar</string>
     <string name="force_stop_app">Forçar parada</string>
@@ -81,7 +81,7 @@ Junte-se ao nosso canal %2$s</string>
     <string name="settings_kernel_umount">Desmontar kernel</string>
     <string name="settings_kernel_umount_summary">Comportamento de desmontagem ao nível do kernel controlado pelo KernelSU</string>
     <string name="profile_flags_desc_no_new_privs">Impede uma escalada adicional de privilégios via KernelSU dentro do contexto deste perfil root.</string>
-    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
-    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
-    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
+    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
 </resources>

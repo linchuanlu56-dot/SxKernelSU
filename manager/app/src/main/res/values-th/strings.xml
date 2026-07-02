@@ -42,7 +42,7 @@
     <string name="reboot_to_apply">รีบูตเพื่อให้มีผล</string>
     <string name="module_magisk_conflict">โมดูลไม่สามารถใช้งานได้ เนื่องจากขัดแย้งกับ Magisk!</string>
     <string name="home_learn_kernelsu">เรียนรู้เกี่ยวกับ KernelSU</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
+    <string name="home_learn_kernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-kernelsu.html</string>
     <string name="home_click_to_learn_kernelsu">เรียนรู้วิธีการติดตั้ง KernelSU และวิธีใช้งานโมดูลต่าง ๆ</string>
     <string name="home_support_title">สนับสนุนพวกเรา</string>
     <string name="home_support_content">KernelSU จะเป็นโอเพ่นซอร์สฟรีเสมอ อย่างไรก็ตาม คุณสามารถแสดงความห่วงใยได้ด้วยการบริจาค</string>
@@ -201,7 +201,7 @@
     <string name="current_kmi">เวอร์ชัน KMI ของอุปกรณ์นี้: %s</string>
     <string name="current_device_kmi">อุปกรณ์นี้ใช้ KMI</string>
     <string name="profile_flags_desc_no_new_privs">ป้องกันการยกระดับสิทธิ์เพิ่มเติมผ่าน KernelSU ภายในบริบทของโปรไฟล์รูทนี้</string>
-    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
-    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
-    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
+    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
 </resources>

@@ -1,10 +1,10 @@
-// IKsuInterface.aidl
-package me.weishu.kernelsu;
+// ISksInterface.aidl
+package com.sxkernelsu;
 
 import android.content.pm.PackageInfo;
 import rikka.parcelablelist.ParcelableListSlice;
 
-interface IKsuInterface {
+interface ISksInterface {
     ParcelableListSlice<PackageInfo> getPackages(int flags);
 
     int[] getUserIds();
