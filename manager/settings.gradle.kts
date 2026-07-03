@@ -18,4 +18,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "SxKernelSU"
-include(":app")
+include(":app", ":libsu-service")
