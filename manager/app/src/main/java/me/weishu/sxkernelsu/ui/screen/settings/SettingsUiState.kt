@@ -47,10 +47,6 @@ data class SettingsUiState(
     val isAdbRootEnabled: Boolean = false,
 
     val isLkmMode: Boolean = false,
-    val isLateLoadMode: Boolean = false,
-
-    // Auto Jailbreak
-    val autoJailbreak: Boolean = false
 )
 
 @Immutable
@@ -67,6 +63,5 @@ data class SettingsScreenActions(
     val onSetAdbRootEnabled: (Boolean) -> Unit,
     val onSetDefaultUmountModules: (Boolean) -> Unit,
     val onSetEnableWebDebugging: (Boolean) -> Unit,
-    val onSetAutoJailbreak: (Boolean) -> Unit,
     val onOpenAbout: () -> Unit,
 )

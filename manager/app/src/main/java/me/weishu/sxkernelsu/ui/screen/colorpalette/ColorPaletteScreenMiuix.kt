@@ -3,10 +3,13 @@ package com.sxkernelsu.ui.screen.colorpalette
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,6 +66,7 @@ import com.materialkolor.rememberDynamicColorScheme
 import com.sxkernelsu.R
 import com.sxkernelsu.ui.component.miuix.ScaleDialog
 import com.sxkernelsu.ui.theme.LocalEnableBlur
+import com.sxkernelsu.ui.theme.isInDarkTheme
 import com.sxkernelsu.ui.theme.keyColorOptions
 import com.sxkernelsu.ui.util.BlurredBar
 import com.sxkernelsu.ui.util.rememberBlurBackdrop
@@ -131,6 +135,12 @@ fun ColorPaletteScreenMiuix(
         val showScaleDialog = rememberSaveable { mutableStateOf(false) }
 
         Box(modifier = if (backdrop != null) Modifier.layerBackdrop(backdrop) else Modifier) {
+            Image(
+                painter = painterResource(id = if (isInDarkTheme()) R.drawable.bg_anime_dark else R.drawable.bg_anime_light),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxHeight()

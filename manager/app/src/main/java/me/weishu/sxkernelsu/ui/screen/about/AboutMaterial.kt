@@ -32,9 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.FixedScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import com.sxkernelsu.ui.theme.isInDarkTheme
 import androidx.compose.ui.unit.dp
 import com.sxkernelsu.R
 import com.sxkernelsu.ui.component.material.SegmentedColumn
@@ -69,12 +71,19 @@ fun AboutScreenMaterial(
             )
         },
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = if (isInDarkTheme()) R.drawable.bg_anime_dark else R.drawable.bg_anime_light),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-        ) {
+            ) {
             item {
                 Column(
                     modifier = Modifier
@@ -127,6 +136,7 @@ fun AboutScreenMaterial(
                     )
                 )
             }
+        }
         }
     }
 }

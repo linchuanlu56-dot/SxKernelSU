@@ -1,8 +1,6 @@
 package com.sxkernelsu.data.repository
 
-import android.content.ComponentName
 import android.content.Context
-import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.content.edit
 import com.materialkolor.PaletteStyle
@@ -10,7 +8,6 @@ import com.materialkolor.dynamiccolor.ColorSpec
 import com.topjohnwu.superuser.ShellUtils
 import com.sxkernelsu.Natives
 import com.sxkernelsu.ksuApp
-import me.weishu.sxkernelsu.magica.BootCompletedReceiver
 import com.sxkernelsu.ui.UiMode
 import com.sxkernelsu.ui.util.execKsud
 import com.sxkernelsu.ui.util.getFeaturePersistValue
@@ -77,23 +74,6 @@ class SettingsRepositoryImpl : SettingsRepository {
     override var enableWebDebugging: Boolean
         get() = prefs.getBoolean("enable_web_debugging", false)
         set(value) = prefs.edit { putBoolean("enable_web_debugging", value) }
-
-    override var autoJailbreak: Boolean
-        get() = prefs.getBoolean("auto_jailbreak", false)
-        set(value) {
-            runCatching {
-                ksuApp.packageManager.setComponentEnabledSetting(
-                    ComponentName(ksuApp, BootCompletedReceiver::class.java),
-                    if (value) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP
-                )
-            }.onFailure {
-                Log.e("Settings", "failed to change boot receiver state to $value", it)
-            }
-            prefs.edit {
-                putBoolean("auto_jailbreak", value)
-            }
-        }
 
     override suspend fun getSuCompatStatus(): String = getFeatureStatus("su_compat")
 

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home_not_installed">Non installé</string>
     <string name="home_working">Fonctionnel</string>
@@ -200,15 +200,10 @@
     <string name="color_amber">Ambre</string>
     <string name="home_version_mismatch">Incompatibilité entre la version du gestionnaire (%1$d) et la version du pilote KernelSU (%2$d).</string>
     <string name="reboot_soft">Redémarrage logiciel</string>
-    <string name="jailbreak_mode">Mode Jailbreak</string>
-    <string name="home_jailbreak">Jailbreak</string>
-    <string name="jailbreak_timeout">Le jailbreak a peut-être échoué, consultez les journaux</string>
     <string name="settings_enable_predictive_back">Geste de retour prédictif</string>
     <string name="settings_enable_predictive_back_summary">Activez la prise en charge du geste de retour prédictif.</string>
     <string name="home_pr_build_warning">Ceci est une version de débogage issue d\'une PR. Ne l\'utilisez PAS en production !</string>
     <string name="home_pr_kernel_warning">Le noyau a été construit avec la prise en charge de signature PR. Ce noyau n\'est pas destiné à être utilisé en production !</string>
-    <string name="jailbreak_flash_warning">Vous êtes en **mode Jailbreak**. En flashant une partition sur un appareil dont le **bootloader est verrouillé** entraînera l\'échec d\'Android Verified Boot (AVB) et pourrait **empêcher le démarrage de l\'appareil**.\n\nAssurez-vous que votre bootloader est bien déverrouillé avant de continuer !</string>
-    <string name="jailbreak_flash_warning_countdown">Continuer (%1$d)</string>
     <string name="settings_monet">Activer Monet</string>
     <string name="settings_ui_mode">Style de l\'interface</string>
     <string name="settings_ui_mode_summary">Choisissez un style d\'interface.</string>
@@ -223,8 +218,6 @@
     <string name="settings_enable_glass">Liquid Glass</string>
     <string name="settings_enable_glass_summary">Activez l\'effet Liquid Glass pour la barre inférieure flottante</string>
     <string name="show_only_primary_user_apps">Afficher seulement les applis de l\'utilisateur principal</string>
-    <string name="settings_auto_jailbreak">Jailbreak automatique</string>
-    <string name="settings_auto_jailbreak_summary">Utilisez automatiquement Magica pour l\'élévation de privilèges lorsque SELinux permissif est détecté au démarrage de l\'appareil. L\'autorisation de démarrage automatique devra être accordé à cette application.</string>
     <string name="allow_shell">Toujours accorder l\'accès root à Shell</string>
     <string name="allow_shell_summary">Autorisez toujours adb shell à appeler su. N\'activez cette option qu\'en cas de nécessité absolue.</string>
     <string name="enable_adb">Forcer l\'activation d\'adb au boot</string>

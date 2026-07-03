@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home">Beranda</string>
     <string name="home_not_installed">Tidak terpasang</string>
@@ -201,14 +201,10 @@
     <string name="color_sakura">Sakura</string>
     <string name="home_version_mismatch">Versi manajer (%1$d) dan versi driver KernelSU (%2$d) tidak sesuai.</string>
     <string name="reboot_soft">Mulai ulang cepat</string>
-    <string name="jailbreak_mode">Mode jailbreak</string>
-    <string name="jailbreak_timeout">Proses jailbreak mungkin gagal, silakan periksa log</string>
     <string name="settings_enable_predictive_back">Gerakan kembali prediktif</string>
     <string name="settings_enable_predictive_back_summary">Aktifkan dukungan gerakan kembali prediktif.</string>
     <string name="home_pr_build_warning">Ini adalah versi PR debug untuk permintaan perubahan (Pull Requests). JANGAN gunakan di lingkungan produksi!</string>
     <string name="home_pr_kernel_warning">Kernel ini dibangun dengan dukungan tanda tangan PR (Pull Requests). Ini bukan kernel produksi!</string>
-    <string name="jailbreak_flash_warning">Anda sedang dalam **Mode jailbreak**. Memasang partisi pada perangkat dengan **bootloader terkunci** akan merusak AVB (Android Verified Boot). dan dapat menyebabkan perangkat **gagal boot**.\n\nPastikan bootloader Anda tidak terkunci sebelum melanjutkan!</string>
-    <string name="jailbreak_flash_warning_countdown">Lanjutkan (%1$d)</string>
     <string name="settings_monet">Aktifkan Monet</string>
     <string name="settings_ui_mode">Gaya Antarmuka</string>
     <string name="settings_ui_mode_summary">Pilih gaya antarmuka.</string>
@@ -222,8 +218,6 @@
     <string name="settings_enable_glass">Kaca cair</string>
     <string name="settings_enable_glass_summary">Aktifkan efek kaca cair (liquid glass) untuk bilah bawah mengambang.</string>
     <string name="show_only_primary_user_apps">Hanya tampilkan apl pengguna utama</string>
-    <string name="settings_auto_jailbreak">Jailbreak otomatis</string>
-    <string name="settings_auto_jailbreak_summary">Secara otomatis menggunakan Magica untuk meningkatkan hak akses ketika SELinux Permissive terdeteksi saat boot. Membutuhkan pemberian izin mulai otomatis untuk aplikasi ini.</string>
     <string name="allow_shell">Selalu berikan izin akses root ke Shell.</string>
     <string name="allow_shell_summary">Selalu izinkan adb shell untuk memanggil su. Jangan aktifkan ini kecuali benar-benar diperlukan.</string>
     <string name="enable_adb">Paksa pengaktifan adb saat boot</string>
@@ -239,7 +233,6 @@
     <string name="download">Unduh</string>
     <string name="download_cancel">Batal</string>
     <string name="download_install">Pasang</string>
-    <string name="home_jailbreak">Jailbreak</string>
     <string name="settings_enable_blur">Blur</string>
     <string name="profile_flags_desc_no_new_privs">Mencegah eskalasi hak akses lebih lanjut melalui KernelSU dalam konteks profil root ini.</string>
     <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>

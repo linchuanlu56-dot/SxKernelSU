@@ -64,8 +64,6 @@ class SettingsViewModel(
             val isAdbRootEnabled = repo.getAdbRootPersistValue() == 1L
             val isDefaultUmountModules = repo.isDefaultUmountModules()
             val uiMode = repo.uiMode
-            val autoJailbreak = repo.autoJailbreak
-            val isLateLoadMode = Natives.isLateLoadMode
 
             _uiState.update {
                 it.copy(
@@ -96,8 +94,6 @@ class SettingsViewModel(
                     isSulogEnabled = isSulogEnabled,
                     isDefaultUmountModules = isDefaultUmountModules,
                     isLkmMode = isLkmMode,
-                    autoJailbreak = autoJailbreak,
-                    isLateLoadMode = isLateLoadMode,
                 )
             }
         }
@@ -275,11 +271,6 @@ class SettingsViewModel(
                 }
             }
         }
-    }
-
-    fun setAutoJailbreak(enabled: Boolean) {
-        repo.autoJailbreak = enabled
-        _uiState.update { it.copy(autoJailbreak = enabled) }
     }
 
     fun setSulogEnabled(enabled: Boolean) {

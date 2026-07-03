@@ -74,13 +74,6 @@ fun FlashScreenMiuix(
     val blurActive = backdrop != null
     val barColor = if (blurActive) Color.Transparent else colorScheme.surface
 
-    if (state.showJailbreakWarning) {
-        JailbreakFlashWarningDialog(
-            onConfirm = actions.onConfirmJailbreakWarning,
-            onDismiss = actions.onDismissJailbreakWarning,
-        )
-    }
-
     Scaffold(
         topBar = {
             TopBar(

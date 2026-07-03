@@ -21,6 +21,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
+import androidx.compose.ui.layout.ContentScale
+import com.sxkernelsu.ui.theme.isInDarkTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -410,7 +412,14 @@ fun ModulePagerMaterial(
             })
         }
     ) { innerPadding ->
-        PullToRefreshBox(
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = if (isInDarkTheme()) R.drawable.bg_anime_dark else R.drawable.bg_anime_light),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+            )
+            PullToRefreshBox(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
@@ -466,6 +475,7 @@ fun ModulePagerMaterial(
                 },
                 onModuleAddShortcut = { module, type -> onModuleAddShortcut(module, type) },
             )
+        }
         }
     }
 

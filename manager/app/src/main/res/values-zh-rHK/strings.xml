@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home">主頁</string>
     <string name="home_not_installed">未安裝</string>
@@ -203,13 +203,11 @@
     <string name="module_undo_uninstall_failed">無法取消解除安裝：%s</string>
     <string name="undo">復原</string>
     <string name="reboot_soft">軟重啟</string>
-    <string name="jailbreak_mode">越獄模式</string>
-    <string name="home_jailbreak">越獄</string>
-    <string name="jailbreak_timeout">越獄可能失敗，請檢查日誌</string>
+
     <string name="home_version_mismatch">管理器版本 (%1$d) 與 KernelSU 版本 (%2$d) 不符</string>
     <string name="settings_enable_predictive_back">預測性返回手勢</string>
     <string name="settings_enable_predictive_back_summary">啟用預測性返回手勢支援</string>
-    <string name="jailbreak_flash_warning_countdown">繼續 (%1$d)</string>
+
     <string name="settings_monet">啟用 Monet 配色</string>
     <string name="settings_ui_mode">介面風格</string>
     <string name="settings_ui_mode_summary">選擇介面顯示風格</string>
@@ -224,8 +222,7 @@
     <string name="settings_enable_glass">液態玻璃</string>
     <string name="settings_enable_glass_summary">為懸浮底部欄啟用液態玻璃效果</string>
     <string name="show_only_primary_user_apps">僅顯示主要使用者 App</string>
-    <string name="settings_auto_jailbreak_summary">開機時若偵測到寬容模式 SELinux，將自動使用 Magica 提升權限（需授予本程式背景啟動權限）</string>
-    <string name="settings_auto_jailbreak">自動越獄</string>
+
     <string name="allow_shell">保持向 Shell 授予 Root 權限</string>
     <string name="allow_shell_summary">保持允許 adb shell 調用 su，非必要請勿啟用</string>
     <string name="enable_adb">開機時強制開啟 ADB 調試</string>
@@ -243,7 +240,7 @@
     <string name="download_install">安裝</string>
     <string name="home_pr_build_warning">此為 PR 除錯版本，切勿於正式環境使用！</string>
     <string name="home_pr_kernel_warning">此核心具 PR 簽名支援，並非正式版本核心！</string>
-    <string name="jailbreak_flash_warning">現正處於**越獄模式**。在 **Bootloader 鎖定**的裝置上刷入分割區會破壞 AVB 驗證，或導致**無法開機**。\n\n操作前請確保 Bootloader 已解鎖！</string>
+
     <string name="menu_sort">排序</string>
     <string name="sort_by_name">應用名</string>
     <string name="sort_by_package_name">套件名</string>
@@ -251,7 +248,7 @@
     <string name="sort_by_update_time">更新時間</string>
     <string name="sort_reverse">倒序</string>
     <string name="profile_flags_desc_no_new_privs">防止在此 Root Profile 的上下文中透過 KernelSU 進一步提升權限</string>
-    <string name="home_learn_sxkernelsu">Learn about SxKernelSU</string>
-    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
-    <string name="home_click_to_learn_sxkernelsu">Click to learn how to install SxKernelSU and develop modules</string>
+    <string name="home_learn_sxkernelsu">了解 SxKernelSU</string>
+    <string name="home_learn_sxkernelsu_url">https://sxkernelsu1.netlify.app/guide/what-is-sxkernelsu.html</string>
+    <string name="home_click_to_learn_sxkernelsu">按一下了解如何安裝 SxKernelSU 及開發模組</string>
 </resources>

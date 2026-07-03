@@ -57,7 +57,6 @@ import com.sxkernelsu.ui.util.BlurredBar
 import com.sxkernelsu.ui.util.module.LatestVersionInfo
 import com.sxkernelsu.ui.util.rememberBlurBackdrop
 import top.yukonga.miuix.kmp.basic.BasicComponent
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
 import top.yukonga.miuix.kmp.basic.Icon
@@ -65,7 +64,6 @@ import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior
 import top.yukonga.miuix.kmp.basic.Scaffold
 import top.yukonga.miuix.kmp.basic.ScrollBehavior
 import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.basic.TextButton
 import top.yukonga.miuix.kmp.basic.TopAppBar
 import top.yukonga.miuix.kmp.blur.LayerBackdrop
 import top.yukonga.miuix.kmp.blur.layerBackdrop
@@ -253,9 +251,6 @@ private fun StatusCard(
                     if (state.isSafeMode) {
                         append(" [${stringResource(id = R.string.safe_mode)}]")
                     }
-                    if (state.isLateLoadMode) {
-                        append(" [${stringResource(id = R.string.jailbreak_mode)}]")
-                    }
                 }
                 val workingMode = when (state.lkmMode) {
                     null -> ""
@@ -282,12 +277,8 @@ private fun StatusCard(
                                 else -> Color(0xFFDFFAE4)
                             }
                         ),
-                        onClick = {
-                            if (!state.isLateLoadMode) {
-                                actions.onInstallClick()
-                            }
-                        },
-                        showIndication = !state.isLateLoadMode,
+                        onClick = actions.onInstallClick,
+                        showIndication = true,
                         pressFeedbackType = PressFeedbackType.Tilt
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
@@ -395,12 +386,8 @@ private fun StatusCard(
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Card(
                         modifier = Modifier.weight(1f),
-                        onClick = {
-                            if (!state.isLateLoadMode) {
-                                actions.onInstallClick()
-                            }
-                        },
-                        showIndication = !state.isLateLoadMode,
+                        onClick = actions.onInstallClick,
+                        showIndication = true,
                         pressFeedbackType = PressFeedbackType.Sink
                     ) {
                         BasicComponent(
@@ -413,15 +400,6 @@ private fun StatusCard(
                                     modifier = Modifier.padding(end = 6.dp),
                                     tint = colorScheme.onBackground,
                                 )
-                            },
-                            endActions = {
-                                if (state.isSELinuxPermissive) {
-                                    TextButton(
-                                        text = stringResource(R.string.home_jailbreak),
-                                        onClick = actions.onJailbreakClick,
-                                        colors = ButtonDefaults.textButtonColorsPrimary()
-                                    )
-                                }
                             }
                         )
                     }
@@ -430,12 +408,8 @@ private fun StatusCard(
 
             else -> {
                 Card(
-                    onClick = {
-                        if (!state.isLateLoadMode) {
-                            actions.onInstallClick()
-                        }
-                    },
-                    showIndication = !state.isLateLoadMode,
+                    onClick = actions.onInstallClick,
+                    showIndication = true,
                     pressFeedbackType = PressFeedbackType.Sink
                 ) {
                     BasicComponent(
@@ -578,15 +552,6 @@ private fun StatusCardPermissivePreview() {
     )
 }
 
-@Preview(name = "Jailbreak")
-@Composable
-private fun StatusCardJailbreakPreview() {
-    StatusCard(
-        state = previewHomeScreenState(ksuVersion = 12345, lkmMode = true, isLateLoadMode = true, superuserCount = 5, moduleCount = 10),
-        actions = HomeActions({}, {}, {}, {})
-    )
-}
-
 private val previewSystemInfo = SystemInfo(
     kernelVersion = "6.12.23-android16-5-g123456789000-abogki123456789-4k",
     managerVersion = "3.0.0 (30000)",
@@ -605,7 +570,6 @@ private fun HomeScreenPreviewContent(
     ksuVersion: Int?,
     lkmMode: Boolean?,
     isSafeMode: Boolean = false,
-    isLateLoadMode: Boolean = false,
     superuserCount: Int = 0,
     moduleCount: Int = 0,
     selinuxStatus: String = "Enforcing",
@@ -622,7 +586,6 @@ private fun HomeScreenPreviewContent(
                     ksuVersion = ksuVersion,
                     lkmMode = lkmMode,
                     isSafeMode = isSafeMode,
-                    isLateLoadMode = isLateLoadMode,
                     superuserCount = superuserCount,
                     moduleCount = moduleCount,
                     selinuxStatus = selinuxStatus,
@@ -654,17 +617,10 @@ private fun HomeScreenPermissivePreview() {
     HomeScreenPreviewContent(ksuVersion = null, lkmMode = null, selinuxStatus = "Permissive")
 }
 
-@Preview(name = "Home Jailbreak", showBackground = true)
-@Composable
-private fun HomeScreenJailbreakPreview() {
-    HomeScreenPreviewContent(ksuVersion = 12345, lkmMode = true, isLateLoadMode = true, superuserCount = 5, moduleCount = 10)
-}
-
 private fun previewHomeScreenState(
     ksuVersion: Int?,
     lkmMode: Boolean?,
     isSafeMode: Boolean = false,
-    isLateLoadMode: Boolean = false,
     superuserCount: Int = 0,
     moduleCount: Int = 0,
     selinuxStatus: String = "Enforcing",
@@ -678,7 +634,6 @@ private fun previewHomeScreenState(
     requiresNewKernel = false,
     isRootAvailable = ksuVersion != null,
     isSafeMode = isSafeMode,
-    isLateLoadMode = isLateLoadMode,
     checkUpdateEnabled = false,
     latestVersionInfo = LatestVersionInfo(),
     currentManagerVersionCode = 10000,

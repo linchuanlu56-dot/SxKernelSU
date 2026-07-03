@@ -5,12 +5,15 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
@@ -23,8 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Warning
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFlexibleTopAppBar
 import androidx.compose.material3.MaterialTheme
@@ -39,20 +40,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sxkernelsu.KernelVersion
-import com.sxkernelsu.Natives
 import com.sxkernelsu.R
 import com.sxkernelsu.ui.component.dialog.rememberConfirmDialog
 import com.sxkernelsu.ui.component.material.TonalCard
 import com.sxkernelsu.ui.component.rebootlistpopup.RebootListPopup
 import com.sxkernelsu.ui.component.statustag.StatusTag
+import com.sxkernelsu.ui.theme.isInDarkTheme
 
 @Composable
 fun HomePagerMaterial(
@@ -66,73 +69,90 @@ fun HomePagerMaterial(
         topBar = { TopBar(scrollBehavior = scrollBehavior) },
         contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .padding(innerPadding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .fillMaxSize()
         ) {
-            StatusCard(
-                state = state,
-                actions = actions,
+            Image(
+                painter = painterResource(id = if (isInDarkTheme()) R.drawable.bg_anime_dark else R.drawable.bg_anime_light),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
             )
-            if (state.showManagerPrBuildWarning) {
-                WarningCard(stringResource(id = R.string.home_pr_build_warning))
-            } else if (state.showKernelPrBuildWarning) {
-                WarningCard(stringResource(id = R.string.home_pr_kernel_warning))
-            }
-            if (state.showVersionMismatchWarning) {
-                WarningCard(
-                    stringResource(
-                        id = R.string.home_version_mismatch,
-                        state.currentManagerVersionCode,
-                        state.ksuVersion ?: 0
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Spacer(Modifier.height(16.dp))
+                    StatusCard(
+                        state = state,
+                        actions = actions,
                     )
-                )
-            }
-            if (state.showGkiWarning) {
-                WarningCard(stringResource(id = R.string.home_gki_warning))
-            }
-            if (state.showUAPIMisMatchWarning) {
-                WarningCard(
-                    stringResource(
-                        id = R.string.uapi_mismatch,
-                        state.managerUAPIVersion,
-                        state.kernelUAPIVersion ?: 0,
-                    )
-                )
-            }
-            if (state.showRequireKernelWarning) {
-                if (state.currentManagerVersionCode < (state.ksuVersion ?: 0)) {
-                    WarningCard(
-                        stringResource(
-                            id = R.string.require_manager_version,
-                            state.currentManagerVersionCode,
-                            state.ksuVersion ?: 0,
+                    if (state.showManagerPrBuildWarning) {
+                        WarningCard(stringResource(id = R.string.home_pr_build_warning))
+                    } else if (state.showKernelPrBuildWarning) {
+                        WarningCard(stringResource(id = R.string.home_pr_kernel_warning))
+                    }
+                    if (state.showVersionMismatchWarning) {
+                        WarningCard(
+                            stringResource(
+                                id = R.string.home_version_mismatch,
+                                state.currentManagerVersionCode,
+                                state.ksuVersion ?: 0
+                            )
                         )
-                    )
-                } else {
-                    WarningCard(
-                        stringResource(
-                            id = R.string.require_kernel_version,
-                            state.ksuVersion ?: 0,
-                            Natives.MINIMAL_SUPPORTED_KERNEL
+                    }
+                    if (state.showGkiWarning) {
+                        WarningCard(stringResource(id = R.string.home_gki_warning))
+                    }
+                    if (state.showUAPIMisMatchWarning) {
+                        WarningCard(
+                            stringResource(
+                                id = R.string.uapi_mismatch,
+                                state.managerUAPIVersion,
+                                state.kernelUAPIVersion ?: 0,
+                            )
                         )
-                    )
+                    }
+                    if (state.showRequireKernelWarning) {
+                        if (state.currentManagerVersionCode < (state.ksuVersion ?: 0)) {
+                            WarningCard(
+                                stringResource(
+                                    id = R.string.require_manager_version,
+                                    state.currentManagerVersionCode,
+                                    state.ksuVersion ?: 0,
+                                )
+                            )
+                        } else {
+                            WarningCard(
+                                stringResource(
+                                    id = R.string.require_kernel_version,
+                                    state.ksuVersion ?: 0,
+                                    com.sxkernelsu.Natives.MINIMAL_SUPPORTED_KERNEL
+                                )
+                            )
+                        }
+                    }
+                    if (state.showRootWarning) {
+                        WarningCard(stringResource(id = R.string.grant_root_failed))
+                    }
+                    if (state.checkUpdateEnabled) {
+                        UpdateCard(state = state, actions = actions)
+                    }
+                    InfoCard(systemInfo = state.systemInfo)
+                    DonateCard(onOpenUrl = actions.onOpenUrl)
+                    LearnMoreCard(onOpenUrl = actions.onOpenUrl)
+                    Spacer(Modifier.height(bottomInnerPadding))
                 }
             }
-            if (state.showRootWarning) {
-                WarningCard(stringResource(id = R.string.grant_root_failed))
-            }
-            if (state.checkUpdateEnabled) {
-                UpdateCard(state = state, actions = actions)
-            }
-            InfoCard(systemInfo = state.systemInfo)
-            DonateCard(onOpenUrl = actions.onOpenUrl)
-            LearnMoreCard(onOpenUrl = actions.onOpenUrl)
-            Spacer(Modifier.height(bottomInnerPadding))
         }
     }
 }
@@ -198,11 +218,7 @@ private fun StatusCard(
             } else {
                 MaterialTheme.colorScheme.errorContainer
             },
-            onClick = {
-                if (!state.isLateLoadMode) {
-                    actions.onInstallClick()
-                }
-            }
+            onClick = actions.onInstallClick
         ) {
             Row(
                 modifier = Modifier
@@ -241,14 +257,6 @@ private fun StatusCard(
                                         backgroundColor = MaterialTheme.colorScheme.errorContainer
                                     )
                                 }
-                                if (state.isLateLoadMode) {
-                                    Spacer(Modifier.width(8.dp))
-                                    StatusTag(
-                                        label = stringResource(id = R.string.jailbreak_mode),
-                                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        backgroundColor = MaterialTheme.colorScheme.errorContainer
-                                    )
-                                }
                             }
                             Spacer(Modifier.height(4.dp))
                             Text(
@@ -274,17 +282,6 @@ private fun StatusCard(
                                 text = stringResource(R.string.home_click_to_install),
                                 style = MaterialTheme.typography.bodyMedium
                             )
-                        }
-                        if (state.isSELinuxPermissive) {
-                            Button(
-                                onClick = actions.onJailbreakClick,
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.error,
-                                    contentColor = MaterialTheme.colorScheme.onError
-                                )
-                            ) {
-                                Text(stringResource(R.string.home_jailbreak))
-                            }
                         }
                     }
 
@@ -498,15 +495,6 @@ private fun StatusCardPermissivePreview() {
     )
 }
 
-@Preview(name = "Jailbreak")
-@Composable
-private fun StatusCardJailbreakPreview() {
-    StatusCard(
-        state = previewHomeScreenState(ksuVersion = 12345, lkmMode = true, isLateLoadMode = true, superuserCount = 5, moduleCount = 10),
-        actions = HomeActions({}, {}, {}, {})
-    )
-}
-
 private val previewSystemInfo = SystemInfo(
     kernelVersion = "6.1.0-android14-0-g123456789000-ab12345678",
     managerVersion = "3.0.0 (30000)",
@@ -525,7 +513,6 @@ private fun HomeScreenPreviewContent(
     ksuVersion: Int?,
     lkmMode: Boolean?,
     isSafeMode: Boolean = false,
-    isLateLoadMode: Boolean = false,
     superuserCount: Int = 0,
     moduleCount: Int = 0,
     selinuxStatus: String = "Enforcing",
@@ -541,7 +528,6 @@ private fun HomeScreenPreviewContent(
                     ksuVersion = ksuVersion,
                     lkmMode = lkmMode,
                     isSafeMode = isSafeMode,
-                    isLateLoadMode = isLateLoadMode,
                     superuserCount = superuserCount,
                     moduleCount = moduleCount,
                     selinuxStatus = selinuxStatus,
@@ -573,17 +559,10 @@ private fun HomeScreenPermissivePreview() {
     HomeScreenPreviewContent(ksuVersion = null, lkmMode = null, selinuxStatus = "Permissive")
 }
 
-@Preview(name = "Home Jailbreak", showBackground = true)
-@Composable
-private fun HomeScreenJailbreakPreview() {
-    HomeScreenPreviewContent(ksuVersion = 12345, lkmMode = true, isLateLoadMode = true, superuserCount = 5, moduleCount = 10)
-}
-
 private fun previewHomeScreenState(
     ksuVersion: Int?,
     lkmMode: Boolean?,
     isSafeMode: Boolean = false,
-    isLateLoadMode: Boolean = false,
     superuserCount: Int = 0,
     moduleCount: Int = 0,
     selinuxStatus: String = "Enforcing",
@@ -597,7 +576,6 @@ private fun previewHomeScreenState(
     requiresNewKernel = false,
     isRootAvailable = ksuVersion != null,
     isSafeMode = isSafeMode,
-    isLateLoadMode = isLateLoadMode,
     checkUpdateEnabled = false,
     latestVersionInfo = com.sxkernelsu.ui.util.module.LatestVersionInfo(),
     currentManagerVersionCode = 10000,
