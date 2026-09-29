@@ -37,6 +37,6 @@ android {
 }
 
 dependencies {
-    compileOnly("androidx.annotation:annotation:1.6.0")
+    compileOnly("androidx.annotation:annotation:1.11.0")
     api(libs.com.github.topjohnwu.libsu.core)
 }
